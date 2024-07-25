@@ -1,0 +1,66 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <DropBearPromptCard
+            Theme="ThemeType.DarkMode"
+            Icon="fas fa-exclamation-triangle"
+            Title="Confirm Action"
+            Description="Are you sure you want to proceed with this action? This cannot be undone."
+            Buttons="@_confirmationButtons"
+            OnButtonClicked="HandleConfirmationButtonClick"/>
+    </div>
+    <div class="col-md-6">
+        <DropBearPromptCard
+            Theme="ThemeType.LightMode"
+            Icon="fas fa-info-circle"
+            Title="Update Available"
+            Description="A new version of the application is available. Would you like to update now?"
+            Buttons="@_updateButtons"
+            OnButtonClicked="HandleUpdateButtonClick"/>
+    </div>
+</div>
+
+@code {
+
+    private readonly List<ButtonConfig> _confirmationButtons =
+    [
+        new ButtonConfig("confirm-button", "Confirm", ButtonType.Primary, "fas fa-check"),
+        new ButtonConfig("cancel-button", "Cancel", ButtonType.Secondary, "fas fa-times")
+    ];
+
+    private readonly List<ButtonConfig> _updateButtons =
+    [
+        new ButtonConfig("update-now", "Update Now", ButtonType.Success, "fas fa-download"),
+        new ButtonConfig("remind-later", "Remind Me Later", ButtonType.Warning, "fas fa-clock"),
+        new ButtonConfig("skip-update", "Skip This Version", ButtonType.Error, "fas fa-ban")
+    ];
+
+    private async Task HandleConfirmationButtonClick(ButtonConfig button)
+    {
+        switch (button.Id)
+        {
+            case "confirm-button":
+                await InvokeAsync(() => StateHasChanged());
+                break;
+            case "cancel-button":
+                await InvokeAsync(() => StateHasChanged());
+                break;
+        }
+    }
+
+    private async Task HandleUpdateButtonClick(ButtonConfig button)
+    {
+        switch (button.Id)
+        {
+            case "update-now":
+                await InvokeAsync(() => StateHasChanged());
+                break;
+            case "remind-later":
+                await InvokeAsync(() => StateHasChanged());
+                break;
+            case "skip-update":
+                await InvokeAsync(() => StateHasChanged());
+                break;
+        }
+    }
+
+}

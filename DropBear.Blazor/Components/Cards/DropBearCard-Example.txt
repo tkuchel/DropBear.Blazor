@@ -1,0 +1,51 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <DropBearCard
+            Theme="ThemeType.LightMode"
+            CompactMode="false"
+            IconSource="fa fa-user"
+            HeaderTitle="Card Title"
+            Buttons="Buttons"
+            OnButtonClicked="HandleButtonClick">
+            <CardBodyContent>
+                <p>This is the card body content.</p>
+            </CardBodyContent>
+        </DropBearCard>
+    </div>
+</div>
+@code{
+
+    private List<ButtonConfig> Buttons =
+    [
+        new ButtonConfig
+        {
+            Id = "submit-button",
+            Text = "Submit",
+            Icon = "fa fa-check",
+            Type = ButtonType.Primary
+        },
+
+        new ButtonConfig
+        {
+            Id = "cancel-button",
+            Text = "Cancel",
+            Icon = "fa fa-times",
+            Type = ButtonType.Success
+        }
+    ];
+
+    private void HandleButtonClick(ButtonConfig clickedButton)
+    {
+        switch (clickedButton.Id)
+        {
+            case "submit-button":
+                // Handle submit button click
+                break;
+            case "cancel-button":
+                // Handle cancel button click
+                break;
+            // ... other cases
+        }
+    }
+
+}
