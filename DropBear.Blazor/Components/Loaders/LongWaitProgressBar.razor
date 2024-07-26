@@ -1,0 +1,20 @@
+﻿<div class="loading-container">
+    <div class="loading-card @GetThemeCssClass()">
+        <h3>
+            <i class="icon fas fa-tasks" aria-hidden="true"></i>
+            @Title
+        </h3>
+        <div class="progress-container" role="progressbar" aria-valuenow="@Progress" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" style="width: @(Progress)%;">
+                <span class="progress-text">@Progress%</span>
+            </div>
+        </div>
+        <p>
+            @Message<span class="dots" aria-hidden="true"></span>
+        </p>
+        @if (ShowCancelButton)
+        {
+            <button class="btn btn-primary" @onclick="HandleCancelClick">Cancel</button>
+        }
+    </div>
+</div>
