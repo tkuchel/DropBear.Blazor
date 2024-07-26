@@ -34,7 +34,9 @@
   /* Typography */
   --font-family: 'Poppins', sans-serif;
   --font-size-base: 16px;
-  --font-size-sm: calc(var(--font-size-base) * var(--inverse-golden-ratio));
+  --font-size-sm: calc(var(--font-size-sm) * var(--inverse-golden-ratio));
+  --font-size-md: calc(var(--font-size-sm) * var(--golden-ratio));
+  --font-size-lg: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
   --line-height-base: 1.5;
 
   /* Spacing */
@@ -44,6 +46,10 @@
   --spacing-md: calc(var(--spacing-unit) * var(--sqrt-golden-ratio));
   --spacing-lg: calc(var(--spacing-unit) * var(--golden-ratio));
   --spacing-xl: calc(var(--spacing-unit) * var(--golden-ratio) * var(--golden-ratio));
+
+  /*Padding*/
+
+
 
   /* Border radius */
   --border-radius-sm: 4px;

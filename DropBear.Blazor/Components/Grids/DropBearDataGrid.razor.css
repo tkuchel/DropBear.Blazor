@@ -1,0 +1,308 @@
+﻿/* Dark Theme Variables */
+.dark-theme {
+  --bg-primary: #1e1f22;
+  --bg-secondary: #2b2d31;
+  --bg-tertiary: #35383e;
+  --text-primary: #ffffff;
+  --text-secondary: #a4b1cd;
+  --accent-color: #4ebafd;
+  --accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);
+  --border-color: #40444b;
+  --hover-bg: rgba(78, 186, 253, 0.1);
+  --clr-rock-blue: #5a7a9a;
+}
+
+/* Light Theme Variables */
+.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f0f2f5;
+  --bg-tertiary: #e4e6e9;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent-color: #3b8fd9;
+  --accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);
+  --border-color: #d1d5db;
+  --hover-bg: rgba(59, 143, 217, 0.1);
+  --clr-rock-blue: #a0b4c8;
+}
+
+/* Common Styles */
+.dropbear-datagrid-container {
+  margin: var(--spacing-sm);
+}
+
+.dropbear-datagrid {
+  font-family: "Poppins", sans-serif;
+  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow var(--transition-normal);
+  animation: fadeIn 0.5s ease-out;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dropbear-datagrid:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme-specific styles */
+
+.datagrid-header {
+  background: var(--accent-gradient);
+  color: var(--bg-primary);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.datagrid-header h2 {
+  margin: 0;
+  font-size: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.datagrid-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px 0 0 4px;
+  transition: background-color var(--transition-normal);
+}
+
+.search-input:focus {
+  outline: none;
+  background-color: var(--bg-tertiary);
+}
+
+.btn-search {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color var(--transition-normal),
+  color var(--transition-normal);
+}
+
+.btn-search:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-normal),
+  transform var(--transition-normal);
+}
+
+.btn-primary:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.datagrid-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.datagrid-row {
+  transition: background-color var(--transition-normal);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.datagrid-cell {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.datagrid-row.header {
+  background-color: var(--bg-secondary);
+}
+
+.datagrid-row.header i {
+  margin: 0 calc(var(--spacing-sm) * 0.5);
+}
+
+.datagrid-row.header .datagrid-cell {
+  font-weight: 600;
+}
+
+.datagrid-row:hover:not(.header) {
+  background-color: var(--hover-bg);
+}
+
+.datagrid-footer {
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: calc(var(--font-size-sm) * var(--golden-ratio));
+}
+
+.datagrid-footer .pagination span,
+.datagrid-footer label {
+  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.datagrid-footer .items-per-page {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-normal), transform var(--transition-normal);
+}
+
+.btn-icon:hover {
+  color: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.datagrid-footer .pagination .btn-icon {
+  color: var(--text-primary);
+  border: 1px solid var(--clr-rock-blue);
+}
+
+
+select {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color var(--transition-normal);
+}
+
+.items-per-page select {
+  color: var(--text-primary);
+  border: 1px solid var(--clr-rock-blue);
+}
+
+select:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.datagrid-footer .items-per-page select {
+  border-radius: var(--border-radius-md);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem top 50%;
+  background-size: 0.65rem auto;
+  padding: 0.4rem 2rem 0.4rem 0.8rem;
+}
+
+.datagrid-footer .pagination .btn-icon:hover,
+.datagrid-footer .items-per-page select:hover {
+  background-color: var(--clr-rock-blue);
+  color: var(--bg-primary);
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .datagrid-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Selected row styles */
+.datagrid-row.selected {
+  background-color: var(--hover-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.datagrid-row.selected::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent-color);
+  opacity: 0;
+  animation: smoothPulse 3s ease-in-out infinite;
+}
+
+@keyframes smoothPulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.datagrid-row.selected:hover::after {
+  animation: none;
+  opacity: 0.1;
+}
+
+/* Enhance the hover effect */
+.datagrid-row:not(.header):hover {
+  background-color: var(--hover-bg);
+  transform: translateY(-1px);
+  transition: background-color var(--transition-normal),
+  transform var(--transition-normal);
+}
