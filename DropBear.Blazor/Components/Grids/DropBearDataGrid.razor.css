@@ -60,10 +60,12 @@
 
 .datagrid-header h2 {
   margin: 0;
+  color: var(--text-primary);
   font-size: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
 }
 
 .datagrid-actions {
@@ -131,6 +133,11 @@
   border-spacing: 0;
 }
 
+.datagrid-table-wrapper {
+  overflow-x: auto;
+
+}
+
 .datagrid-row {
   transition: background-color var(--transition-normal);
   animation: fadeIn 0.3s ease-out;
@@ -165,6 +172,26 @@
   justify-content: space-between;
   align-items: center;
   font-size: calc(var(--font-size-sm) * var(--golden-ratio));
+}
+
+.dropbear-datagrid .pagination {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.dropbear-datagrid .pagination button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color var(--transition-normal), transform var(--transition-normal);
+}
+
+.dropbear-datagrid .pagination button:hover {
+  color: var(--accent-color);
 }
 
 .datagrid-footer .pagination span,

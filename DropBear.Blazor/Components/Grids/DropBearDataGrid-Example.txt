@@ -1,0 +1,176 @@
+﻿<DropBearDataGrid TItem="User"
+                  @key="_isDarkTheme"
+                  Items="@Users"
+                  Columns="@Columns"
+                  Title="User List"
+                  EnableSearch="true"
+                  EnablePagination="true"
+                  ItemsPerPage="10"
+                  EnableMultiSelect="true"
+                  AllowAdd="true"
+                  AllowEdit="true"
+                  AllowDelete="true"
+                  Theme="@(_isDarkTheme ? ThemeType.DarkMode : ThemeType.LightMode)"
+                  OnAddItem="@AddUser"
+                  OnEditItem="@EditUser"
+                  OnDeleteItem="@DeleteUser"
+                  OnSelectionChanged="@SelectionChanged">
+</DropBearDataGrid>
+
+<div class="mb-3">
+    <button class="btn btn-secondary" @onclick="IncrementCounter" type="button">
+        Test Button: Clicked @_testCounter times
+    </button>
+</div>
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="ToggleTheme" type="button">
+        Switch to @(_isDarkTheme ? "Light" : "Dark") Theme
+    </button>
+</div>
+
+@code {
+    private List<User> Users { get; set; } = new();
+    private List<DataGridColumn<User>> Columns { get; set; } = new();
+    private bool _isDarkTheme;
+    private int _testCounter;
+
+    protected override void OnInitialized()
+    {
+        Users = GetSampleUsers();
+        SetupColumns();
+    }
+
+    private void SetupColumns()
+    {
+        Columns = new List<DataGridColumn<User>>
+        {
+            new()
+            {
+                PropertyName = "FirstName",
+                Title = "First Name",
+                PropertySelector = u => u.FirstName,
+                Sortable = true,
+                Filterable = true,
+                Width = 150
+            },
+            new()
+            {
+                PropertyName = "LastName",
+                Title = "Last Name",
+                PropertySelector = u => u.LastName,
+                Sortable = true,
+                Filterable = true,
+                Width = 150
+            },
+            new()
+            {
+                PropertyName = "Email",
+                Title = "Email",
+                PropertySelector = u => u.Email,
+                Sortable = true,
+                Filterable = true,
+                Width = 250
+            },
+            new()
+            {
+                PropertyName = "DateOfBirth",
+                Title = "Date of Birth",
+                PropertySelector = u => u.DateOfBirth,
+                Sortable = true,
+                Filterable = true,
+                Format = "dd/MM/yyyy",
+                Width = 150
+            },
+            new()
+            {
+                Title = "Age",
+                PropertySelector = u => CalculateAge(u.DateOfBirth),
+                Sortable = true,
+                CustomSort = (items, isAscending) => isAscending
+                    ? items.OrderBy(u => CalculateAge(u.DateOfBirth))
+                    : items.OrderByDescending(u => CalculateAge(u.DateOfBirth)),
+                Width = 100
+            },
+            new()
+            {
+                Title = "Full Name",
+                Template = user => @<text>@user.FirstName @user.LastName</text>,
+                Sortable = true,
+                CustomSort = (items, isAscending) => isAscending
+                    ? items.OrderBy(u => u.LastName).ThenBy(u => u.FirstName)
+                    : items.OrderByDescending(u => u.LastName).ThenByDescending(u => u.FirstName),
+                Width = 200
+            },
+            new()
+            {
+                Title = "Status",
+                PropertySelector = u => u.IsActive,
+                Template = user => @<span class="@(user.IsActive ? "status-active" : "status-inactive")">
+                                       <i class="fas @(user.IsActive ? "fa-check-circle" : "fa-times-circle")"></i>
+                                       @(user.IsActive ? "Active" : "Inactive")
+                                   </span>,
+                Sortable = true,
+                Width = 100
+            }
+        };
+    }
+
+    private static List<User> GetSampleUsers()
+    {
+        return
+        [
+            new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", DateOfBirth = new DateTime(1985, 5, 15), IsActive = true },
+            new User { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com", DateOfBirth = new DateTime(1990, 8, 22), IsActive = true },
+            new User { Id = 3, FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com", DateOfBirth = new DateTime(1978, 3, 10), IsActive = false },
+            new User { Id = 4, FirstName = "Alice", LastName = "Brown", Email = "alice.brown@example.com", DateOfBirth = new DateTime(1995, 11, 30), IsActive = true },
+            new User { Id = 5, FirstName = "Charlie", LastName = "Davis", Email = "charlie.davis@example.com", DateOfBirth = new DateTime(1982, 7, 18), IsActive = false }
+        ];
+    }
+
+    private static int CalculateAge(DateTime dateOfBirth)
+    {
+        var today = DateTime.Today;
+        var age = today.Year - dateOfBirth.Year;
+        if (dateOfBirth.Date > today.AddYears(-age)) age--;
+        return age;
+    }
+
+    private static void AddUser(User user)
+    {
+        // Implementation for adding a new user
+        Console.WriteLine("Adding new user");
+    }
+
+    private static void EditUser(User user)
+    {
+        // Implementation for editing a user
+        Console.WriteLine($"Editing user: {user.FirstName} {user.LastName}");
+    }
+
+    private static void DeleteUser(User user)
+    {
+        // Implementation for deleting a user
+        Console.WriteLine($"Deleting user: {user.FirstName} {user.LastName}");
+    }
+
+    private static void SelectionChanged(List<User> selectedUsers)
+    {
+        // Handle selection change
+        Console.WriteLine($"Selected users: {selectedUsers.Count}");
+    }
+
+    private void ToggleTheme()
+    {
+        _isDarkTheme = !_isDarkTheme;
+        Console.WriteLine($"Theme toggled. Is Dark Theme: {_isDarkTheme}");
+        StateHasChanged(); // Ensure the component re-renders
+    }
+
+    private void IncrementCounter()
+    {
+        _testCounter++;
+        Console.WriteLine($"Test button clicked. Counter: {_testCounter}");
+    }
+
+}

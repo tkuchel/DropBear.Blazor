@@ -1,0 +1,40 @@
+﻿
+<DropBearContextMenu MenuItems="@_menuItems" OnItemClicked="HandleMenuItemClick" Context="@selectedRow">
+<button type="button">TESTICLES</button>
+</DropBearContextMenu>
+
+@code {
+
+    private readonly List<ContextMenuItem> _menuItems = new()
+    {
+        new() { Text = "Edit", IconClass = "fas fa-edit" },
+        new() { Text = "Delete", IconClass = "fas fa-trash-alt", IsDanger = true },
+        new() { IsSeparator = true },
+        new()
+        {
+            Text = "Share",
+            IconClass = "fas fa-share",
+            Submenu = new List<ContextMenuItem>
+            {
+                new() { Text = "Facebook", IconClass = "fab fa-facebook" },
+                new() { Text = "Twitter", IconClass = "fab fa-twitter" },
+                new() { Text = "LinkedIn", IconClass = "fab fa-linkedin" }
+            }
+        }
+    };
+
+    private object selectedRow;
+
+    private void HandleRowClicked(object row)
+    {
+        selectedRow = row;
+    }
+
+    private void HandleMenuItemClick(ContextMenuItem item)
+    {
+        // Handle the menu item click
+        // You can access the selectedRow here to get the context
+        Console.WriteLine($"Clicked {item.Text} on row: {selectedRow}");
+    }
+
+}
