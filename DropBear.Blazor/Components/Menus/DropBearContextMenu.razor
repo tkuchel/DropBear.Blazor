@@ -4,7 +4,7 @@
     @ChildContent
 </div>
 
-<div class="context-menu @(IsVisible ? "active" : "")" style="left: @(_left)px; top: @(_top)px;">
+<div class="context-menu @(IsVisible ? "active" : "")" style="left: @(Left)px; top: @(Top)px;">
     @foreach (var item in MenuItems)
     {
         if (item.IsSeparator)

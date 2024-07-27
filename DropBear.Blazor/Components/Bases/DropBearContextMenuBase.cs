@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -34,19 +35,24 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
         };";
 
     private bool _jsInitialized;
-    protected int _left;
-    protected int _top;
-    protected bool IsVisible;
 
-    private DotNetObjectReference<DropBearContextMenuBase> ObjectReference;
+    private DotNetObjectReference<DropBearContextMenuBase>? _objectReference;
+    protected bool IsVisible;
+    protected int Left;
+    protected int Top;
 
     protected ElementReference TriggerElement;
-    [Inject] protected IJSRuntime JSRuntime { get; set; }
+    [Inject] protected IJSRuntime? JsRuntime { get; set; }
+    [Inject] protected IDynamicContextMenuService? DynamicContextMenuService { get; set; }
 
-    [Parameter] public RenderFragment ChildContent { get; set; }
-    [Parameter] public List<ContextMenuItem> MenuItems { get; set; } = new();
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public List<ContextMenuItem> MenuItems { get; set; } = [];
     [Parameter] public EventCallback<ContextMenuItem> OnItemClicked { get; set; }
-    [Parameter] public object Context { get; set; }
+    [Parameter] public string MenuType { get; set; } = string.Empty;
+    [Parameter] public object Context { get; set; } = new();
+    [Parameter] public bool UseDynamicService { get; set; }
+
+    protected List<ContextMenuItem>? ActiveMenuItems { get; private set; }
 
     public async ValueTask DisposeAsync()
     {
@@ -54,7 +60,12 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
         {
             try
             {
-                await JSRuntime.InvokeAsync<object>("dropBearContextMenu.dispose", TriggerElement);
+                if (JsRuntime != null)
+                {
+                    await JsRuntime.InvokeAsync<object>("dropBearContextMenu.dispose", TriggerElement);
+                }
+
+                GC.SuppressFinalize(this);
             }
             catch (JSException)
             {
@@ -62,14 +73,26 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
             }
         }
 
-        ObjectReference?.Dispose();
+        _objectReference?.Dispose();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (UseDynamicService && DynamicContextMenuService != null)
+        {
+            ActiveMenuItems = await DynamicContextMenuService.GetMenuItemsAsync(Context, MenuType);
+        }
+        else
+        {
+            ActiveMenuItems = MenuItems ?? [];
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            ObjectReference = DotNetObjectReference.Create(this);
+            _objectReference = DotNetObjectReference.Create(this);
             await InitializeJavaScript();
         }
     }
@@ -78,8 +101,12 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
     {
         try
         {
-            await JSRuntime.InvokeAsync<object>("eval", DropBearContextMenuJavaScript);
-            await JSRuntime.InvokeAsync<object>("dropBearContextMenu.initialize", TriggerElement, ObjectReference);
+            if (JsRuntime != null)
+            {
+                await JsRuntime.InvokeAsync<object>("eval", DropBearContextMenuJavaScript);
+                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.initialize", TriggerElement, _objectReference);
+            }
+
             _jsInitialized = true;
         }
         catch (JSException)
@@ -92,8 +119,8 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
     [JSInvokable]
     public void Show(int left, int top)
     {
-        _left = left;
-        _top = top;
+        Left = left;
+        Top = top;
         IsVisible = true;
         StateHasChanged();
     }
@@ -109,7 +136,10 @@ public class DropBearContextMenuBase : ComponentBase, IAsyncDisposable
     {
         if (_jsInitialized)
         {
-            await JSRuntime.InvokeAsync<object>("dropBearContextMenu.show", e.ClientX, e.ClientY, ObjectReference);
+            if (JsRuntime != null)
+            {
+                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
+            }
         }
     }
 

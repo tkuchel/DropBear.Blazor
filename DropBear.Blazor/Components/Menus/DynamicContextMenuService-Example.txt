@@ -1,0 +1,86 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+
+public interface IDynamicMenuService
+{
+    Task<List<ContextMenuItem>> GetMenuItemsAsync(object context, string menuType);
+}
+
+public class DynamicMenuService : IDynamicMenuService
+{
+    private readonly AuthenticationStateProvider _authenticationStateProvider;
+
+    public DynamicMenuService(AuthenticationStateProvider authenticationStateProvider)
+    {
+        _authenticationStateProvider = authenticationStateProvider;
+    }
+
+    public async Task<List<ContextMenuItem>> GetMenuItemsAsync(object context, string menuType)
+    {
+        var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // Example: Generate menu items based on context and user roles
+        switch (menuType)
+        {
+            case "DataGridRow":
+                return await GetDataGridRowMenuItems(context, user);
+            case "FileExplorer":
+                return await GetFileExplorerMenuItems(context, user);
+            // Add more menu types as needed
+            default:
+                return new List<ContextMenuItem>();
+        }
+    }
+
+    private async Task<List<ContextMenuItem>> GetDataGridRowMenuItems(object context, System.Security.Claims.ClaimsPrincipal user)
+    {
+        var menuItems = new List<ContextMenuItem>();
+
+        // Example: Add Edit option if user has edit permission
+        if (user.IsInRole("Editor"))
+        {
+            menuItems.Add(new ContextMenuItem { Text = "Edit", IconClass = "fas fa-edit", Data = context });
+        }
+
+        // Always add View option
+        menuItems.Add(new ContextMenuItem { Text = "View", IconClass = "fas fa-eye", Data = context });
+
+        // Add Delete option if user is an admin
+        if (user.IsInRole("Admin"))
+        {
+            menuItems.Add(new ContextMenuItem { Text = "Delete", IconClass = "fas fa-trash-alt", IsDanger = true, Data = context });
+        }
+
+        // Add a separator
+        menuItems.Add(new ContextMenuItem { IsSeparator = true });
+
+        // Add a submenu for sharing options
+        menuItems.Add(new ContextMenuItem
+        {
+            Text = "Share",
+            IconClass = "fas fa-share",
+            Submenu = new List<ContextMenuItem>
+            {
+                new ContextMenuItem { Text = "Email", IconClass = "fas fa-envelope" },
+                new ContextMenuItem { Text = "Slack", IconClass = "fab fa-slack" }
+            }
+        });
+
+        return menuItems;
+    }
+
+    private async Task<List<ContextMenuItem>> GetFileExplorerMenuItems(object context, System.Security.Claims.ClaimsPrincipal user)
+    {
+        // Implement file explorer specific menu items
+        // This is just a placeholder implementation
+        return new List<ContextMenuItem>
+        {
+            new ContextMenuItem { Text = "Open", IconClass = "fas fa-folder-open" },
+            new ContextMenuItem { Text = "Download", IconClass = "fas fa-download" },
+            new ContextMenuItem { Text = "Rename", IconClass = "fas fa-edit" }
+        };
+    }
+}
