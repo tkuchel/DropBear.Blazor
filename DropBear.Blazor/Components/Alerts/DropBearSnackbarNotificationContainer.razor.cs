@@ -1,8 +1,10 @@
 ﻿#region
 
 using DropBear.Blazor.Components.Bases;
+using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 #endregion
 
@@ -12,17 +14,27 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
 {
     private readonly List<SnackbarInstance> _snackbars = [];
 
+    [Inject] private ISnackbarNotificationService SnackbarService { get; set; } = default!;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     public async ValueTask DisposeAsync()
     {
-        // TODO release managed resources here
-    }
+        SnackbarService.OnShow -= ShowSnackbarAsync;
+        SnackbarService.OnHideAll -= HideAllSnackbars;
 
-    public void Dispose()
-    {
-        // TODO release managed resources here
+        foreach (var snackbar in _snackbars)
+        {
+            try
+            {
+                await snackbar.ComponentRef.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The circuit is disconnected, so we can't invoke JavaScript.
+                // This is fine, as the snackbars will be removed when the page unloads.
+            }
+        }
     }
 
     protected override void OnInitialized()
@@ -50,7 +62,6 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         _snackbars.Add(snackbar);
         StateHasChanged();
 
-        // Defer the call to ShowAsync
         await Task.Yield(); // Ensure component is rendered
         await snackbar.ComponentRef.ShowAsync();
 
@@ -62,13 +73,31 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         if (snackbar.IsDismissible)
         {
             await Task.Delay(snackbar.Duration);
-            _snackbars.Remove(snackbar);
+            await RemoveSnackbar(snackbar);
+        }
+    }
+
+    private async Task RemoveSnackbar(SnackbarInstance snackbar)
+    {
+        if (_snackbars.Remove(snackbar))
+        {
+            try
+            {
+                await snackbar.ComponentRef.DismissAsync();
+            }
+            catch (Exception ex)
+            {
+                await Console.Error.WriteLineAsync($"Error removing snackbar: {ex.Message}");
+            }
+
             StateHasChanged();
         }
     }
 
-    private void HideAllSnackbars()
+    private async void HideAllSnackbars()
     {
+        var tasks = _snackbars.Select(s => s.ComponentRef.DismissAsync());
+        await Task.WhenAll(tasks);
         _snackbars.Clear();
         StateHasChanged();
     }
@@ -76,6 +105,6 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
     private sealed class SnackbarInstance : SnackbarNotificationOptions
     {
         public Guid Id { get; init; }
-        public DropBearSnackbarNotification ComponentRef { get; set; }
+        public DropBearSnackbarNotification ComponentRef { get; set; } = default!;
     }
 }

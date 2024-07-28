@@ -1,5 +1,4 @@
 ﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
-
 @if (IsVisible)
 {
     <div id="@SnackbarId" class="snackbar @GetSnackbarClasses()" role="alert" aria-live="assertive">
@@ -9,7 +8,7 @@
         <div class="snackbar-content">
             @if (!string.IsNullOrEmpty(Title))
             {
-                <h4 class="snackbar-title">@Title</h4>
+                <div class="snackbar-title">@Title</div>
             }
             <p class="snackbar-message">@Message</p>
         </div>

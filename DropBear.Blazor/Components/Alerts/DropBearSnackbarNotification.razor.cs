@@ -11,9 +11,13 @@ namespace DropBear.Blazor.Components.Alerts;
 
 public sealed partial class DropBearSnackbarNotification : DropBearComponentBase, IAsyncDisposable
 {
+    private CancellationTokenSource? _dismissCancellationTokenSource;
+    private bool _isDismissed = false;
+    private bool _isDisposed = false;
     private bool _isInitialized;
     private bool _shouldRender;
-    [Inject] private IJSRuntime? JsRuntime { get; set; }
+    [Inject] private IJSRuntime? JsRuntime { get; set; } = default!;
+
     [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public string Message { get; set; } = string.Empty;
     [Parameter] public SnackbarType Type { get; set; } = SnackbarType.Information;
@@ -24,18 +28,37 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
     [Parameter] public EventCallback OnAction { get; set; }
 
     private bool IsVisible { get; set; }
-    [Parameter] public string? SnackbarId { get; set; }
+    [Parameter] public string SnackbarId { get; set; } = Guid.NewGuid().ToString("N");
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
-    }
-
-    protected override void OnInitialized()
-    {
-        if (string.IsNullOrEmpty(SnackbarId))
+        if (_isDisposed)
         {
-            SnackbarId = Guid.NewGuid().ToString();
+            return;
+        }
+
+        _isDisposed = true;
+
+        try
+        {
+            await _dismissCancellationTokenSource?.CancelAsync();
+            _dismissCancellationTokenSource?.Dispose();
+        }
+        catch (ObjectDisposedException)
+        {
+            // CancellationTokenSource was already disposed, ignore
+        }
+
+        if (!_isDismissed)
+        {
+            try
+            {
+                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.disposeSnackbar", SnackbarId);
+            }
+            catch (JSException ex)
+            {
+                await Console.Error.WriteLineAsync($"Error disposing snackbar: {ex.Message}");
+            }
         }
     }
 
@@ -46,13 +69,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_isInitialized)
+        if (!_isInitialized)
         {
-            return;
+            _isInitialized = true;
+            await InvokeAsync(StateHasChanged);
         }
-
-        _isInitialized = true;
-        await InvokeAsync(StateHasChanged); // Ensure StateHasChanged is called after render handle is available
     }
 
     public async Task ShowAsync()
@@ -63,27 +84,54 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
         if (Duration > 0)
         {
-            var escapedSnackbarId = SnackbarId!;
+            await Task.Yield(); // Ensure the component has rendered
             if (JsRuntime != null)
             {
-                await JsRuntime.InvokeVoidAsync("eval", GetJavaScriptFunctions());
-                await JsRuntime.InvokeVoidAsync("startProgress", escapedSnackbarId, Duration);
+                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", SnackbarId, Duration);
             }
 
-            await Task.Delay(Duration);
-            await DismissAsync();
+            _dismissCancellationTokenSource = new CancellationTokenSource();
+            try
+            {
+                await Task.Delay(Duration, _dismissCancellationTokenSource.Token);
+                await DismissAsync();
+            }
+            catch (TaskCanceledException)
+            {
+                // Dismissal was cancelled, do nothing
+            }
         }
     }
 
     public async Task DismissAsync()
     {
-        var escapedSnackbarId = SnackbarId!;
-        if (JsRuntime != null)
+        if (_isDismissed)
         {
-            await JsRuntime.InvokeVoidAsync("hideSnackbar", escapedSnackbarId);
+            return;
         }
 
-        await Task.Delay(300); // Wait for the hide animation to complete
+        _isDismissed = true;
+        try
+        {
+            await _dismissCancellationTokenSource?.CancelAsync();
+        }
+        catch (ObjectDisposedException)
+        {
+            // CancellationTokenSource was already disposed, ignore
+        }
+
+        try
+        {
+            if (JsRuntime != null)
+            {
+                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.hideSnackbar", SnackbarId);
+            }
+        }
+        catch (JSException ex)
+        {
+            await Console.Error.WriteLineAsync($"Error hiding snackbar: {ex.Message}");
+        }
+
         IsVisible = false;
         _shouldRender = true;
         StateHasChanged();
@@ -96,6 +144,15 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     private async Task OnActionClick()
     {
+        try
+        {
+            await _dismissCancellationTokenSource?.CancelAsync();
+        }
+        catch (ObjectDisposedException)
+        {
+            // CancellationTokenSource was already disposed, ignore
+        }
+
         await OnAction.InvokeAsync();
         await DismissAsync();
     }
@@ -120,40 +177,5 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
             SnackbarType.Error => "fas fa-times-circle",
             _ => "fas fa-info-circle"
         };
-    }
-
-    private string GetJavaScriptFunctions()
-    {
-        return @"
-            function startProgress(snackbarId, duration) {
-                const progress = document.querySelector(`#${snackbarId} .snackbar-progress`);
-                if (progress) {
-                    progress.style.transition = `width ${duration}ms linear`;
-                    progress.style.width = '0%';
-                } else {
-                    console.error('Progress bar not found');
-                }
-            }
-
-            function showSnackbar(snackbarId, duration) {
-                const snackbar = document.getElementById(snackbarId);
-                if (snackbar) {
-                    snackbar.style.display = 'block';
-                    setTimeout(() => {
-                        snackbar.style.display = 'none';
-                    }, duration);
-                } else {
-                    console.error('Snackbar not found');}
-            }
-
-            function hideSnackbar(snackbarId) {
-                const snackbar = document.querySelector(`#${snackbarId}`);
-                if (snackbar) {
-                    snackbar.style.animation = 'slideOutAndShrink var(--transition-normal) ease-out forwards';
-                } else {
-                    console.error('Snackbar not found');
-                }
-            }
-        ";
     }
 }
