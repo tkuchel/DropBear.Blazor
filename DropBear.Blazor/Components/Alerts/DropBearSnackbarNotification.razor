@@ -1,0 +1,26 @@
+﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
+
+@if (IsVisible)
+{
+    <div id="@SnackbarId" class="snackbar @GetSnackbarClasses()" role="alert" aria-live="assertive">
+        <div class="snackbar-icon">
+            <i class="@GetIconClass()"></i>
+        </div>
+        <div class="snackbar-content">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <h4 class="snackbar-title">@Title</h4>
+            }
+            <p class="snackbar-message">@Message</p>
+        </div>
+        @if (!string.IsNullOrEmpty(ActionText))
+        {
+            <button class="snackbar-action" @onclick="OnActionClick">@ActionText</button>
+        }
+        @if (IsDismissible)
+        {
+            <button class="snackbar-close" aria-label="Close" @onclick="Dismiss">&times;</button>
+        }
+        <div class="snackbar-progress"></div>
+    </div>
+}

@@ -1,10 +1,10 @@
-﻿@inherits DropBear.Blazor.Components.Bases.DropBearContextMenuBase
+﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 
-<div @ref="TriggerElement" @oncontextmenu="OnContextMenu" @oncontextmenu:preventDefault>
+<div @ref="_triggerElement" @oncontextmenu="OnContextMenu" @oncontextmenu:preventDefault>
     @ChildContent
 </div>
 
-<div class="context-menu @(IsVisible ? "active" : "")" style="left: @(Left)px; top: @(Top)px;">
+<div class="context-menu @(_isVisible ? "active" : "")" style="left: @(_left)px; top: @(_top)px;">
     @foreach (var item in MenuItems)
     {
         if (item.IsSeparator)

@@ -1,0 +1,61 @@
+﻿@page "/alert-example"
+@inject PageAlertService AlertService
+@using DropBear.Blazor.Enums
+
+<h1>Alert System Example</h1>
+
+<DropBearPageAlertContainer />
+
+<h2>Service-Managed Alerts</h2>
+<div>
+    <button class="btn btn-info" @onclick="() => ShowServiceAlert(AlertType.Info)">Show Info Alert</button>
+    <button class="btn btn-success" @onclick="() => ShowServiceAlert(AlertType.Success)">Show Success Alert</button>
+    <button class="btn btn-warning" @onclick="() => ShowServiceAlert(AlertType.Warning)">Show Warning Alert</button>
+    <button class="btn btn-danger" @onclick="() => ShowServiceAlert(AlertType.Danger)">Show Danger Alert</button>
+</div>
+
+<h2>Direct Component Usage</h2>
+<div>
+    <DropBearPageAlert
+        Title="Manual Info Alert"
+        Message="This is a manually placed info alert."
+        Type="AlertType.Info"
+        Theme="ThemeType.DarkMode" />
+
+    <DropBearPageAlert
+        Title="Manual Success Alert"
+        Message="This is a manually placed success alert."
+        Type="AlertType.Success"
+        Theme="ThemeType.LightMode"
+        IsDismissible="true"
+        OnClose="@HandleManualAlertClosed" />
+</div>
+
+<h2>Theme Toggle</h2>
+<div>
+    <button class="btn btn-secondary" @onclick="ToggleTheme">
+        Switch to @(CurrentTheme == ThemeType.DarkMode ? "Light" : "Dark") Mode
+    </button>
+</div>
+
+@code {
+    private ThemeType CurrentTheme = ThemeType.DarkMode;
+
+    private void ShowServiceAlert(AlertType type)
+    {
+        string title = type.ToString();
+        string message = $"This is a service-managed {type.ToString().ToLower()} alert.";
+        AlertService.AddAlert(title, message, type, CurrentTheme);
+    }
+
+    private void HandleManualAlertClosed()
+    {
+        AlertService.AddAlert("Notification", "The manual success alert was closed.", AlertType.Notification, CurrentTheme);
+    }
+
+    private void ToggleTheme()
+    {
+        CurrentTheme = CurrentTheme == ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
+        AlertService.AddAlert("Theme Changed", $"Switched to {CurrentTheme.ToString()} mode.", AlertType.Info, CurrentTheme);
+    }
+}

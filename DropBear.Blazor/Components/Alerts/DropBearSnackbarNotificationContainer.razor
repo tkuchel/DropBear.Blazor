@@ -1,0 +1,20 @@
+﻿@inject ISnackbarNotificationService SnackbarService
+@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
+@using DropBear.Blazor.Interfaces
+@implements IDisposable
+
+<div class="snackbar-container">
+    @foreach (var snackbar in _snackbars)
+    {
+        <DropBearSnackbarNotification @ref="snackbar.ComponentRef"
+                                      SnackbarId="@snackbar.Id.ToString().Replace("-", "")"
+                                      Title="@snackbar.Title"
+                                      Message="@snackbar.Message"
+                                      Type="snackbar.Type"
+                                      Theme="snackbar.Theme"
+                                      Duration="snackbar.Duration"
+                                      IsDismissible="snackbar.IsDismissible"
+                                      ActionText="@snackbar.ActionText"
+                                      OnAction="snackbar.OnAction"/>
+    }
+</div>
