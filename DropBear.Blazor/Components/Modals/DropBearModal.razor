@@ -1,0 +1,33 @@
+﻿@inject IModalService ModalService
+@inject IJSRuntime JSRuntime
+@using DropBear.Blazor.Interfaces
+@using Microsoft.JSInterop
+@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
+
+<div class="@GetModalClasses()" id="dropBearModal" @onclick="CloseModalOnBackdropClick">
+    <div class="modal-content" @onclick:stopPropagation>
+        <div class="modal-header">
+            <h2>@Title</h2>
+            <button class="modal-close" @onclick="Close" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            @BodyContent
+        </div>
+        <div class="modal-footer">
+            @foreach (var button in Buttons)
+            {
+            <button class="@GetButtonClasses(button.Type)" @onclick="() => button.OnClick.InvokeAsync()">
+                @if (!string.IsNullOrEmpty(button.Icon))
+                {
+                <i class="@button.Icon"></i>
+                }
+                @button.Text
+            </button>
+            }
+        </div>
+    </div>
+</div>
+
+<button @onclick="ToggleTheme">Toggle Theme</button>

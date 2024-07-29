@@ -1,0 +1,44 @@
+﻿<PageTitle>Snackbar Test</PageTitle>
+
+<h1>Snackbar Test</h1>
+
+<DropBearSnackbarNotificationContainer/>
+
+<div>
+    <button @onclick="() => ShowSnackbar(SnackbarType.Success, ThemeType.DarkMode)" type="button">Show Success (Dark)</button>
+    <button @onclick="() => ShowSnackbar(SnackbarType.Information, ThemeType.LightMode)" type="button">Show Info (Light)</button>
+    <button @onclick="() => ShowSnackbar(SnackbarType.Warning, ThemeType.DarkMode)" type="button">Show Warning (Dark)</button>
+    <button @onclick="() => ShowSnackbar(SnackbarType.Error, ThemeType.LightMode)" type="button">Show Error (Light)</button>
+</div>
+
+@code {
+
+    private async Task ShowSnackbar(SnackbarType type, ThemeType theme)
+    {
+        try
+        {
+            await SnackbarService.ShowAsync(new SnackbarNotificationOptions
+            {
+                Title = type.ToString(),
+                Message = $"This is a {type.ToString().ToLower()} message!",
+                Type = type,
+                Theme = theme,
+                Duration = 15000,
+                IsDismissible = true,
+                ActionText = "Undo",
+                OnAction = async () =>
+                {
+                    // Handle undo action
+                    await Task.CompletedTask;
+                    Console.WriteLine("Undo action triggered");
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Console.Error.WriteLineAsync($"Error showing snackbar: {ex.Message}");
+            // Handle or log the error as appropriate
+        }
+    }
+
+}

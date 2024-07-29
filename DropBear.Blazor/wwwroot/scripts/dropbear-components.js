@@ -56,3 +56,40 @@
     }
   };
 })();
+
+
+window.DropBearModal = (function () {
+  return {
+    initialize() {
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          DotNet.invokeMethodAsync('DropBear.Blazor', 'CloseModalOnEscape');
+        }
+      });
+    },
+    focusFirstInput(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        const input = modal.querySelector('input, select, textarea');
+        if (input) {
+          input.focus();
+        }
+      }
+    },
+    updateModalTheme(modalId, themeClass) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove("theme-dark", "theme-light");
+        modal.classList.add(themeClass);
+      }
+    },
+    hideModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove("active");
+      }
+    }
+  };
+})();
+
+
