@@ -49,6 +49,7 @@
   --spacing-xl: calc(var(--spacing-unit) * var(--golden-ratio) * var(--golden-ratio));
 
   /*Padding*/
+  --padding-default: calc(1.272em / 2.618) calc(1.618em / 2.618) calc(1.272em / 2.618) calc(1.618em / 2.618);
   --padding-top: calc(1.272em / 2.618);
   --padding-bottom: calc(1.272em / 2.618);
   --padding-left: calc(1.618em / 2.618);
