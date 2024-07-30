@@ -52,7 +52,7 @@
   --padding-top: calc(1.272em / 2.618);
   --padding-bottom: calc(1.272em / 2.618);
   --padding-left: calc(1.618em / 2.618);
-  --padding-right: calc(1.618em / 1.272);
+  --padding-right: calc(1.618em / 2.618);
 
   /*Gap*/
   --gap: calc(1.272em / 2.618);
@@ -204,7 +204,7 @@ a:hover, a:focus {
 }
 
 .padding-right {
-  padding-right: calc(1.618em / 1.272);
+  padding-right: calc(1.618em / 2.618);
 }
 
 .gap {
@@ -212,7 +212,7 @@ a:hover, a:focus {
 }
 
 .default-padding-and-gap {
-  padding: calc(1.272em / 2.618) calc(1.618em / 1.272) calc(1.272em / 2.618) calc(1.618em / 2.618);
+  padding: calc(1.272em / 2.618) calc(1.618em / 2.618) calc(1.272em / 2.618) calc(1.618em / 2.618);
   gap: calc(1.272em / 2.618);
 }
 
