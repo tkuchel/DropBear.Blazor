@@ -3,10 +3,9 @@
 @inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 @inject IJSRuntime JSRuntime
 
-
-<div class="file-uploader-container @GetThemeClass()">
-    <div class="file-uploader">
-        <div class="file-uploader-dropzone @(_isDragOver ? "dragover" : "")"
+<div class="file-upload-container @GetThemeClass()">
+    <div class="file-upload-component">
+        <div class="file-upload-dropzone @(_isDragOver ? "dragover" : "")"
              @ondragenter:preventDefault
              @ondragenter="() => _isDragOver = true"
              @ondragleave:preventDefault
@@ -14,58 +13,55 @@
              @ondragover:preventDefault
              @ondrop:preventDefault
              @ondrop="HandleDrop">
-            <p>
-                <i class="fas fa-cloud-upload-alt fa-2x"></i>
-            </p>
+            <i class="fas fa-cloud-upload-alt fa-2x"></i>
             <p>Drag & Drop files here or</p>
             <div class="file-input-wrapper">
-                <InputFile OnChange="HandleFileSelection" multiple id="fileInput"/>
+                <InputFile OnChange="HandleFileSelection" multiple id="fileInput" class="file-upload-input"/>
             </div>
-            <label for="fileInput" class="file-uploader-label">
-                <i class="fas fa-folder-open"></i> CHOOSE FILES
+            <label for="fileInput" class="file-upload-label">
+                Choose Files
             </label>
         </div>
-        <div class="file-uploader-file-list">
+        <div class="file-upload-list">
             @foreach (var file in _selectedFiles)
             {
-                <div class="file-uploader-file-item @GetFileStatusClass(file.UploadStatus)">
-                    <div class="file-uploader-file-info">
-                        <div class="file-uploader-file-name">@file.Name</div>
-                        <div class="file-uploader-file-meta">
+                <div class="file-upload-item">
+                    <div class="file-upload-info">
+                        <div class="file-upload-name">@file.Name</div>
+                        <div class="file-upload-meta">
                             @FormatFileSize(file.Size) | @(file.ContentType ?? "Unknown type")
                         </div>
-                        <div class="file-uploader-file-status">@file.UploadStatus</div>
+                        <div class="file-upload-status">@file.UploadStatus</div>
                     </div>
-                    <button class="file-uploader-remove-btn" @onclick="() => RemoveFile(file)">
+                    <button class="file-upload-remove-btn" @onclick="() => RemoveFile(file)">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             }
         </div>
-        <div class="file-uploader-footer">
-            <button class="file-uploader-upload-btn"
+        <div class="file-upload-footer">
+            <button class="file-upload-btn"
                     @onclick="UploadFiles"
                     disabled="@(_selectedFiles.Count == 0 || _isUploading)">
                 @if (_isUploading)
                 {
-                    <i class="fas fa-spinner file-uploader-spinner"></i>
+                    <i class="fas fa-spinner file-upload-spinner"></i>
                     <span>Uploading...</span>
                 }
                 else
                 {
-                    <i class="fas fa-upload"></i>
-                    <span>UPLOAD FILES</span>
+                    <span>Upload Files</span>
                 }
             </button>
-            <div class="file-uploader-progress">
-                <div class="file-uploader-progress-bar" style="width: @(_uploadProgress)%"></div>
+            <div class="file-upload-progress">
+                <div class="file-upload-progress-bar" style="width: @(_uploadProgress)%"></div>
             </div>
         </div>
     </div>
 
     @if (_uploadedFiles.Any())
     {
-        <div class="uploaded-files-list">
+        <div class="file-upload-completed-list">
             <h4>Uploaded Files:</h4>
             <ul>
                 @foreach (var file in _uploadedFiles)

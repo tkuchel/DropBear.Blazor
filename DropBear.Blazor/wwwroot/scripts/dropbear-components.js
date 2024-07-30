@@ -100,10 +100,21 @@ window.DropBearFileUploader = (function () {
 
     droppedFiles = [];
 
-    if (e.dataTransfer.items) {
-      for (let i = 0; i < e.dataTransfer.items.length; i++) {
-        if (e.dataTransfer.items[i].kind === 'file') {
-          const file = e.dataTransfer.items[i].getAsFile();
+    try {
+      if (e.dataTransfer.items) {
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+          if (e.dataTransfer.items[i].kind === 'file') {
+            const file = e.dataTransfer.items[i].getAsFile();
+            droppedFiles.push({
+              name: file.name,
+              size: file.size,
+              type: file.type
+            });
+          }
+        }
+      } else {
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+          const file = e.dataTransfer.files[i];
           droppedFiles.push({
             name: file.name,
             size: file.size,
@@ -111,25 +122,32 @@ window.DropBearFileUploader = (function () {
           });
         }
       }
-    } else {
-      for (let i = 0; i < e.dataTransfer.files.length; i++) {
-        const file = e.dataTransfer.files[i];
-        droppedFiles.push({
-          name: file.name,
-          size: file.size,
-          type: file.type
-        });
-      }
+    } catch (error) {
+      console.error('Error handling dropped files:', error);
     }
   }
 
-  document.addEventListener('DOMContentLoaded', event => {
-    document.body.addEventListener('drop', handleDrop);
-    document.body.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.stopPropagation();
+  function init() {
+    document.addEventListener('drop', function (e) {
+      if (e.target.closest('.file-upload-dropzone')) {
+        handleDrop(e);
+      }
     });
-  });
+
+    document.addEventListener('dragover', function (e) {
+      if (e.target.closest('.file-upload-dropzone')) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  }
+
+  // Initialize when the DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
   return {
     getDroppedFiles() {
@@ -144,3 +162,14 @@ window.DropBearFileUploader = (function () {
   };
 })();
 
+window.downloadFileFromStream = (fileName, byteArray) => {
+  const blob = new Blob([byteArray], {type: "application/octet-stream"});
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  document.body.appendChild(a);
+  a.style = "display: none";
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+};

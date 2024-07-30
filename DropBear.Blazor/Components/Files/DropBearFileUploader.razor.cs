@@ -32,7 +32,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
 
     private string GetThemeClass()
     {
-        return Theme == ThemeType.LightMode ? "theme-light" : "theme-dark";
+        return Theme == ThemeType.LightMode ? "light-theme" : "dark-theme";
     }
 
     private async Task HandleDrop()
@@ -128,8 +128,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
                     var progress = new Progress<int>(percent =>
                     {
                         file.UploadProgress = percent;
-                        _uploadProgress =
-                            (int)(_selectedFiles.Sum(f => f.UploadProgress) / (float)_selectedFiles.Count);
+                        _uploadProgress = (int)(_selectedFiles.Sum(f => f.UploadProgress) / (float)_selectedFiles.Count);
                         StateHasChanged();
                     });
 
@@ -188,11 +187,11 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
     {
         return status switch
         {
-            UploadStatus.Ready => "status-ready",
-            UploadStatus.Uploading => "status-uploading",
-            UploadStatus.Success => "status-success",
-            UploadStatus.Failure => "status-failure",
-            UploadStatus.Warning => "status-warning",
+            UploadStatus.Ready => "file-status-ready",
+            UploadStatus.Uploading => "file-status-uploading",
+            UploadStatus.Success => "file-status-success",
+            UploadStatus.Failure => "file-status-failure",
+            UploadStatus.Warning => "file-status-warning",
             _ => ""
         };
     }

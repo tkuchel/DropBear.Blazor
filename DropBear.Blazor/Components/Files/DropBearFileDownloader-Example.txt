@@ -1,0 +1,51 @@
+﻿<DropBearFileDownloader
+    FileName="example.pdf"
+    FileSize="3.2 MB"
+    FileIconClass="fas fa-file-pdf"
+    Theme="ThemeType.DarkMode"
+    DownloadFileAsync="DownloadFile"
+    OnDownloadComplete="HandleDownloadComplete"/>
+
+@code {
+
+    private async Task<MemoryStream> DownloadFile(Stream stream, IProgress<int> progress)
+    {
+        // This is just an example. Replace with your actual download logic.
+        var response = await HttpClient.GetAsync("https://example.com/api/files/example.pdf", HttpCompletionOption.ResponseHeadersRead);
+        var contentLength = response.Content.Headers.ContentLength ?? -1L;
+
+        using var downloadStream = await response.Content.ReadAsStreamAsync();
+        var memoryStream = new MemoryStream();
+
+        var buffer = new byte[8192];
+        var totalBytesRead = 0L;
+        int bytesRead;
+
+        while ((bytesRead = await downloadStream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+        {
+            await memoryStream.WriteAsync(buffer, 0, bytesRead);
+            totalBytesRead += bytesRead;
+
+            if (contentLength > 0)
+            {
+                var percentComplete = (int)((double)totalBytesRead / contentLength * 100);
+                progress.Report(percentComplete);
+            }
+        }
+
+        return memoryStream;
+    }
+
+    private async Task HandleDownloadComplete(bool success)
+    {
+        if (success)
+        {
+            await SnackbarService.ShowAsync("File downloaded successfully!");
+        }
+        else
+        {
+            await SnackbarService.ShowAsync("File download failed.");
+        }
+    }
+
+}
