@@ -37,7 +37,7 @@ public partial class DropBearPromptCard : ComponentBase
     [Parameter] public List<ButtonConfig> Buttons { get; set; } = new();
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
     [Parameter] public PromptType PromptType { get; set; } = PromptType.Information;
-    [Parameter] public bool Subtle { get; set; } = false;
+    [Parameter] public bool Subtle { get; set; }
     private string ThemeClass => Theme == ThemeType.LightMode ? "light-mode" : "";
 
     private string GetButtonClass(ButtonType type)

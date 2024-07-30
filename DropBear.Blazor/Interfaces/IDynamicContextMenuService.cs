@@ -1,4 +1,8 @@
-﻿using DropBear.Blazor.Models;
+﻿#region
+
+using DropBear.Blazor.Models;
+
+#endregion
 
 namespace DropBear.Blazor.Interfaces;
 

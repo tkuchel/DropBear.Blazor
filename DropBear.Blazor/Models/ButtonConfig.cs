@@ -6,12 +6,12 @@ using DropBear.Blazor.Enums;
 
 namespace DropBear.Blazor.Models;
 
-public class ButtonConfig
+public sealed class ButtonConfig
 {
     public ButtonConfig()
     {
-
     }
+
     public ButtonConfig(string id, string text, ButtonType type, string icon)
     {
         Id = id;

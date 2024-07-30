@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
+@inject IJSRuntime JSRuntime
+
+
+<div class="file-uploader-container @GetThemeClass()">
+    <div class="file-uploader">
+        <div class="file-uploader-dropzone @(_isDragOver ? "dragover" : "")"
+             @ondragenter:preventDefault
+             @ondragenter="() => _isDragOver = true"
+             @ondragleave:preventDefault
+             @ondragleave="() => _isDragOver = false"
+             @ondragover:preventDefault
+             @ondrop:preventDefault
+             @ondrop="HandleDrop">
+            <p>
+                <i class="fas fa-cloud-upload-alt fa-2x"></i>
+            </p>
+            <p>Drag & Drop files here or</p>
+            <div class="file-input-wrapper">
+                <InputFile OnChange="HandleFileSelection" multiple id="fileInput"/>
+            </div>
+            <label for="fileInput" class="file-uploader-label">
+                <i class="fas fa-folder-open"></i> CHOOSE FILES
+            </label>
+        </div>
+        <div class="file-uploader-file-list">
+            @foreach (var file in _selectedFiles)
+            {
+                <div class="file-uploader-file-item @GetFileStatusClass(file.UploadStatus)">
+                    <div class="file-uploader-file-info">
+                        <div class="file-uploader-file-name">@file.Name</div>
+                        <div class="file-uploader-file-meta">
+                            @FormatFileSize(file.Size) | @(file.ContentType ?? "Unknown type")
+                        </div>
+                        <div class="file-uploader-file-status">@file.UploadStatus</div>
+                    </div>
+                    <button class="file-uploader-remove-btn" @onclick="() => RemoveFile(file)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            }
+        </div>
+        <div class="file-uploader-footer">
+            <button class="file-uploader-upload-btn"
+                    @onclick="UploadFiles"
+                    disabled="@(_selectedFiles.Count == 0 || _isUploading)">
+                @if (_isUploading)
+                {
+                    <i class="fas fa-spinner file-uploader-spinner"></i>
+                    <span>Uploading...</span>
+                }
+                else
+                {
+                    <i class="fas fa-upload"></i>
+                    <span>UPLOAD FILES</span>
+                }
+            </button>
+            <div class="file-uploader-progress">
+                <div class="file-uploader-progress-bar" style="width: @(_uploadProgress)%"></div>
+            </div>
+        </div>
+    </div>
+
+    @if (_uploadedFiles.Any())
+    {
+        <div class="uploaded-files-list">
+            <h4>Uploaded Files:</h4>
+            <ul>
+                @foreach (var file in _uploadedFiles)
+                {
+                    <li>
+                        <span class="file-status-icon @GetFileStatusIconClass(file.UploadStatus)"></span>
+                        @file.Name (@FormatFileSize(file.Size))
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>

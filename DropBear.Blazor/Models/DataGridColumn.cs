@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Models;
 
-public class DataGridColumn<TItem>
+public sealed class DataGridColumn<TItem>
 {
     // Existing properties
     public string PropertyName { get; set; } = string.Empty;

@@ -1,0 +1,42 @@
+﻿<DropBearFileUploader Theme="ThemeType.LightMode" UploadFileAsync="HandleFileUploadAsync"/>
+
+@code {
+
+    private async Task<UploadResult> HandleFileUploadAsync(UploadFile file, IProgress<int> progress)
+    {
+        try
+        {
+            // Create a StreamContent from the file
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.FileData.OpenReadStream(file.Size));
+            content.Add(fileContent, "file", file.Name);
+
+            // Send the file to your API
+            // var response = await HttpClient.PostAsync("api/upload", content);
+            //
+            // if (response.IsSuccessStatusCode)
+            // {
+            return new UploadResult
+            {
+                Status = UploadStatus.Success,
+                Message = "File uploaded successfully"
+            };
+            //}
+
+            // return new UploadResult
+            // {
+            //     Status = UploadStatus.Failure,
+            //     Message = $"Upload failed: {response.ReasonPhrase}"
+            // };
+        }
+        catch (Exception ex)
+        {
+            return new UploadResult
+            {
+                Status = UploadStatus.Failure,
+                Message = $"Upload failed: {ex.Message}"
+            };
+        }
+    }
+
+}

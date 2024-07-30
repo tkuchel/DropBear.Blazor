@@ -25,9 +25,9 @@
                 }
                 @if (AllowAdd)
                 {
-                <button class="btn btn-primary" @onclick="AddItem">
-                    <i class="fas fa-plus"></i> Add Item
-                </button>
+                    <button class="btn btn-primary" @onclick="AddItem">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
                 }
             </div>
         </div>
@@ -37,12 +37,12 @@
                 <tr class="datagrid-row header" role="row">
                     @if (EnableMultiSelect)
                     {
-                    <th class="datagrid-cell checkbox" role="columnheader">
-                        <input type="checkbox"
-                               checked="@(SelectedItems.Count == Items.Count())"
-                               @onchange="(e) => ToggleSelectAll(e.Value is bool and true)"
-                               aria-label="Select all items">
-                    </th>
+                        <th class="datagrid-cell checkbox" role="columnheader">
+                            <input type="checkbox"
+                                   checked="@(SelectedItems.Count == Items.Count())"
+                                   @onchange="e => ToggleSelectAll(e.Value is bool and true)"
+                                   aria-label="Select all items">
+                        </th>
                     }
                     @foreach (var column in Columns.Where(c => c.Visible))
                     {
@@ -75,12 +75,12 @@
                     <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")" role="row">
                         @if (EnableMultiSelect)
                         {
-                        <td class="datagrid-cell checkbox" role="gridcell">
-                            <input type="checkbox"
-                                   checked="@(SelectedItems.Contains(item))"
-                                   @onchange="(e) => ToggleSelection(item, e.Value is bool and true)"
-                                   aria-label="Select item">
-                        </td>
+                            <td class="datagrid-cell checkbox" role="gridcell">
+                                <input type="checkbox"
+                                       checked="@(SelectedItems.Contains(item))"
+                                       @onchange="e => ToggleSelection(item, e.Value is bool and true)"
+                                       aria-label="Select item">
+                            </td>
                         }
                         @foreach (var column in Columns.Where(c => c.Visible))
                         {
@@ -134,7 +134,7 @@
                     <select id="itemsPerPage" @bind="ItemsPerPage" aria-label="Select number of items per page">
                         @foreach (var option in ItemsPerPageOptions)
                         {
-                        <option value="@option">@option</option>
+                            <option value="@option">@option</option>
                         }
                     </select>
                 </div>

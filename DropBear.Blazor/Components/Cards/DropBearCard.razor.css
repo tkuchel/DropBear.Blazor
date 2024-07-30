@@ -208,8 +208,7 @@
 }
 
 .btn {
-  padding: calc(var(--spacing-md) * var(--inverse-golden-ratio))
-  var(--spacing-md);
+  padding: calc(var(--spacing-md) * var(--inverse-golden-ratio)) var(--spacing-md);
   border: none;
   border-radius: var(--border-radius-md);
   font-weight: 500;

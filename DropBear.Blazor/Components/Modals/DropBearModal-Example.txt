@@ -1,0 +1,36 @@
+﻿<DropBearModal Title="Example Modal" Theme="ThemeType.DarkMode" Buttons="@modalButtons">
+    <BodyContent>
+        <p>This is the modal content. You can put any Blazor components or HTML here.</p>
+        <input type="text" placeholder="Enter some text"/>
+    </BodyContent>
+</DropBearModal>
+
+@code {
+    private List<ModalButton> modalButtons;
+
+    protected override void OnInitialized()
+    {
+        modalButtons = new List<ModalButton>
+        {
+            new() { Text = "Cancel", Type = ButtonType.Secondary, Icon = "fas fa-times", OnClick = EventCallback.Factory.Create(this, CloseModal) },
+            new() { Text = "Confirm", Type = ButtonType.Primary, Icon = "fas fa-check", OnClick = EventCallback.Factory.Create(this, Confirm) }
+        };
+    }
+
+    private void OpenModal()
+    {
+        ModalService.Show();
+    }
+
+    private void CloseModal()
+    {
+        ModalService.Close();
+    }
+
+    private void Confirm()
+    {
+        // Handle confirmation logic
+        CloseModal();
+    }
+
+}

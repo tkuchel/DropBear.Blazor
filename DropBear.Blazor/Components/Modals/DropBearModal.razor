@@ -18,13 +18,13 @@
         <div class="modal-footer">
             @foreach (var button in Buttons)
             {
-            <button class="@GetButtonClasses(button.Type)" @onclick="() => button.OnClick.InvokeAsync()">
-                @if (!string.IsNullOrEmpty(button.Icon))
-                {
-                <i class="@button.Icon"></i>
-                }
-                @button.Text
-            </button>
+                <button class="@GetButtonClasses(button.Type)" @onclick="() => button.OnClick.InvokeAsync()">
+                    @if (!string.IsNullOrEmpty(button.Icon))
+                    {
+                        <i class="@button.Icon"></i>
+                    }
+                    @button.Text
+                </button>
             }
         </div>
     </div>

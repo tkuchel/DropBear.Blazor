@@ -13,7 +13,7 @@ public partial class LongWaitProgressBar : ComponentBase
     [Parameter] public string Title { get; set; } = "Long Wait";
     [Parameter] public string Message { get; set; } = "Please wait while we process your request.";
     [Parameter] public bool ShowCancelButton { get; set; } = true;
-    [Parameter] public int Progress { get; set; } = 0;
+    [Parameter] public int Progress { get; set; }
 
     [Parameter] public EventCallback OnCancel { get; set; }
 

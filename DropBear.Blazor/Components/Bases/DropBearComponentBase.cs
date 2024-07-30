@@ -8,5 +8,4 @@ namespace DropBear.Blazor.Components.Bases;
 
 public abstract class DropBearComponentBase : ComponentBase
 {
-
 }

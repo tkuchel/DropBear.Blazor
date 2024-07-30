@@ -1,6 +1,6 @@
 ﻿namespace DropBear.Blazor.Models;
 
-public class ContextMenuItem
+public sealed class ContextMenuItem
 {
     public string Text { get; set; }
     public string IconClass { get; set; }

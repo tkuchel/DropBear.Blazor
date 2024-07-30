@@ -57,7 +57,6 @@
   };
 })();
 
-
 window.DropBearModal = (function () {
   return {
     initialize() {
@@ -92,4 +91,56 @@ window.DropBearModal = (function () {
   };
 })();
 
+window.DropBearFileUploader = (function () {
+  let droppedFiles = [];
+
+  function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    droppedFiles = [];
+
+    if (e.dataTransfer.items) {
+      for (let i = 0; i < e.dataTransfer.items.length; i++) {
+        if (e.dataTransfer.items[i].kind === 'file') {
+          const file = e.dataTransfer.items[i].getAsFile();
+          droppedFiles.push({
+            name: file.name,
+            size: file.size,
+            type: file.type
+          });
+        }
+      }
+    } else {
+      for (let i = 0; i < e.dataTransfer.files.length; i++) {
+        const file = e.dataTransfer.files[i];
+        droppedFiles.push({
+          name: file.name,
+          size: file.size,
+          type: file.type
+        });
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', event => {
+    document.body.addEventListener('drop', handleDrop);
+    document.body.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+
+  return {
+    getDroppedFiles() {
+      const files = droppedFiles;
+      droppedFiles = [];
+      return files;
+    },
+
+    clearDroppedFiles() {
+      droppedFiles = [];
+    }
+  };
+})();
 

@@ -1,5 +1,9 @@
-﻿using DropBear.Blazor.Enums;
+﻿#region
+
+using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
+
+#endregion
 
 namespace DropBear.Blazor.Interfaces;
 
