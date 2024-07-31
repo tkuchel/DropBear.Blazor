@@ -1,0 +1,16 @@
+﻿<DropBearButton ButtonStyle="ButtonStyle.Solid"
+                Color="ButtonColor.Primary"
+                Size="ButtonSize.Medium"
+                Icon="fas fa-check"
+                OnClick="@HandleClick">
+    Submit
+</DropBearButton>
+
+@code {
+
+    private void HandleClick(MouseEventArgs args)
+    {
+        // Handle click event
+    }
+
+}

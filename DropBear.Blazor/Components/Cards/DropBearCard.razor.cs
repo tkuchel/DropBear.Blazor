@@ -10,12 +10,12 @@ namespace DropBear.Blazor.Components.Cards;
 
 public partial class DropBearCard : ComponentBase
 {
-    private static readonly Dictionary<ButtonType, string> ButtonClasses = new()
+    private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
     {
-        { ButtonType.Primary, "btn-primary" },
-        { ButtonType.Secondary, "btn-secondary" },
-        { ButtonType.Success, "btn-success" },
-        { ButtonType.Warning, "btn-warning" }
+        { ButtonColor.Default, "btn-primary" },
+        { ButtonColor.Secondary, "btn-secondary" },
+        { ButtonColor.Success, "btn-success" },
+        { ButtonColor.Warning, "btn-warning" }
     };
 
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
@@ -42,7 +42,7 @@ public partial class DropBearCard : ComponentBase
 
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
 
-    private static string GetButtonClass(ButtonType type)
+    private static string GetButtonClass(ButtonColor type)
     {
         return ButtonClasses.GetValueOrDefault(type, "btn-primary");
     }

@@ -12,7 +12,7 @@ public sealed class ButtonConfig
     {
     }
 
-    public ButtonConfig(string id, string text, ButtonType type, string icon)
+    public ButtonConfig(string id, string text, ButtonColor type, string icon)
     {
         Id = id;
         Text = text;
@@ -22,6 +22,6 @@ public sealed class ButtonConfig
 
     public string Id { get; set; }
     public string Text { get; set; }
-    public ButtonType Type { get; set; }
+    public ButtonColor Type { get; set; }
     public string Icon { get; set; }
 }

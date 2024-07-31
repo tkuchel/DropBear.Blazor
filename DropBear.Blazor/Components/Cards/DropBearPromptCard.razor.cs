@@ -10,24 +10,24 @@ namespace DropBear.Blazor.Components.Cards;
 
 public partial class DropBearPromptCard : ComponentBase
 {
-    private static readonly Dictionary<ButtonType, string> ButtonClasses = new()
+    private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
     {
-        { ButtonType.Primary, "prompt-btn-primary" },
-        { ButtonType.Secondary, "prompt-btn-secondary" },
-        { ButtonType.Success, "prompt-btn-success" },
-        { ButtonType.Warning, "prompt-btn-warning" },
-        { ButtonType.Error, "prompt-btn-danger" },
-        { ButtonType.Default, "prompt-btn-default" }
+        { ButtonColor.Primary, "prompt-btn-primary" },
+        { ButtonColor.Secondary, "prompt-btn-secondary" },
+        { ButtonColor.Success, "prompt-btn-success" },
+        { ButtonColor.Warning, "prompt-btn-warning" },
+        { ButtonColor.Error, "prompt-btn-danger" },
+        { ButtonColor.Default, "prompt-btn-default" }
     };
 
-    private static readonly Dictionary<ButtonType, string> GradientTypes = new()
+    private static readonly Dictionary<ButtonColor, string> GradientTypes = new()
     {
-        { ButtonType.Default, "confirmation" },
-        { ButtonType.Primary, "information" },
-        { ButtonType.Secondary, "confirmation" },
-        { ButtonType.Success, "success" },
-        { ButtonType.Warning, "warning" },
-        { ButtonType.Error, "error" }
+        { ButtonColor.Default, "confirmation" },
+        { ButtonColor.Primary, "information" },
+        { ButtonColor.Secondary, "confirmation" },
+        { ButtonColor.Success, "success" },
+        { ButtonColor.Warning, "warning" },
+        { ButtonColor.Error, "error" }
     };
 
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
@@ -40,7 +40,7 @@ public partial class DropBearPromptCard : ComponentBase
     [Parameter] public bool Subtle { get; set; }
     private string ThemeClass => Theme == ThemeType.LightMode ? "light-mode" : "";
 
-    private string GetButtonClass(ButtonType type)
+    private string GetButtonClass(ButtonColor type)
     {
         var baseClass = "prompt-btn";
         var typeClass = ButtonClasses.GetValueOrDefault(type, "prompt-btn-default");

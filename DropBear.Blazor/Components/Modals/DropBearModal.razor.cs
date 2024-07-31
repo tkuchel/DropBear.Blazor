@@ -68,7 +68,7 @@ public sealed partial class DropBearModal : DropBearComponentBase
         return string.Join(" ", classes);
     }
 
-    private static string GetButtonClasses(ButtonType type)
+    private static string GetButtonClasses(ButtonColor type)
     {
         return $"btn btn-{type.ToString().ToLower()}";
     }
