@@ -43,25 +43,6 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
     protected int CurrentPage { get; private set; } = 1;
     protected int TotalPages => (int)Math.Ceiling(FilteredItems.Count() / (double)ItemsPerPage);
 
-    private bool SelectAll
-    {
-        get => SelectedItems.Count == Items.Take(SelectedItems.Count + 1).Count();
-        set
-        {
-            SelectedItems.Clear();
-            if (value)
-            {
-                foreach (var item in Items)
-                {
-                    SelectedItems.Add(item);
-                }
-            }
-
-            _ = OnSelectionChanged.InvokeAsync(SelectedItems.ToList());
-        }
-    }
-
-
     protected Collection<TItem> SelectedItems
     {
         get => _selectedItems ??= [];

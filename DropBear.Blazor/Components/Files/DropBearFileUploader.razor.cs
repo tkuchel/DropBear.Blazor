@@ -196,19 +196,6 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase, IDispo
         return $"{bytes:0.##} {sizes[order]}";
     }
 
-    private static string GetFileStatusClass(UploadStatus status)
-    {
-        return status switch
-        {
-            UploadStatus.Ready => "file-status-ready",
-            UploadStatus.Uploading => "file-status-uploading",
-            UploadStatus.Success => "file-status-success",
-            UploadStatus.Failure => "file-status-failure",
-            UploadStatus.Warning => "file-status-warning",
-            _ => ""
-        };
-    }
-
     private static string GetFileStatusIconClass(UploadStatus status)
     {
         return status switch
