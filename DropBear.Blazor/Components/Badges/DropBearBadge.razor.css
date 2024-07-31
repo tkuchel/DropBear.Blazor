@@ -1,0 +1,76 @@
+﻿.dropbear-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-default);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--border-radius-sm);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.dropbear-badge-pill {
+  padding: var(--padding-default);
+  border-radius: var(--border-radius-md);
+}
+
+.dropbear-badge-icon-only {
+  padding: var(--padding-default);
+  border-radius: var(--border-radius-md);
+}
+
+.dropbear-badge i {
+  margin-right: 0.25em;
+}
+
+.dropbear-badge-icon-only i {
+  margin-right: 0;
+}
+
+/* Badge Colors */
+.dropbear-badge-default {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-viking);
+}
+
+.dropbear-badge-secondary {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-rock-blue);
+}
+
+.dropbear-badge-success {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-pastel-green);
+}
+
+.dropbear-badge-information {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-malibu);
+}
+
+.dropbear-badge-warning {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-mustard);
+}
+
+.dropbear-badge-error {
+  color: var(--clr-text-dark);
+  background-color: var(--clr-persimmon);
+}
+
+/* Tooltip */
+.dropbear-tooltip {
+  position: fixed;
+  background-color: var(--clr-dark-background);
+  color: var(--clr-text-white);
+  padding: var(--padding-default);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+  opacity: 0.9;
+}
