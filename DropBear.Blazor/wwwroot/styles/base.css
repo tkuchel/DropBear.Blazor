@@ -72,8 +72,8 @@
   --font-family: 'Poppins', sans-serif;
   --font-size-base: 16px;
   --font-size-sm: calc(var(--font-size-base) / var(--golden-ratio));
-  --font-size-md: calc(var(--font-size-base) * var(--golden-ratio));
-  --font-size-lg: calc(var(--font-size-base) * var(--golden-ratio) * var(--golden-ratio));
+  --font-size-md: var(--font-size-base);
+  --font-size-lg: calc(var(--font-size-base) * var(--golden-ratio));
   --line-height-base: var(--sqrt-golden-ratio);
 
   /* Spacing */
