@@ -71,9 +71,9 @@
   /* Typography */
   --font-family: 'Poppins', sans-serif;
   --font-size-base: 16px;
-  --font-size-sm: calc(var(--font-size-base) * var(--inverse-golden-ratio));
+  --font-size-sm: calc(var(--font-size-base) / var(--golden-ratio));
   --font-size-md: calc(var(--font-size-base) * var(--golden-ratio));
-  --font-size-lg: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
+  --font-size-lg: calc(var(--font-size-base) * var(--golden-ratio) * var(--golden-ratio));
   --line-height-base: var(--sqrt-golden-ratio);
 
   /* Spacing */
