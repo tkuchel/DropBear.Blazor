@@ -3,7 +3,7 @@
   --clr-background-dark: #1e1f22;
   --clr-surface-dark: #2b2d31;
   --clr-surface-light-dark: #3a3d44;
-  --clr-text-dark: #ffffff;
+  --clr-text-dark-theme: #ffffff;
   --clr-text-muted-dark: #a4b1cd;
   --clr-primary-dark: #4ebafd;
   --clr-success-dark: #43b581;
@@ -14,7 +14,7 @@
   --clr-background-light: #ffffff;
   --clr-surface-light: #f3f3f3;
   --clr-surface-light-light: #e0e0e0;
-  --clr-text-light: #000000;
+  --clr-text-light-theme: #000000;
   --clr-text-muted-light: #555555;
   --clr-primary-light: #007bff;
   --clr-success-light: #28a745;
@@ -32,7 +32,7 @@
   --clr-surface: var(--clr-surface-light);
   --clr-surface-light: var(--clr-surface-light-light);
   --clr-surface-header-footer: #e0e0e0; /* Slightly darker than body */
-  --clr-text: var(--clr-text-light);
+  --clr-text: var(--clr-text-light-theme);
   --clr-text-muted: var(--clr-text-muted-light);
   --clr-primary: var(--clr-primary-light);
   --clr-success: var(--clr-success-light);
@@ -47,7 +47,7 @@
   --clr-surface: var(--clr-surface-dark);
   --clr-surface-light: var(--clr-surface-light-dark);
   --clr-surface-header-footer: #2b2d31; /* Darker but not too dark */
-  --clr-text: var(--clr-text-dark);
+  --clr-text: var(--clr-text-dark-theme);
   --clr-text-muted: var(--clr-text-muted-dark);
   --clr-primary: var(--clr-primary-dark);
   --clr-success: var(--clr-success-dark);

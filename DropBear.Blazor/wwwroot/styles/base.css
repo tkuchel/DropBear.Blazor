@@ -7,7 +7,7 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
 
 :root {
-  /* Colors */
+  /* Theme Colors */
   --clr-mine-shaft: hsl(0deg 0% 20%);
   --clr-silver-sand: hsl(210deg 7% 76%);
   --clr-viking: hsl(171deg 56% 62%);
@@ -21,10 +21,46 @@
   --clr-malibu: hsl(202deg 97% 65%);
   --clr-cornflower-blue: hsl(262deg 92% 63%);
   --clr-hyperlink-blue: hsl(208deg 100% 68%);
-  --clr-dark-background: hsl(230deg 9% 12%);
   --clr-lime: hsl(86deg 100% 47%);
   --clr-rock-blue: hsl(220deg 26% 70%);
-  --clr-confirmation: hsl(282deg 36% 55%);
+
+  /* Background */
+  --clr-dark-background: hsl(230deg 9% 12%);
+  --clr-light-background: var(--clr-silver-sand);
+
+  /* Dark Surface Colors */
+  --clr-surface-darker: hsl(0deg 0% 15%); /* #333 */
+  --clr-surface-dark: hsl(0deg 0% 20%); /* same as mine-shaft */
+
+  /* Light Surface Colors */
+  --clr-surface-lighter: hsl(210deg 7% 80%); /* # */
+  --clr-surface-light: hsl(210deg 7% 75%); /* # */
+
+  /* Border Colors */
+  --clr-border-dark: hsl(0deg 0% 25%);
+  --clr-border-light: hsl(210deg 7% 85%);
+  --clr-border: hsl(210deg 7% 85%);
+
+  /* Text Colors */
+  --clr-text-dark: var(--clr-mine-shaft);
+  --clr-text-light: var(--clr-silver-sand);
+  --clr-text-black: #000;
+  --clr-text-white: #fff;
+
+  /* Type Colors */
+  --clr-success-darker: hsl(152.63, 45.97%, 48.63%);
+  --clr-success: var(--clr-pastel-green);
+  --clr-success-lighter: hsl(133.7, 61.35%, 40.59%);
+  --clr-warning-darker: hsl(37.5, 95.73%, 54.12%);
+  --clr-warning: var(--clr-mustard);
+  --clr-warning-lighter: hsl(45, 100%, 51.37%);
+  --clr-error-darker: hsl(0, 84.92%, 60.98%);
+  --clr-error: var(--clr-persimmon);
+  --clr-error-lighter: hsl(354.25, 70.46%, 53.53%);
+  --clr-information-darker: hsl(202.97, 97.77%, 64.9%);
+  --clr-information: var(--clr-malibu);
+  --clr-information-lighter: hsl(188.2, 77.78%, 40.59%);
+  --clr-confirmation: var(--clr-silver-sand);
 
   /* Golden Ratio */
   --golden-ratio: 1.618;
@@ -38,7 +74,7 @@
   --font-size-sm: calc(var(--font-size-sm) * var(--inverse-golden-ratio));
   --font-size-md: calc(var(--font-size-sm) * var(--golden-ratio));
   --font-size-lg: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
-  --line-height-base: 1.618;
+  --line-height-base: var(--sqrt-golden-ratio);
 
   /* Spacing */
   --spacing-unit: 8px;
@@ -99,8 +135,8 @@ html {
 body {
   font-family: var(--font-family), sans-serif;
   line-height: var(--line-height-base);
-  color: var(--clr-mine-shaft);
-  background-color: #fff;
+  color: var(--clr-dark-background);
+  background-color: var(--clr-text-light);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -112,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: var(--spacing-md);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: calc(var(--line-height-base) * var(--sqrt-golden-ratio));
 }
 
 h1 {
@@ -145,13 +181,13 @@ p {
 }
 
 a {
-  color: var(--clr-hyperlink-blue);
+  color: var(--clr-malibu);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover, a:focus {
-  color: var(--clr-cornflower-blue);
+  color: var(--clr-hyperlink-blue);
   text-decoration: underline;
 }
 
