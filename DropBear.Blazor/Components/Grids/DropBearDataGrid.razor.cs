@@ -64,7 +64,7 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
 
     protected Collection<TItem> SelectedItems
     {
-        get => _selectedItems ??= new Collection<TItem>();
+        get => _selectedItems ??= [];
         private set => _selectedItems = value;
     }
 
@@ -119,7 +119,7 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
 
         if (_currentSortColumn == column)
         {
-            _currentSortDirection = _currentSortDirection == SortDirection.Ascending
+            _currentSortDirection = _currentSortDirection is SortDirection.Ascending
                 ? SortDirection.Descending
                 : SortDirection.Ascending;
         }
@@ -135,7 +135,7 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
         }
         else if (column.PropertySelector is not null)
         {
-            FilteredItems = _currentSortDirection == SortDirection.Ascending
+            FilteredItems = _currentSortDirection is SortDirection.Ascending
                 ? FilteredItems.OrderBy(column.PropertySelector.Compile())
                 : FilteredItems.OrderByDescending(column.PropertySelector.Compile());
         }

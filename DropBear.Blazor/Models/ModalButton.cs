@@ -10,6 +10,7 @@ namespace DropBear.Blazor.Models;
 /// <summary>
 ///     Represents a button in a modal dialog.
 /// </summary>
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class ModalButton
 {
     /// <summary>

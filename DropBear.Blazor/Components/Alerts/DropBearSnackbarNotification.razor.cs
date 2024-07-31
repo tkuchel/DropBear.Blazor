@@ -77,12 +77,15 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         if (Duration > 0)
         {
             await Task.Yield(); // Ensure the component has rendered
+            _dismissCancellationTokenSource = new CancellationTokenSource();
+
             if (JsRuntime is not null)
             {
-                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", SnackbarId, Duration);
+                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", _dismissCancellationTokenSource.Token,
+                    SnackbarId, Duration);
             }
 
-            _dismissCancellationTokenSource = new CancellationTokenSource();
+
             await WaitForDismissalAsync();
         }
     }
@@ -124,7 +127,7 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     private string GetThemeClass()
     {
-        return Theme == ThemeType.DarkMode ? "dark" : "light";
+        return Theme is ThemeType.DarkMode ? "dark" : "light";
     }
 
     private string GetIconClass()
@@ -158,8 +161,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         {
             if (JsRuntime is not null)
             {
-                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.disposeSnackbar", SnackbarId,
-                    _dismissCancellationTokenSource?.Token, null);
+                if (_dismissCancellationTokenSource is not null)
+                {
+                    await JsRuntime.InvokeVoidAsync("DropBearSnackbar.disposeSnackbar",
+                        _dismissCancellationTokenSource.Token, SnackbarId);
+                }
             }
         }
         catch (JSException ex)
@@ -174,7 +180,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         {
             if (JsRuntime is not null)
             {
-                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.hideSnackbar", SnackbarId);
+                if (_dismissCancellationTokenSource is not null)
+                {
+                    await JsRuntime.InvokeVoidAsync("DropBearSnackbar.hideSnackbar",
+                        _dismissCancellationTokenSource.Token, SnackbarId);
+                }
             }
         }
         catch (JSException ex)

@@ -15,6 +15,7 @@ namespace DropBear.Blazor.Components.Modals;
 /// </summary>
 public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 {
+    private CancellationTokenSource? _dismissCancellationTokenSource;
     [Parameter] public string Title { get; set; } = "Modal Title";
     [Parameter] public RenderFragment BodyContent { get; set; } = default!;
     [Parameter] public IReadOnlyCollection<ModalButton> Buttons { get; set; } = Array.Empty<ModalButton>();
@@ -27,12 +28,16 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
     {
         ModalService.OnShow -= ShowModal;
         ModalService.OnClose -= CloseModal;
+
+        _dismissCancellationTokenSource?.Dispose();
     }
 
     protected override void OnInitialized()
     {
         ModalService.OnShow += ShowModal;
         ModalService.OnClose += CloseModal;
+
+        _dismissCancellationTokenSource = new CancellationTokenSource();
     }
 
     private void ShowModal(object? sender, EventArgs e)
@@ -62,13 +67,13 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 
     private string GetModalClasses()
     {
-        var classes = new List<string> { "modal", Theme == ThemeType.DarkMode ? "theme-dark" : "theme-light" };
+        var classes = new List<string> { "modal", Theme is ThemeType.DarkMode ? "theme-dark" : "theme-light" };
         if (IsVisible)
         {
             classes.Add("active");
         }
 
-        return string.Join(" ", classes);
+        return string.Join(' ', classes);
     }
 
     private static string GetButtonClasses(ButtonColor type)
@@ -80,7 +85,11 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 
     private async Task ToggleTheme()
     {
-        Theme = Theme == ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
-        await JSRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", "dropBearModal", GetModalClasses());
+        Theme = Theme is ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
+        if (_dismissCancellationTokenSource is not null)
+        {
+            await JSRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", _dismissCancellationTokenSource.Token,
+                "dropBearModal", GetModalClasses());
+        }
     }
 }

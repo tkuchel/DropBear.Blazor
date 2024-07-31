@@ -12,7 +12,7 @@ namespace DropBear.Blazor.Components.Badges;
 /// <summary>
 ///     A Blazor component for displaying badges with optional tooltips.
 /// </summary>
-public partial class DropBearBadge : DropBearComponentBase
+public sealed partial class DropBearBadge : DropBearComponentBase
 {
     [Parameter] public BadgeColor Color { get; set; } = BadgeColor.Default;
     [Parameter] public BadgeShape Shape { get; set; } = BadgeShape.Normal;
@@ -50,12 +50,14 @@ public partial class DropBearBadge : DropBearComponentBase
     /// <param name="args">The mouse event arguments.</param>
     private void OnTooltipShow(MouseEventArgs args)
     {
-        if (!string.IsNullOrEmpty(Tooltip))
+        if (string.IsNullOrEmpty(Tooltip))
         {
-            ShowTooltip = true;
-            TooltipStyle = $"left: {args.ClientX}px; top: {args.ClientY}px;";
-            StateHasChanged();
+            return;
         }
+
+        ShowTooltip = true;
+        TooltipStyle = $"left: {args.ClientX}px; top: {args.ClientY}px;";
+        StateHasChanged();
     }
 
     /// <summary>

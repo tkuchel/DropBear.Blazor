@@ -13,28 +13,23 @@ namespace DropBear.Blazor;
 // This class can be registered as scoped DI service and then injected into Blazor
 // components for use.
 
-public class ExampleJsInterop : IAsyncDisposable
+public class ExampleJsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
 {
-    private readonly Lazy<Task<IJSObjectReference>> moduleTask;
-
-    public ExampleJsInterop(IJSRuntime jsRuntime)
-    {
-        moduleTask = new Lazy<Task<IJSObjectReference>>(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/DropBear.Blazor/exampleJsInterop.js").AsTask());
-    }
+    private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
+        "import", "./_content/DropBear.Blazor/exampleJsInterop.js").AsTask());
 
     public async ValueTask DisposeAsync()
     {
-        if (moduleTask.IsValueCreated)
+        if (_moduleTask.IsValueCreated)
         {
-            var module = await moduleTask.Value.ConfigureAwait(false);
+            var module = await _moduleTask.Value.ConfigureAwait(false);
             await module.DisposeAsync().ConfigureAwait(false);
         }
     }
 
     public async ValueTask<string> Prompt(string message)
     {
-        var module = await moduleTask.Value.ConfigureAwait(false);
+        var module = await _moduleTask.Value.ConfigureAwait(false);
         return await module.InvokeAsync<string>("showPrompt", message).ConfigureAwait(false);
     }
 }

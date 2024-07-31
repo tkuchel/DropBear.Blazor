@@ -12,8 +12,9 @@ namespace DropBear.Blazor.Components.Files;
 /// <summary>
 ///     A Blazor component for downloading files with progress indication.
 /// </summary>
-public sealed partial class DropBearFileDownloader : DropBearComponentBase
+public sealed partial class DropBearFileDownloader : DropBearComponentBase, IDisposable
 {
+    private CancellationTokenSource? _dismissCancellationTokenSource;
     private int _downloadProgress;
     private bool _isDownloading;
 
@@ -27,11 +28,19 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase
 
     private string ThemeClass => Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
 
+    public void Dispose()
+    {
+        _dismissCancellationTokenSource?.Dispose();
+    }
+
+
     /// <summary>
     ///     Starts the file download process.
     /// </summary>
     private async Task StartDownload()
     {
+        _dismissCancellationTokenSource = new CancellationTokenSource();
+
         if (_isDownloading || DownloadFileAsync is null)
         {
             return;
@@ -54,7 +63,8 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase
             resultStream.Position = 0;
             var byteArray = resultStream.ToArray();
 
-            await JSRuntime.InvokeVoidAsync("downloadFileFromStream", FileName, byteArray);
+            await JsRuntime.InvokeVoidAsync("downloadFileFromStream", _dismissCancellationTokenSource.Token, FileName,
+                byteArray);
 
             await OnDownloadComplete.InvokeAsync(true);
         }

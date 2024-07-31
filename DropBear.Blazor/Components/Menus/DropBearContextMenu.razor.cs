@@ -16,13 +16,13 @@ namespace DropBear.Blazor.Components.Menus;
 /// </summary>
 public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncDisposable
 {
+    private CancellationTokenSource? _dismissCancellationTokenSource;
     private bool _isVisible;
     private bool _jsInitialized;
     private int _left;
     private DotNetObjectReference<DropBearContextMenu>? _objectReference;
     private int _top;
     private ElementReference? _triggerElement; // The element that will trigger the context menu
-
     [Inject] private IJSRuntime? JsRuntime { get; set; }
     [Inject] private IDynamicContextMenuService? DynamicContextMenuService { get; set; }
 
@@ -38,11 +38,17 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     /// </summary>
     public async ValueTask DisposeAsync()
     {
-        if (_jsInitialized && JsRuntime != null)
+        if (_jsInitialized && JsRuntime is not null)
         {
             try
             {
-                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.dispose", _triggerElement);
+                if (_dismissCancellationTokenSource is not null)
+                {
+                    await JsRuntime.InvokeVoidAsync("dropBearContextMenu.dispose",
+                        _dismissCancellationTokenSource.Token, _triggerElement);
+
+                    _dismissCancellationTokenSource.Dispose();
+                }
             }
             catch (JSException)
             {
@@ -55,7 +61,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
 
     protected override async Task OnParametersSetAsync()
     {
-        if (UseDynamicService && DynamicContextMenuService != null)
+        if (UseDynamicService && DynamicContextMenuService is not null)
         {
             await DynamicContextMenuService.GetMenuItemsAsync(Context, MenuType);
         }
@@ -65,6 +71,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     {
         if (firstRender)
         {
+            _dismissCancellationTokenSource = new CancellationTokenSource();
             _objectReference = DotNetObjectReference.Create(this);
             await InitializeJavaScript();
         }
@@ -75,12 +82,17 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     /// </summary>
     private async Task InitializeJavaScript()
     {
-        if (JsRuntime != null)
+        if (JsRuntime is not null)
         {
             try
             {
-                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.initialize", _triggerElement,
-                    _objectReference);
+                if (_dismissCancellationTokenSource is not null)
+                {
+                    await JsRuntime.InvokeVoidAsync("dropBearContextMenu.initialize",
+                        _dismissCancellationTokenSource.Token, _triggerElement,
+                        _objectReference);
+                }
+
                 _jsInitialized = true;
             }
             catch (JSException)
@@ -109,9 +121,13 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
 
     private async Task OnContextMenu(MouseEventArgs e)
     {
-        if (_jsInitialized && JsRuntime != null)
+        if (_jsInitialized && JsRuntime is not null)
         {
-            await JsRuntime.InvokeVoidAsync("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
+            if (_dismissCancellationTokenSource is not null)
+            {
+                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.show", _dismissCancellationTokenSource.Token,
+                    e.ClientX, e.ClientY, _objectReference);
+            }
         }
     }
 

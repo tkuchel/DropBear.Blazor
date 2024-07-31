@@ -9,6 +9,7 @@ namespace DropBear.Blazor.Models;
 /// <summary>
 ///     Configuration model for a button.
 /// </summary>
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class ButtonConfig
 {
     public ButtonConfig() { }

@@ -8,15 +8,15 @@ public sealed class DroppedFile
     /// <summary>
     ///     Gets or sets the name of the file.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the size of the file in bytes.
     /// </summary>
-    public long Size { get; set; }
+    public long Size { get; init; }
 
     /// <summary>
     ///     Gets or sets the MIME type of the file.
     /// </summary>
-    public string Type { get; set; } = string.Empty;
+    public string Type { get; init; } = string.Empty;
 }

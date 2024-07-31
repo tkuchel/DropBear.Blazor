@@ -22,7 +22,7 @@ public partial class DropBearCard : ComponentBase
     };
 
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
-    private string SelectedTheme => Theme == ThemeType.LightMode ? "light-theme" : "dark-theme";
+    private string SelectedTheme => Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
 
     [Parameter] public CardType Type { get; set; } = CardType.Default;
 

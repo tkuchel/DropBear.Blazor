@@ -53,6 +53,6 @@ public sealed partial class DropBearPageAlert : DropBearComponentBase
     /// <returns>Returns "dark" if the theme is dark mode; otherwise, "light".</returns>
     private string GetThemeClass()
     {
-        return Theme == ThemeType.DarkMode ? "dark" : "light";
+        return Theme is ThemeType.DarkMode ? "dark" : "light";
     }
 }

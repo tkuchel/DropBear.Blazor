@@ -11,7 +11,7 @@ namespace DropBear.Blazor.Components.Cards;
 /// <summary>
 ///     A Blazor component for rendering a prompt card with various styles and options.
 /// </summary>
-public partial class DropBearPromptCard : ComponentBase
+public sealed partial class DropBearPromptCard : ComponentBase
 {
     private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
     {
@@ -31,7 +31,7 @@ public partial class DropBearPromptCard : ComponentBase
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
     [Parameter] public PromptType PromptType { get; set; } = PromptType.Information;
     [Parameter] public bool Subtle { get; set; }
-    private string ThemeClass => Theme == ThemeType.LightMode ? "light-mode" : "";
+    private string ThemeClass => Theme is ThemeType.LightMode ? "light-mode" : "";
 
     /// <summary>
     ///     Gets the CSS class for the specified button color.
@@ -40,13 +40,13 @@ public partial class DropBearPromptCard : ComponentBase
     /// <returns>A string representing the CSS class.</returns>
     private string GetButtonClass(ButtonColor type)
     {
-        var baseClass = "prompt-btn";
+        const string BaseClass = "prompt-btn";
         var typeClass = ButtonClasses.GetValueOrDefault(type, "prompt-btn-default");
 #pragma warning disable CA1308
         var promptTypeClass = PromptType.ToString().ToLowerInvariant();
 #pragma warning restore CA1308
 
-        return $"{baseClass} {typeClass} {promptTypeClass}".Trim();
+        return $"{BaseClass} {typeClass} {promptTypeClass}".Trim();
     }
 
     /// <summary>

@@ -16,7 +16,7 @@ namespace DropBear.Blazor.Components.Alerts;
 /// </summary>
 public sealed partial class DropBearSnackbarNotificationContainer : DropBearComponentBase, IAsyncDisposable
 {
-    private readonly List<SnackbarInstance> _snackbars = new();
+    private readonly List<SnackbarInstance> _snackbars = [];
 
     [Inject] private ISnackbarNotificationService SnackbarService { get; set; } = default!;
 

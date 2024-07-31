@@ -15,17 +15,17 @@ public sealed class UploadFile
     /// <summary>
     ///     Gets or sets the name of the file.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the size of the file in bytes.
     /// </summary>
-    public long Size { get; set; }
+    public long Size { get; init; }
 
     /// <summary>
     ///     Gets or sets the MIME type of the file.
     /// </summary>
-    public string ContentType { get; set; } = string.Empty;
+    public string ContentType { get; init; } = string.Empty;
 
     /// <summary>
     ///     Gets or sets the upload status of the file.

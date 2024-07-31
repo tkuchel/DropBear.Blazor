@@ -13,7 +13,7 @@ namespace DropBear.Blazor.Services;
 /// </summary>
 public sealed class PageAlertService : IPageAlertService
 {
-    private readonly List<PageAlert> _alerts = new();
+    private readonly List<PageAlert> _alerts = [];
     public IReadOnlyList<PageAlert> Alerts => _alerts.AsReadOnly();
 
     public event EventHandler<EventArgs>? OnChange; // Event to notify the UI that the alerts have changed
@@ -54,7 +54,7 @@ public sealed class PageAlertService : IPageAlertService
     /// <param name="id">The ID of the alert to remove.</param>
     public void RemoveAlert(Guid id)
     {
-        var alert = _alerts.FirstOrDefault(a => a.Id == id);
+        var alert = _alerts.Find(a => a.Id == id);
         if (alert is not { IsDismissible: true })
         {
             return;

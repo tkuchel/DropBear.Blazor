@@ -14,14 +14,14 @@ namespace DropBear.Blazor.Components.Files;
 /// <summary>
 ///     A Blazor component for uploading files with drag-and-drop support and progress indication.
 /// </summary>
-public sealed partial class DropBearFileUploader : DropBearComponentBase
+public sealed partial class DropBearFileUploader : DropBearComponentBase, IDisposable
 {
     private readonly List<UploadFile> _selectedFiles = [];
     private readonly List<UploadFile> _uploadedFiles = [];
+    private CancellationTokenSource? _dismissCancellationTokenSource;
     private bool _isDragOver;
     private bool _isUploading;
     private int _uploadProgress;
-
     [Parameter] public int MaxFileSize { get; set; } = 10 * 1024 * 1024; // 10MB default
 
 
@@ -33,6 +33,11 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
 
     [Parameter] public Func<UploadFile, IProgress<int>, Task<UploadResult>>? UploadFileAsync { get; set; }
+
+    public void Dispose()
+    {
+        _dismissCancellationTokenSource?.Dispose();
+    }
 
     private string GetThemeClass()
     {
@@ -47,7 +52,9 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
 
     private async Task HandleDroppedFiles()
     {
-        var files = await JSRuntime.InvokeAsync<List<DroppedFile>>("DropBearFileUploader.getDroppedFiles");
+        _dismissCancellationTokenSource = new CancellationTokenSource();
+        var files = await JSRuntime.InvokeAsync<List<DroppedFile>>("DropBearFileUploader.getDroppedFiles",
+            _dismissCancellationTokenSource.Token);
         foreach (var uploadFile in from file in files
                  where IsFileValid(file)
                  select new UploadFile
@@ -58,7 +65,8 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
             _selectedFiles.Add(uploadFile);
         }
 
-        await JSRuntime.InvokeVoidAsync("DropBearFileUploader.clearDroppedFiles");
+        await JSRuntime.InvokeVoidAsync("DropBearFileUploader.clearDroppedFiles",
+            _dismissCancellationTokenSource.Token);
         StateHasChanged();
     }
 
@@ -142,7 +150,10 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
                 else
                 {
                     // Fallback to simulated upload if no upload function is provided
-                    await Task.Delay(1000);
+                    if (_dismissCancellationTokenSource is not null)
+                    {
+                        await Task.Delay(1000, _dismissCancellationTokenSource.Token);
+                    }
 #pragma warning disable CA5394
                     file.UploadStatus = Random.Shared.Next(10) < 8 ? UploadStatus.Success : UploadStatus.Failure;
 #pragma warning restore CA5394

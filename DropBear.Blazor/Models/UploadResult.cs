@@ -9,6 +9,7 @@ namespace DropBear.Blazor.Models;
 /// <summary>
 ///     Represents the result of an upload operation.
 /// </summary>
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class UploadResult
 {
     /// <summary>
