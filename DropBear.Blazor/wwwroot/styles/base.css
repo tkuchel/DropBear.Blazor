@@ -33,12 +33,12 @@
   --clr-surface-dark: hsl(0deg 0% 20%); /* same as mine-shaft */
 
   /* Light Surface Colors */
-  --clr-surface-lighter: hsl(210deg 7% 80%); /* # */
-  --clr-surface-light: hsl(210deg 7% 75%); /* # */
+  --clr-surface-lighter: hsl(210deg 7% 85%); /* # */
+  --clr-surface-light: hsl(210deg 7% 80%); /* # */
 
   /* Border Colors */
   --clr-border-dark: hsl(0deg 0% 25%);
-  --clr-border-light: hsl(210deg 7% 85%);
+  --clr-border-light: hsl(210deg 7% 90%);
   --clr-border: hsl(210deg 7% 85%);
 
   /* Text Colors */
