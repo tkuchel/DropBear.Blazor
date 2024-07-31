@@ -16,7 +16,7 @@ public partial class DropBearPageAlertContainer : ComponentBase, IDisposable
     /// </summary>
     public void Dispose()
     {
-        AlertService.OnChange -= StateHasChanged;
+        AlertService.OnChange -= HandleAlertChange;
     }
 
     /// <summary>
@@ -25,6 +25,14 @@ public partial class DropBearPageAlertContainer : ComponentBase, IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        AlertService.OnChange += StateHasChanged;
+        AlertService.OnChange += HandleAlertChange;
+    }
+
+    /// <summary>
+    ///     Handles changes in the alert service.
+    /// </summary>
+    private void HandleAlertChange(object? sender, EventArgs e)
+    {
+        _ = InvokeAsync(StateHasChanged);
     }
 }

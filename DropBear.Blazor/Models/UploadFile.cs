@@ -20,7 +20,7 @@ public sealed class UploadFile
     /// <summary>
     ///     Gets or sets the size of the file in bytes.
     /// </summary>
-    public long Size { get; set; } = 0;
+    public long Size { get; set; }
 
     /// <summary>
     ///     Gets or sets the MIME type of the file.
@@ -35,7 +35,7 @@ public sealed class UploadFile
     /// <summary>
     ///     Gets or sets the upload progress of the file as a percentage.
     /// </summary>
-    public int UploadProgress { get; set; } = 0;
+    public int UploadProgress { get; set; }
 
     /// <summary>
     ///     Gets or sets the browser file data.

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.ObjectModel;
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
@@ -18,9 +19,12 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
     private DataGridColumn<TItem> _currentSortColumn = new();
     private SortDirection _currentSortDirection = SortDirection.Ascending;
 
-    private List<TItem>? _selectedItems;
+    private Collection<TItem>? _selectedItems;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
-    [Parameter] public List<DataGridColumn<TItem>> Columns { get; set; } = new();
+
+    [Parameter]
+    public IReadOnlyCollection<DataGridColumn<TItem>> Columns { get; set; } = Array.Empty<DataGridColumn<TItem>>();
+
     [Parameter] public string Title { get; set; } = "Data Grid";
     [Parameter] public bool EnableSearch { get; set; } = true;
     [Parameter] public bool EnablePagination { get; set; } = true;
@@ -41,29 +45,42 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
 
     private bool SelectAll
     {
-        get => SelectedItems.Count == Items.Count();
+        get => SelectedItems.Count == Items.Take(SelectedItems.Count + 1).Count();
         set
         {
-            SelectedItems = value ? Items.ToList() : new List<TItem>();
-            OnSelectionChanged.InvokeAsync(SelectedItems);
+            SelectedItems.Clear();
+            if (value)
+            {
+                foreach (var item in Items)
+                {
+                    SelectedItems.Add(item);
+                }
+            }
+
+            _ = OnSelectionChanged.InvokeAsync(SelectedItems.ToList());
         }
     }
 
-    protected List<TItem> SelectedItems
+
+    protected Collection<TItem> SelectedItems
     {
-        get => _selectedItems ??= new List<TItem>();
+        get => _selectedItems ??= new Collection<TItem>();
         private set => _selectedItems = value;
     }
 
     private IEnumerable<TItem> FilteredItems { get; set; } = new List<TItem>();
     protected IEnumerable<TItem> DisplayedItems { get; private set; } = new List<TItem>();
-    protected List<int> ItemsPerPageOptions { get; set; } = new() { 10, 25, 50, 100 };
-    protected string ThemeClass => Theme == ThemeType.DarkMode ? "dark-theme" : "light-theme";
+
+    protected IReadOnlyCollection<int> ItemsPerPageOptions { get; set; } =
+        new ReadOnlyCollection<int>(new List<int> { 10, 25, 50, 100 });
+
+
+    protected string ThemeClass => Theme is ThemeType.DarkMode ? "dark-theme" : "light-theme";
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _selectedItems ??= new List<TItem>();
+        _selectedItems ??= [];
         FilteredItems = Items;
         UpdateDisplayedItems();
     }
@@ -83,9 +100,8 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
         else
         {
             FilteredItems = Items.Where(item => Columns.Any(column =>
-                column.PropertySelector != null &&
-                column.PropertySelector.Compile()(item)?.ToString()
-                    .Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) == true
+                column.PropertySelector?.Compile()(item)?.ToString()
+                    ?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) is true
             ));
         }
 
@@ -113,11 +129,11 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
             _currentSortDirection = SortDirection.Ascending;
         }
 
-        if (column.CustomSort != null)
+        if (column.CustomSort is not null)
         {
-            FilteredItems = column.CustomSort(FilteredItems, _currentSortDirection == SortDirection.Ascending);
+            FilteredItems = column.CustomSort(FilteredItems, _currentSortDirection is SortDirection.Ascending);
         }
-        else if (column.PropertySelector != null)
+        else if (column.PropertySelector is not null)
         {
             FilteredItems = _currentSortDirection == SortDirection.Ascending
                 ? FilteredItems.OrderBy(column.PropertySelector.Compile())
@@ -172,20 +188,25 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
         }
         else
         {
-            if (SelectedItems.Contains(item))
-            {
-                SelectedItems.Remove(item);
-            }
+            SelectedItems.Remove(item);
         }
 
-        OnSelectionChanged.InvokeAsync(SelectedItems);
+        _ = OnSelectionChanged.InvokeAsync(SelectedItems.ToList());
         StateHasChanged();
     }
 
     protected void ToggleSelectAll(bool selectAll)
     {
-        SelectedItems = selectAll ? Items.ToList() : new List<TItem>();
-        OnSelectionChanged.InvokeAsync(SelectedItems);
+        SelectedItems.Clear();
+        if (selectAll)
+        {
+            foreach (var item in Items)
+            {
+                SelectedItems.Add(item);
+            }
+        }
+
+        _ = OnSelectionChanged.InvokeAsync(SelectedItems.ToList());
         StateHasChanged();
     }
 
@@ -206,7 +227,7 @@ public class DropbearDataGrid<TItem> : DropBearComponentBase
 
     protected string GetFormattedValue(TItem item, DataGridColumn<TItem> column)
     {
-        if (column.PropertySelector == null)
+        if (column.PropertySelector is null)
         {
             return string.Empty;
         }

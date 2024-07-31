@@ -17,7 +17,7 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 {
     [Parameter] public string Title { get; set; } = "Modal Title";
     [Parameter] public RenderFragment BodyContent { get; set; } = default!;
-    [Parameter] public List<ModalButton> Buttons { get; set; } = new();
+    [Parameter] public IReadOnlyCollection<ModalButton> Buttons { get; set; } = Array.Empty<ModalButton>();
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
     [Parameter] public bool CloseOnBackdropClick { get; set; } = true;
 
@@ -35,13 +35,13 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
         ModalService.OnClose += CloseModal;
     }
 
-    private void ShowModal()
+    private void ShowModal(object? sender, EventArgs e)
     {
         IsVisible = true;
         StateHasChanged();
     }
 
-    private void CloseModal()
+    private void CloseModal(object? sender, EventArgs e)
     {
         IsVisible = false;
         StateHasChanged();
@@ -73,7 +73,9 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 
     private static string GetButtonClasses(ButtonColor type)
     {
-        return $"btn btn-{type.ToString().ToLower()}";
+#pragma warning disable CA1308
+        return $"btn btn-{type.ToString().ToLowerInvariant()}";
+#pragma warning restore CA1308
     }
 
     private async Task ToggleTheme()

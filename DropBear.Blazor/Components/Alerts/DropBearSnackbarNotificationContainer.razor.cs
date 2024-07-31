@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
@@ -66,8 +67,16 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
     /// <summary>
     ///     Shows a snackbar notification asynchronously.
     /// </summary>
-    /// <param name="options">The options for the snackbar notification.</param>
-    public async Task ShowSnackbarAsync(SnackbarNotificationOptions options)
+    /// <param name="sender">The event sender.</param>
+    /// <param name="e">The event arguments containing snackbar options.</param>
+#pragma warning disable MA0155
+    private async void ShowSnackbarAsync(object? sender, SnackbarNotificationEventArgs e)
+#pragma warning restore MA0155
+    {
+        await ShowSnackbarInternalAsync(e.Options);
+    }
+
+    private async Task ShowSnackbarInternalAsync(SnackbarNotificationOptions options)
     {
         var snackbar = new SnackbarInstance
         {
@@ -118,7 +127,9 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         }
     }
 
-    private async void HideAllSnackbars()
+#pragma warning disable MA0155
+    private async void HideAllSnackbars(object? sender, EventArgs e)
+#pragma warning restore MA0155
     {
         var tasks = _snackbars.Select(s => s.ComponentRef.DismissAsync());
         await Task.WhenAll(tasks);

@@ -12,27 +12,27 @@ namespace DropBear.Blazor.Components.Files;
 /// <summary>
 ///     A Blazor component for downloading files with progress indication.
 /// </summary>
-public partial class DropBearFileDownloader : DropBearComponentBase
+public sealed partial class DropBearFileDownloader : DropBearComponentBase
 {
     private int _downloadProgress;
     private bool _isDownloading;
 
-    [Parameter] public string FileName { get; set; } = "example_document.pdf";
-    [Parameter] public string FileSize { get; set; } = "2.5 MB";
+    [Parameter] public string FileName { get; set; } = String.Empty;
+    [Parameter] public string FileSize { get; set; } = String.Empty;
     [Parameter] public string FileIconClass { get; set; } = "fas fa-file-pdf";
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
 
-    [Parameter] public Func<Stream, IProgress<int>, Task<MemoryStream>> DownloadFileAsync { get; set; }
+    [Parameter] public Func<Stream, IProgress<int>, Task<MemoryStream>>? DownloadFileAsync { get; set; }
     [Parameter] public EventCallback<bool> OnDownloadComplete { get; set; }
 
-    private string ThemeClass => Theme == ThemeType.LightMode ? "light-theme" : "dark-theme";
+    private string ThemeClass => Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
 
     /// <summary>
     ///     Starts the file download process.
     /// </summary>
     private async Task StartDownload()
     {
-        if (_isDownloading || DownloadFileAsync == null)
+        if (_isDownloading || DownloadFileAsync is null)
         {
             return;
         }
@@ -60,7 +60,7 @@ public partial class DropBearFileDownloader : DropBearComponentBase
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Download failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"Download failed: {ex.Message}");
             await OnDownloadComplete.InvokeAsync(false);
         }
         finally

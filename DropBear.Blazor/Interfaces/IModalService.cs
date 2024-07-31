@@ -8,12 +8,12 @@ public interface IModalService
     /// <summary>
     ///     Event triggered when a modal is shown.
     /// </summary>
-    event Action OnShow;
+    event EventHandler? OnShow;
 
     /// <summary>
     ///     Event triggered when a modal is closed.
     /// </summary>
-    event Action OnClose;
+    event EventHandler? OnClose;
 
     /// <summary>
     ///     Shows a modal.

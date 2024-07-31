@@ -39,7 +39,7 @@ public sealed class PageAlert
     /// <summary>
     ///     Gets or sets the creation date and time of the alert.
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     ///     Gets or sets a value indicating whether the alert is dismissible.

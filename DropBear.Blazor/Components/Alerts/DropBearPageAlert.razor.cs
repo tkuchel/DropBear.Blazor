@@ -29,7 +29,9 @@ public sealed partial class DropBearPageAlert : DropBearComponentBase
     [Parameter] public bool IsDismissible { get; set; } = true;
     [Parameter] public EventCallback OnClose { get; set; } = EventCallback.Empty;
 
-    private string AlertClassString => $"alert alert-{GetThemeClass()} alert-{Type.ToString().ToLower()}";
+#pragma warning disable CA1308
+    private string AlertClassString => $"alert alert-{GetThemeClass()} alert-{Type.ToString().ToLowerInvariant()}";
+#pragma warning restore CA1308
     private string IconClassString => IconClasses[Type];
 
     /// <summary>

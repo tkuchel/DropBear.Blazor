@@ -41,7 +41,7 @@ public partial class DropBearCard : ComponentBase
     [Parameter] public bool UseCustomFooter { get; set; }
     [Parameter] public RenderFragment? CardFooterContent { get; set; }
 
-    [Parameter] public List<ButtonConfig> Buttons { get; set; } = new();
+    [Parameter] public IReadOnlyCollection<ButtonConfig> Buttons { get; set; } = Array.Empty<ButtonConfig>();
 
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
 

@@ -32,9 +32,10 @@ public partial class DropBearBadge : DropBearComponentBase
     private string BuildCssClass()
     {
         var cssClass = "dropbear-badge";
-        cssClass += $" dropbear-badge-{Color.ToString().ToLower()}";
-        cssClass += $" dropbear-badge-{Shape.ToString().ToLower()}";
-
+#pragma warning disable CA1308
+        cssClass += $" dropbear-badge-{Color.ToString().ToLowerInvariant()}";
+        cssClass += $" dropbear-badge-{Shape.ToString().ToLowerInvariant()}";
+#pragma warning restore CA1308
         if (string.IsNullOrEmpty(Text) && !string.IsNullOrEmpty(Icon))
         {
             cssClass += " dropbear-badge-icon-only";

@@ -16,7 +16,7 @@ public sealed class PageAlertService : IPageAlertService
     private readonly List<PageAlert> _alerts = new();
     public IReadOnlyList<PageAlert> Alerts => _alerts.AsReadOnly();
 
-    public event Action? OnChange; // Event to notify the UI that the alerts have changed
+    public event EventHandler<EventArgs>? OnChange; // Event to notify the UI that the alerts have changed
 
     /// <summary>
     ///     Adds an alert to the list.
@@ -36,11 +36,11 @@ public sealed class PageAlertService : IPageAlertService
             Message = message,
             Type = type,
             Theme = theme,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         _alerts.Add(alert);
-        OnChange?.Invoke();
+        OnChange?.Invoke(this, EventArgs.Empty);
 
         if (durationMs.HasValue)
         {
@@ -61,7 +61,7 @@ public sealed class PageAlertService : IPageAlertService
         }
 
         _alerts.RemoveAll(a => a.Id == id);
-        OnChange?.Invoke();
+        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public sealed class PageAlertService : IPageAlertService
     public void ClearAlerts()
     {
         _alerts.Clear();
-        OnChange?.Invoke();
+        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public sealed class PageAlertService : IPageAlertService
     /// <param name="delayMs">The delay in milliseconds before removing the alert.</param>
     private async Task RemoveAlertAfterDelay(Guid id, int delayMs)
     {
-        await Task.Delay(delayMs);
+        await Task.Delay(delayMs).ConfigureAwait(false);
         RemoveAlert(id);
     }
 }

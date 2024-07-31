@@ -27,7 +27,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     [Inject] private IDynamicContextMenuService? DynamicContextMenuService { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public List<ContextMenuItem> MenuItems { get; set; } = new();
+    [Parameter] public IReadOnlyCollection<ContextMenuItem> MenuItems { get; set; } = Array.Empty<ContextMenuItem>();
     [Parameter] public EventCallback<ContextMenuItem> OnItemClicked { get; set; }
     [Parameter] public string MenuType { get; set; } = string.Empty;
     [Parameter] public object Context { get; set; } = new();
@@ -42,7 +42,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
         {
             try
             {
-                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.dispose", _triggerElement);
+                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.dispose", _triggerElement);
             }
             catch (JSException)
             {
@@ -79,7 +79,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
         {
             try
             {
-                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.initialize", _triggerElement,
+                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.initialize", _triggerElement,
                     _objectReference);
                 _jsInitialized = true;
             }
@@ -111,7 +111,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     {
         if (_jsInitialized && JsRuntime != null)
         {
-            await JsRuntime.InvokeAsync<object>("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
+            await JsRuntime.InvokeVoidAsync("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
         }
     }
 

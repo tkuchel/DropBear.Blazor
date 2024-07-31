@@ -117,7 +117,9 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     private string GetSnackbarClasses()
     {
-        return $"snackbar-{GetThemeClass()} snackbar-{Type.ToString().ToLower()}";
+#pragma warning disable CA1308
+        return $"snackbar-{GetThemeClass()} snackbar-{Type.ToString().ToLowerInvariant()}";
+#pragma warning restore CA1308
     }
 
     private string GetThemeClass()
@@ -185,7 +187,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
     {
         try
         {
-            await Task.Delay(Duration, _dismissCancellationTokenSource.Token);
+            if (_dismissCancellationTokenSource is not null)
+            {
+                await Task.Delay(Duration, _dismissCancellationTokenSource.Token);
+            }
+
             await DismissAsync();
         }
         catch (TaskCanceledException)

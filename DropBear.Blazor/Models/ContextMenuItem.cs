@@ -1,4 +1,10 @@
-﻿namespace DropBear.Blazor.Models;
+﻿#region
+
+using System.Collections.ObjectModel;
+
+#endregion
+
+namespace DropBear.Blazor.Models;
 
 /// <summary>
 ///     Represents an item in a context menu.
@@ -9,7 +15,7 @@ public sealed class ContextMenuItem
     {
         Text = string.Empty;
         IconClass = string.Empty;
-        Submenu = new List<ContextMenuItem>();
+        Submenu = new Collection<ContextMenuItem>();
         Data = new object();
     }
 
@@ -17,7 +23,7 @@ public sealed class ContextMenuItem
     public string IconClass { get; set; }
     public bool IsSeparator { get; set; }
     public bool IsDanger { get; set; }
-    public bool HasSubmenu => Submenu?.Count > 0;
-    public List<ContextMenuItem> Submenu { get; set; }
+    public bool HasSubmenu => Submenu.Count > 0;
+    public Collection<ContextMenuItem> Submenu { get; set; }
     public object Data { get; set; }
 }

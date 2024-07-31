@@ -13,7 +13,7 @@ public sealed class DroppedFile
     /// <summary>
     ///     Gets or sets the size of the file in bytes.
     /// </summary>
-    public long Size { get; set; } = 0;
+    public long Size { get; set; }
 
     /// <summary>
     ///     Gets or sets the MIME type of the file.

@@ -16,25 +16,27 @@ namespace DropBear.Blazor.Components.Files;
 /// </summary>
 public sealed partial class DropBearFileUploader : DropBearComponentBase
 {
-    private readonly List<UploadFile> _selectedFiles = new();
-    private readonly List<UploadFile> _uploadedFiles = new();
+    private readonly List<UploadFile> _selectedFiles = [];
+    private readonly List<UploadFile> _uploadedFiles = [];
     private bool _isDragOver;
     private bool _isUploading;
     private int _uploadProgress;
 
     [Parameter] public int MaxFileSize { get; set; } = 10 * 1024 * 1024; // 10MB default
 
-    [Parameter] public List<string> AllowedFileTypes { get; set; } = new();
+
+    [Parameter] public IReadOnlyCollection<string> AllowedFileTypes { get; set; } = Array.Empty<string>();
+
 
     [Parameter] public EventCallback<List<UploadFile>> OnFilesUploaded { get; set; }
 
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
 
-    [Parameter] public Func<UploadFile, IProgress<int>, Task<UploadResult>> UploadFileAsync { get; set; }
+    [Parameter] public Func<UploadFile, IProgress<int>, Task<UploadResult>>? UploadFileAsync { get; set; }
 
     private string GetThemeClass()
     {
-        return Theme == ThemeType.LightMode ? "light-theme" : "dark-theme";
+        return Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
     }
 
     private async Task HandleDrop()
@@ -46,40 +48,41 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
     private async Task HandleDroppedFiles()
     {
         var files = await JSRuntime.InvokeAsync<List<DroppedFile>>("DropBearFileUploader.getDroppedFiles");
-        foreach (var file in files)
+        foreach (var uploadFile in from file in files
+                 where IsFileValid(file)
+                 select new UploadFile
+                 {
+                     Name = file.Name, Size = file.Size, ContentType = file.Type, UploadStatus = UploadStatus.Ready
+                 })
         {
-            if (IsFileValid(file))
-            {
-                var uploadFile = new UploadFile
-                {
-                    Name = file.Name, Size = file.Size, ContentType = file.Type, UploadStatus = UploadStatus.Ready
-                };
-
-                _selectedFiles.Add(uploadFile);
-            }
+            _selectedFiles.Add(uploadFile);
         }
 
         await JSRuntime.InvokeVoidAsync("DropBearFileUploader.clearDroppedFiles");
         StateHasChanged();
     }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     private async Task HandleFileSelection(InputFileChangeEventArgs e)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
         foreach (var file in e.GetMultipleFiles())
         {
-            if (IsFileValid(file))
+            if (!IsFileValid(file))
             {
-                var uploadFile = new UploadFile
-                {
-                    Name = file.Name,
-                    Size = file.Size,
-                    ContentType = file.ContentType,
-                    UploadStatus = UploadStatus.Ready,
-                    FileData = file
-                };
-
-                _selectedFiles.Add(uploadFile);
+                continue;
             }
+
+            var uploadFile = new UploadFile
+            {
+                Name = file.Name,
+                Size = file.Size,
+                ContentType = file.ContentType,
+                UploadStatus = UploadStatus.Ready,
+                FileData = file
+            };
+
+            _selectedFiles.Add(uploadFile);
         }
 
         StateHasChanged();
@@ -98,13 +101,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
             return false;
         }
 
-        if (AllowedFileTypes.Any() && !AllowedFileTypes.Contains(file.Type))
-        {
-            // You might want to show an error message to the user here
-            return false;
-        }
-
-        return true;
+        return AllowedFileTypes.Count is 0 || AllowedFileTypes.Contains(file.Type, StringComparer.OrdinalIgnoreCase);
     }
 
     private void RemoveFile(UploadFile file)
@@ -125,7 +122,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
 
             try
             {
-                if (UploadFileAsync != null)
+                if (UploadFileAsync is not null)
                 {
                     var progress = new Progress<int>(percent =>
                     {
@@ -137,7 +134,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
 
                     var result = await UploadFileAsync(file, progress);
                     file.UploadStatus = result.Status;
-                    if (result.Status == UploadStatus.Success)
+                    if (result.Status is UploadStatus.Success)
                     {
                         _uploadedFiles.Add(file);
                     }
@@ -146,8 +143,10 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
                 {
                     // Fallback to simulated upload if no upload function is provided
                     await Task.Delay(1000);
+#pragma warning disable CA5394
                     file.UploadStatus = Random.Shared.Next(10) < 8 ? UploadStatus.Success : UploadStatus.Failure;
-                    if (file.UploadStatus == UploadStatus.Success)
+#pragma warning restore CA5394
+                    if (file.UploadStatus is UploadStatus.Success)
                     {
                         _uploadedFiles.Add(file);
                     }
@@ -168,14 +167,14 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
         _uploadProgress = 100;
 
         // Remove successfully uploaded files from the selected files list
-        _selectedFiles.RemoveAll(f => f.UploadStatus == UploadStatus.Success);
+        _selectedFiles.RemoveAll(f => f.UploadStatus is UploadStatus.Success);
 
         StateHasChanged();
     }
 
-    private string FormatFileSize(long bytes)
+    private static string FormatFileSize(long bytes)
     {
-        string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+        string[] sizes = ["B", "KB", "MB", "GB", "TB"];
         var order = 0;
         while (bytes >= 1024 && order < sizes.Length - 1)
         {
@@ -186,7 +185,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
         return $"{bytes:0.##} {sizes[order]}";
     }
 
-    private string GetFileStatusClass(UploadStatus status)
+    private static string GetFileStatusClass(UploadStatus status)
     {
         return status switch
         {
@@ -199,7 +198,7 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
         };
     }
 
-    private string GetFileStatusIconClass(UploadStatus status)
+    private static string GetFileStatusIconClass(UploadStatus status)
     {
         return status switch
         {

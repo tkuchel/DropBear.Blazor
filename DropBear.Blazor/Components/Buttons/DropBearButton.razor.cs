@@ -25,7 +25,7 @@ public sealed partial class DropBearButton : DropBearComponentBase
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> AdditionalAttributes { get; set; } = new();
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     private string CssClass => BuildCssClass();
 
@@ -36,10 +36,11 @@ public sealed partial class DropBearButton : DropBearComponentBase
     private string BuildCssClass()
     {
         var cssClass = "dropbear-btn";
-        cssClass += $" dropbear-btn-{ButtonStyle.ToString().ToLower()}";
-        cssClass += $" dropbear-btn-{Color.ToString().ToLower()}";
-        cssClass += $" dropbear-btn-{Size.ToString().ToLower()}";
-
+#pragma warning disable CA1308
+        cssClass += $" dropbear-btn-{ButtonStyle.ToString().ToLowerInvariant()}";
+        cssClass += $" dropbear-btn-{Color.ToString().ToLowerInvariant()}";
+        cssClass += $" dropbear-btn-{Size.ToString().ToLowerInvariant()}";
+#pragma warning restore CA1308
         if (IsBlock)
         {
             cssClass += " dropbear-btn-block";

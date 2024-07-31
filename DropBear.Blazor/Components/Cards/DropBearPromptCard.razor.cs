@@ -23,21 +23,11 @@ public partial class DropBearPromptCard : ComponentBase
         { ButtonColor.Default, "prompt-btn-default" }
     };
 
-    private static readonly Dictionary<ButtonColor, string> GradientTypes = new()
-    {
-        { ButtonColor.Default, "confirmation" },
-        { ButtonColor.Primary, "information" },
-        { ButtonColor.Secondary, "confirmation" },
-        { ButtonColor.Success, "success" },
-        { ButtonColor.Warning, "warning" },
-        { ButtonColor.Error, "error" }
-    };
-
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
     [Parameter] public string Icon { get; set; } = "fas fa-question-circle";
     [Parameter] public string Title { get; set; } = "Title";
     [Parameter] public string Description { get; set; } = "Description";
-    [Parameter] public List<ButtonConfig> Buttons { get; set; } = new();
+    [Parameter] public IReadOnlyCollection<ButtonConfig> Buttons { get; set; } = Array.Empty<ButtonConfig>();
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
     [Parameter] public PromptType PromptType { get; set; } = PromptType.Information;
     [Parameter] public bool Subtle { get; set; }
@@ -52,7 +42,9 @@ public partial class DropBearPromptCard : ComponentBase
     {
         var baseClass = "prompt-btn";
         var typeClass = ButtonClasses.GetValueOrDefault(type, "prompt-btn-default");
-        var promptTypeClass = PromptType.ToString().ToLower();
+#pragma warning disable CA1308
+        var promptTypeClass = PromptType.ToString().ToLowerInvariant();
+#pragma warning restore CA1308
 
         return $"{baseClass} {typeClass} {promptTypeClass}".Trim();
     }

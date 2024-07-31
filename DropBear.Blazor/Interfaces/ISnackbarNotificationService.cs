@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
 
@@ -12,12 +13,12 @@ public interface ISnackbarNotificationService
     /// <summary>
     ///     Event triggered when a new snackbar notification should be shown.
     /// </summary>
-    event Func<SnackbarNotificationOptions, Task>? OnShow;
+    event EventHandler<SnackbarNotificationEventArgs> OnShow;
 
     /// <summary>
     ///     Event triggered when all snackbar notifications should be hidden.
     /// </summary>
-    event Action? OnHideAll;
+    event EventHandler OnHideAll;
 
     /// <summary>
     ///     Shows a snackbar notification with the specified message and options.

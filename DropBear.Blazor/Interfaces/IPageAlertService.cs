@@ -20,7 +20,7 @@ public interface IPageAlertService
     /// <summary>
     ///     Event triggered when the alerts list changes.
     /// </summary>
-    event Action OnChange;
+    event EventHandler<EventArgs> OnChange;
 
     /// <summary>
     ///     Adds a new alert.

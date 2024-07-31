@@ -11,15 +11,15 @@ namespace DropBear.Blazor.Services;
 /// </summary>
 public class ModalService : IModalService
 {
-    public event Action? OnShow;
-    public event Action? OnClose;
+    public event EventHandler? OnShow;
+    public event EventHandler? OnClose;
 
     /// <summary>
     ///     Triggers the OnShow event to display a modal.
     /// </summary>
     public void Show()
     {
-        OnShow?.Invoke();
+        OnShow?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ public class ModalService : IModalService
     /// </summary>
     public void Close()
     {
-        OnClose?.Invoke();
+        OnClose?.Invoke(this, EventArgs.Empty);
     }
 }

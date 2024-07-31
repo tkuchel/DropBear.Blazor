@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Diagnostics;
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
@@ -14,15 +15,14 @@ namespace DropBear.Blazor.Services;
 /// </summary>
 public sealed class SnackbarNotificationService : ISnackbarNotificationService
 {
-    public event Action? OnHideAll;
-    public event Func<SnackbarNotificationOptions, Task>? OnShow;
+    public event EventHandler? OnHideAll;
 
     /// <summary>
     ///     Hides all snackbar notifications.
     /// </summary>
     public void HideAll()
     {
-        OnHideAll?.Invoke();
+        OnHideAll?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -48,19 +48,20 @@ public sealed class SnackbarNotificationService : ISnackbarNotificationService
     /// </summary>
     /// <param name="options">The options for the snackbar notification.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task ShowAsync(SnackbarNotificationOptions options)
+    public Task ShowAsync(SnackbarNotificationOptions options)
     {
         try
         {
-            if (OnShow != null)
-            {
-                await OnShow.Invoke(options);
-            }
+            OnShow?.Invoke(this, new SnackbarNotificationEventArgs(options));
+            return Task.CompletedTask;
         }
         catch (Exception ex)
         {
             // Log the exception or handle it as appropriate for your application
             Debug.WriteLine($"Error showing snackbar: {ex.Message}");
+            return Task.FromException(ex);
         }
     }
+
+    public event EventHandler<SnackbarNotificationEventArgs>? OnShow;
 }
