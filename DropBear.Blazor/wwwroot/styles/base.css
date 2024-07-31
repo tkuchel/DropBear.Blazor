@@ -48,18 +48,18 @@
   --clr-text-white: #fff;
 
   /* Type Colors */
-  --clr-success-darker: hsl(152.63, 45.97%, 48.63%);
-  --clr-success: var(--clr-pastel-green);
-  --clr-success-lighter: hsl(133.7, 61.35%, 40.59%);
-  --clr-warning-darker: hsl(37.5, 95.73%, 54.12%);
-  --clr-warning: var(--clr-mustard);
-  --clr-warning-lighter: hsl(45, 100%, 51.37%);
-  --clr-error-darker: hsl(0, 84.92%, 60.98%);
-  --clr-error: var(--clr-persimmon);
-  --clr-error-lighter: hsl(354.25, 70.46%, 53.53%);
-  --clr-information-darker: hsl(202.97, 97.77%, 64.9%);
-  --clr-information: var(--clr-malibu);
-  --clr-information-lighter: hsl(188.2, 77.78%, 40.59%);
+  --clr-success-darker: hsl(133.7, 61.35%, 40.59%);
+  --clr-success: hsl(152.63, 45.97%, 48.63%);
+  --clr-success-lighter: var(--clr-pastel-green);
+  --clr-warning-darker: hsl(45, 100%, 51.37%);
+  --clr-warning: hsl(37.5, 95.73%, 54.12%);
+  --clr-warning-lighter: var(--clr-mustard);
+  --clr-error-darker:hsl(354.25, 70.46%, 53.53%);
+  --clr-error: hsl(0, 84.92%, 60.98%);
+  --clr-error-lighter:  var(--clr-persimmon);
+  --clr-information-darker: hsl(188.2, 77.78%, 40.59%);
+  --clr-information: hsl(202.97, 97.77%, 64.9%);
+  --clr-information-lighter: var(--clr-malibu);
   --clr-confirmation: var(--clr-silver-sand);
 
   /* Golden Ratio */
