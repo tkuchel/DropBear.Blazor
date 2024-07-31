@@ -11,59 +11,38 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Menus;
 
+/// <summary>
+///     A Blazor component for displaying a context menu.
+/// </summary>
 public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncDisposable
 {
-    private const string DropBearContextMenuJavaScript = @"
-        window.dropBearContextMenu = {
-            initialize: function (element, dotNetReference) {
-                element.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    this.show(e.clientX, e.clientY, dotNetReference);
-                });
-
-                document.addEventListener('click', () => {
-                    dotNetReference.invokeMethodAsync('Hide');
-                });
-            },
-
-            show: function (x, y, dotNetReference) {
-                dotNetReference.invokeMethodAsync('Show', x, y);
-            },
-
-            dispose: function (element) {
-                // Remove event listeners if necessary
-            }
-        };";
-
     private bool _isVisible;
-
     private bool _jsInitialized;
     private int _left;
-
     private DotNetObjectReference<DropBearContextMenu>? _objectReference;
     private int _top;
+    private ElementReference? _triggerElement; // The element that will trigger the context menu
 
-    private ElementReference? _triggerElement; // This is the element that will trigger the context menu
     [Inject] private IJSRuntime? JsRuntime { get; set; }
     [Inject] private IDynamicContextMenuService? DynamicContextMenuService { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public List<ContextMenuItem> MenuItems { get; set; } = [];
+    [Parameter] public List<ContextMenuItem> MenuItems { get; set; } = new();
     [Parameter] public EventCallback<ContextMenuItem> OnItemClicked { get; set; }
     [Parameter] public string MenuType { get; set; } = string.Empty;
     [Parameter] public object Context { get; set; } = new();
     [Parameter] public bool UseDynamicService { get; set; }
 
+    /// <summary>
+    ///     Disposes the context menu.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
-        if (_jsInitialized)
+        if (_jsInitialized && JsRuntime != null)
         {
             try
             {
-                if (JsRuntime != null)
-                {
-                    await JsRuntime.InvokeAsync<object>("dropBearContextMenu.dispose", _triggerElement);
-                }
+                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.dispose", _triggerElement);
             }
             catch (JSException)
             {
@@ -91,23 +70,24 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
         }
     }
 
+    /// <summary>
+    ///     Initializes the JavaScript interop.
+    /// </summary>
     private async Task InitializeJavaScript()
     {
-        try
+        if (JsRuntime != null)
         {
-            if (JsRuntime != null)
+            try
             {
-                await JsRuntime.InvokeAsync<object>("eval", DropBearContextMenuJavaScript);
                 await JsRuntime.InvokeAsync<object>("dropBearContextMenu.initialize", _triggerElement,
                     _objectReference);
+                _jsInitialized = true;
             }
-
-            _jsInitialized = true;
-        }
-        catch (JSException)
-        {
-            // JavaScript interop is not available (e.g., prerendering)
-            _jsInitialized = false;
+            catch (JSException)
+            {
+                // JavaScript interop is not available (e.g., prerendering)
+                _jsInitialized = false;
+            }
         }
     }
 
@@ -129,12 +109,9 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
 
     private async Task OnContextMenu(MouseEventArgs e)
     {
-        if (_jsInitialized)
+        if (_jsInitialized && JsRuntime != null)
         {
-            if (JsRuntime != null)
-            {
-                await JsRuntime.InvokeAsync<object>("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
-            }
+            await JsRuntime.InvokeAsync<object>("dropBearContextMenu.show", e.ClientX, e.ClientY, _objectReference);
         }
     }
 

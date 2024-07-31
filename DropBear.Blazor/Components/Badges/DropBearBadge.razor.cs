@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace DropBear.Blazor.Components.Badges;
 
+/// <summary>
+///     A Blazor component for displaying badges with optional tooltips.
+/// </summary>
 public partial class DropBearBadge : DropBearComponentBase
 {
     [Parameter] public BadgeColor Color { get; set; } = BadgeColor.Default;
@@ -22,11 +25,16 @@ public partial class DropBearBadge : DropBearComponentBase
 
     private string CssClass => BuildCssClass();
 
+    /// <summary>
+    ///     Builds the CSS class for the badge based on its properties.
+    /// </summary>
+    /// <returns>A string representing the CSS class.</returns>
     private string BuildCssClass()
     {
         var cssClass = "dropbear-badge";
         cssClass += $" dropbear-badge-{Color.ToString().ToLower()}";
         cssClass += $" dropbear-badge-{Shape.ToString().ToLower()}";
+
         if (string.IsNullOrEmpty(Text) && !string.IsNullOrEmpty(Icon))
         {
             cssClass += " dropbear-badge-icon-only";
@@ -35,6 +43,10 @@ public partial class DropBearBadge : DropBearComponentBase
         return cssClass.Trim();
     }
 
+    /// <summary>
+    ///     Shows the tooltip at the specified mouse position.
+    /// </summary>
+    /// <param name="args">The mouse event arguments.</param>
     private void OnTooltipShow(MouseEventArgs args)
     {
         if (!string.IsNullOrEmpty(Tooltip))
@@ -45,6 +57,9 @@ public partial class DropBearBadge : DropBearComponentBase
         }
     }
 
+    /// <summary>
+    ///     Hides the tooltip.
+    /// </summary>
     private void OnTooltipHide()
     {
         ShowTooltip = false;

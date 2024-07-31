@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using Microsoft.AspNetCore.Components;
 
@@ -7,13 +8,19 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Loaders;
 
-public partial class ShortWaitSpinner : ComponentBase
+/// <summary>
+///     A Blazor component for displaying a spinner for short wait times.
+/// </summary>
+public partial class ShortWaitSpinner : DropBearComponentBase
 {
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
     [Parameter] public string Title { get; set; } = "Short Wait";
     [Parameter] public string Message { get; set; } = "Please wait while we process your request.";
 
-    // Get css style based on theme
+    /// <summary>
+    ///     Gets the CSS class based on the selected theme.
+    /// </summary>
+    /// <returns>A string representing the CSS class.</returns>
     private string GetThemeCssClass()
     {
         return Theme switch

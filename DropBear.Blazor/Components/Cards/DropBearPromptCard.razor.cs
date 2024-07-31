@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Cards;
 
+/// <summary>
+///     A Blazor component for rendering a prompt card with various styles and options.
+/// </summary>
 public partial class DropBearPromptCard : ComponentBase
 {
     private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
@@ -40,6 +43,11 @@ public partial class DropBearPromptCard : ComponentBase
     [Parameter] public bool Subtle { get; set; }
     private string ThemeClass => Theme == ThemeType.LightMode ? "light-mode" : "";
 
+    /// <summary>
+    ///     Gets the CSS class for the specified button color.
+    /// </summary>
+    /// <param name="type">The button color.</param>
+    /// <returns>A string representing the CSS class.</returns>
     private string GetButtonClass(ButtonColor type)
     {
         var baseClass = "prompt-btn";
@@ -49,6 +57,10 @@ public partial class DropBearPromptCard : ComponentBase
         return $"{baseClass} {typeClass} {promptTypeClass}".Trim();
     }
 
+    /// <summary>
+    ///     Handles the button click event.
+    /// </summary>
+    /// <param name="button">The button configuration.</param>
     private Task OnButtonClick(ButtonConfig button)
     {
         return OnButtonClicked.InvokeAsync(button);

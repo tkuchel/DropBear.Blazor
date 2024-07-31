@@ -10,7 +10,10 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Modals;
 
-public sealed partial class DropBearModal : DropBearComponentBase
+/// <summary>
+///     A Blazor component for displaying a modal dialog.
+/// </summary>
+public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 {
     [Parameter] public string Title { get; set; } = "Modal Title";
     [Parameter] public RenderFragment BodyContent { get; set; } = default!;
@@ -20,16 +23,16 @@ public sealed partial class DropBearModal : DropBearComponentBase
 
     private bool IsVisible { get; set; }
 
-    protected override void OnInitialized()
-    {
-        ModalService.OnShow += ShowModal;
-        ModalService.OnClose += CloseModal;
-    }
-
     public void Dispose()
     {
         ModalService.OnShow -= ShowModal;
         ModalService.OnClose -= CloseModal;
+    }
+
+    protected override void OnInitialized()
+    {
+        ModalService.OnShow += ShowModal;
+        ModalService.OnClose += CloseModal;
     }
 
     private void ShowModal()
@@ -73,9 +76,9 @@ public sealed partial class DropBearModal : DropBearComponentBase
         return $"btn btn-{type.ToString().ToLower()}";
     }
 
-    private void ToggleTheme()
+    private async Task ToggleTheme()
     {
         Theme = Theme == ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
-        JSRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", "dropBearModal", GetModalClasses());
+        await JSRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", "dropBearModal", GetModalClasses());
     }
 }

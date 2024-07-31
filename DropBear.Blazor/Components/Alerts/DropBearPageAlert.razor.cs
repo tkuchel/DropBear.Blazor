@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Alerts;
 
+/// <summary>
+///     A Blazor component for displaying page alerts.
+/// </summary>
 public sealed partial class DropBearPageAlert : DropBearComponentBase
 {
     private static readonly Dictionary<AlertType, string> IconClasses = new()
@@ -29,24 +32,23 @@ public sealed partial class DropBearPageAlert : DropBearComponentBase
     private string AlertClassString => $"alert alert-{GetThemeClass()} alert-{Type.ToString().ToLower()}";
     private string IconClassString => IconClasses[Type];
 
+    /// <summary>
+    ///     Handles the close button click event.
+    /// </summary>
     private async Task OnCloseClick()
     {
-        // Check is IsDismissible is false
-        if (IsDismissible is false)
+        if (!IsDismissible || !OnClose.HasDelegate)
         {
             return;
         }
 
-        // Check if the OnClose event is empty
-        if (OnClose.HasDelegate is false)
-        {
-            return;
-        }
-
-        // Invoke the OnClose event
         await OnClose.InvokeAsync();
     }
 
+    /// <summary>
+    ///     Gets the CSS class for the theme.
+    /// </summary>
+    /// <returns>Returns "dark" if the theme is dark mode; otherwise, "light".</returns>
     private string GetThemeClass()
     {
         return Theme == ThemeType.DarkMode ? "dark" : "light";

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace DropBear.Blazor.Components.Buttons;
 
+/// <summary>
+///     A Blazor component for rendering a button with various styles and options.
+/// </summary>
 public sealed partial class DropBearButton : DropBearComponentBase
 {
     [Parameter] public ButtonStyle ButtonStyle { get; set; } = ButtonStyle.Solid;
@@ -26,6 +29,10 @@ public sealed partial class DropBearButton : DropBearComponentBase
 
     private string CssClass => BuildCssClass();
 
+    /// <summary>
+    ///     Builds the CSS class for the button based on its properties.
+    /// </summary>
+    /// <returns>A string representing the CSS class.</returns>
     private string BuildCssClass()
     {
         var cssClass = "dropbear-btn";
@@ -51,6 +58,10 @@ public sealed partial class DropBearButton : DropBearComponentBase
         return cssClass.Trim();
     }
 
+    /// <summary>
+    ///     Handles the click event for the button.
+    /// </summary>
+    /// <param name="args">The mouse event arguments.</param>
     private async Task OnClickHandler(MouseEventArgs args)
     {
         if (!IsDisabled && OnClick.HasDelegate)

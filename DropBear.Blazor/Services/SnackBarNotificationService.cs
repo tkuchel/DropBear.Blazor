@@ -9,17 +9,30 @@ using DropBear.Blazor.Models;
 
 namespace DropBear.Blazor.Services;
 
+/// <summary>
+///     Service to manage snackbar notifications.
+/// </summary>
 public sealed class SnackbarNotificationService : ISnackbarNotificationService
 {
     public event Action? OnHideAll;
+    public event Func<SnackbarNotificationOptions, Task>? OnShow;
 
+    /// <summary>
+    ///     Hides all snackbar notifications.
+    /// </summary>
     public void HideAll()
     {
         OnHideAll?.Invoke();
     }
 
-    public event Func<SnackbarNotificationOptions, Task>? OnShow;
-
+    /// <summary>
+    ///     Shows a snackbar notification with the specified message and options.
+    /// </summary>
+    /// <param name="message">The message to display.</param>
+    /// <param name="type">The type of the snackbar.</param>
+    /// <param name="theme">The theme of the snackbar.</param>
+    /// <param name="duration">The duration to display the snackbar.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public Task ShowAsync(string message, SnackbarType type = SnackbarType.Information,
         ThemeType theme = ThemeType.DarkMode, int duration = 5000)
     {
@@ -30,6 +43,11 @@ public sealed class SnackbarNotificationService : ISnackbarNotificationService
         return ShowAsync(options);
     }
 
+    /// <summary>
+    ///     Shows a snackbar notification with the specified options.
+    /// </summary>
+    /// <param name="options">The options for the snackbar notification.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task ShowAsync(SnackbarNotificationOptions options)
     {
         try

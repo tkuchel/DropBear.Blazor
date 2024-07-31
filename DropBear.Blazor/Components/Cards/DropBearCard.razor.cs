@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Cards;
 
+/// <summary>
+///     A Blazor component for rendering a card with various styles and options.
+/// </summary>
 public partial class DropBearCard : ComponentBase
 {
     private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
@@ -42,11 +45,20 @@ public partial class DropBearCard : ComponentBase
 
     [Parameter] public EventCallback<ButtonConfig> OnButtonClicked { get; set; }
 
+    /// <summary>
+    ///     Gets the CSS class for the specified button color.
+    /// </summary>
+    /// <param name="type">The button color.</param>
+    /// <returns>A string representing the CSS class.</returns>
     private static string GetButtonClass(ButtonColor type)
     {
         return ButtonClasses.GetValueOrDefault(type, "btn-primary");
     }
 
+    /// <summary>
+    ///     Handles the button click event.
+    /// </summary>
+    /// <param name="button">The button configuration.</param>
     private async Task OnButtonClick(ButtonConfig button)
     {
         await OnButtonClicked.InvokeAsync(button);

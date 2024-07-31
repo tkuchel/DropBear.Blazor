@@ -11,13 +11,16 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Files;
 
+/// <summary>
+///     A Blazor component for uploading files with drag-and-drop support and progress indication.
+/// </summary>
 public sealed partial class DropBearFileUploader : DropBearComponentBase
 {
-    private bool _isDragOver = false;
-    private bool _isUploading = false;
-    private List<UploadFile> _selectedFiles = new();
-    private List<UploadFile> _uploadedFiles = new();
-    private int _uploadProgress = 0;
+    private readonly List<UploadFile> _selectedFiles = new();
+    private readonly List<UploadFile> _uploadedFiles = new();
+    private bool _isDragOver;
+    private bool _isUploading;
+    private int _uploadProgress;
 
     [Parameter] public int MaxFileSize { get; set; } = 10 * 1024 * 1024; // 10MB default
 
@@ -28,7 +31,6 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
 
     [Parameter] public Func<UploadFile, IProgress<int>, Task<UploadResult>> UploadFileAsync { get; set; }
-
 
     private string GetThemeClass()
     {
@@ -128,7 +130,8 @@ public sealed partial class DropBearFileUploader : DropBearComponentBase
                     var progress = new Progress<int>(percent =>
                     {
                         file.UploadProgress = percent;
-                        _uploadProgress = (int)(_selectedFiles.Sum(f => f.UploadProgress) / (float)_selectedFiles.Count);
+                        _uploadProgress =
+                            (int)(_selectedFiles.Sum(f => f.UploadProgress) / (float)_selectedFiles.Count);
                         StateHasChanged();
                     });
 

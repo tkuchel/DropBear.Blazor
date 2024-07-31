@@ -173,3 +173,78 @@ window.downloadFileFromStream = (fileName, byteArray) => {
   a.click();
   window.URL.revokeObjectURL(url);
 };
+
+window.DropBearContextMenu = (function () {
+  class ContextMenu {
+    constructor(element, dotNetReference) {
+      this.element = element;
+      this.dotNetReference = dotNetReference;
+      this.initialize();
+    }
+
+    initialize() {
+      this.element.addEventListener('contextmenu', this.handleContextMenu.bind(this));
+      document.addEventListener('click', this.handleDocumentClick.bind(this));
+    }
+
+    handleContextMenu(e) {
+      e.preventDefault();
+      this.show(e.clientX, e.clientY);
+    }
+
+    handleDocumentClick() {
+      this.dotNetReference.invokeMethodAsync('Hide');
+    }
+
+    show(x, y) {
+      this.dotNetReference.invokeMethodAsync('Show', x, y);
+    }
+
+    dispose() {
+      this.element.removeEventListener('contextmenu', this.handleContextMenu);
+      document.removeEventListener('click', this.handleDocumentClick);
+    }
+  }
+
+  const menuInstances = new Map();
+
+  return {
+    initialize(elementId, dotNetReference) {
+      const element = document.getElementById(elementId);
+      if (!element) {
+        console.error(`Element with id '${elementId}' not found.`);
+        return;
+      }
+
+      if (menuInstances.has(elementId)) {
+        console.warn(`Context menu for element '${elementId}' already initialized. Disposing old instance.`);
+        this.dispose(elementId);
+      }
+
+      const menuInstance = new ContextMenu(element, dotNetReference);
+      menuInstances.set(elementId, menuInstance);
+    },
+
+    show(elementId, x, y) {
+      const menuInstance = menuInstances.get(elementId);
+      if (menuInstance) {
+        menuInstance.show(x, y);
+      } else {
+        console.error(`No context menu instance found for element '${elementId}'.`);
+      }
+    },
+
+    dispose(elementId) {
+      const menuInstance = menuInstances.get(elementId);
+      if (menuInstance) {
+        menuInstance.dispose();
+        menuInstances.delete(elementId);
+      }
+    },
+
+    disposeAll() {
+      menuInstances.forEach((instance, elementId) => instance.dispose());
+      menuInstances.clear();
+    }
+  };
+})();

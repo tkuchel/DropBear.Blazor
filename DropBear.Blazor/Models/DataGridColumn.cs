@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Models;
 
+/// <summary>
+///     Represents a column in a data grid.
+/// </summary>
+/// <typeparam name="TItem">The type of the data items.</typeparam>
 public sealed class DataGridColumn<TItem>
 {
     // Existing properties

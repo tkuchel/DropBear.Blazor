@@ -1,7 +1,18 @@
 ﻿namespace DropBear.Blazor.Models;
 
+/// <summary>
+///     Represents an item in a context menu.
+/// </summary>
 public sealed class ContextMenuItem
 {
+    public ContextMenuItem()
+    {
+        Text = string.Empty;
+        IconClass = string.Empty;
+        Submenu = new List<ContextMenuItem>();
+        Data = new object();
+    }
+
     public string Text { get; set; }
     public string IconClass { get; set; }
     public bool IsSeparator { get; set; }

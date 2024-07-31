@@ -54,9 +54,9 @@
   --clr-warning-darker: hsl(45, 100%, 51.37%);
   --clr-warning: hsl(37.5, 95.73%, 54.12%);
   --clr-warning-lighter: var(--clr-mustard);
-  --clr-error-darker:hsl(354.25, 70.46%, 53.53%);
+  --clr-error-darker: hsl(354.25, 70.46%, 53.53%);
   --clr-error: hsl(0, 84.92%, 60.98%);
-  --clr-error-lighter:  var(--clr-persimmon);
+  --clr-error-lighter: var(--clr-persimmon);
   --clr-information-darker: hsl(188.2, 77.78%, 40.59%);
   --clr-information: hsl(202.97, 97.77%, 64.9%);
   --clr-information-lighter: var(--clr-malibu);

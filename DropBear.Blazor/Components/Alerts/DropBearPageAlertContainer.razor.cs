@@ -6,15 +6,25 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Alerts;
 
-public partial class DropBearPageAlertContainer : ComponentBase
+/// <summary>
+///     A container component for displaying page alerts.
+/// </summary>
+public partial class DropBearPageAlertContainer : ComponentBase, IDisposable
 {
+    /// <summary>
+    ///     Disposes of the alert service subscription.
+    /// </summary>
     public void Dispose()
     {
         AlertService.OnChange -= StateHasChanged;
     }
 
+    /// <summary>
+    ///     Subscribes to the alert service on initialization.
+    /// </summary>
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         AlertService.OnChange += StateHasChanged;
     }
 }

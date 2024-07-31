@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
@@ -8,14 +9,18 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Components.Grids;
 
-public class DropbearDataGridBase<TItem> : ComponentBase
+/// <summary>
+///     A Blazor component for rendering a data grid with sorting, searching, and pagination capabilities.
+/// </summary>
+/// <typeparam name="TItem">The type of the data items.</typeparam>
+public class DropbearDataGrid<TItem> : DropBearComponentBase
 {
     private DataGridColumn<TItem> _currentSortColumn = new();
     private SortDirection _currentSortDirection = SortDirection.Ascending;
 
     private List<TItem>? _selectedItems;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
-    [Parameter] public List<DataGridColumn<TItem>> Columns { get; set; } = [];
+    [Parameter] public List<DataGridColumn<TItem>> Columns { get; set; } = new();
     [Parameter] public string Title { get; set; } = "Data Grid";
     [Parameter] public bool EnableSearch { get; set; } = true;
     [Parameter] public bool EnablePagination { get; set; } = true;
@@ -29,36 +34,36 @@ public class DropbearDataGridBase<TItem> : ComponentBase
     [Parameter] public EventCallback<TItem> OnEditItem { get; set; }
     [Parameter] public EventCallback<TItem> OnDeleteItem { get; set; }
     [Parameter] public EventCallback<List<TItem>> OnSelectionChanged { get; set; }
+
     protected string SearchTerm { get; private set; } = string.Empty;
     protected int CurrentPage { get; private set; } = 1;
     protected int TotalPages => (int)Math.Ceiling(FilteredItems.Count() / (double)ItemsPerPage);
 
-    protected bool SelectAll
+    private bool SelectAll
     {
         get => SelectedItems.Count == Items.Count();
         set
         {
-            SelectedItems = value ? [..Items] : [];
+            SelectedItems = value ? Items.ToList() : new List<TItem>();
             OnSelectionChanged.InvokeAsync(SelectedItems);
         }
     }
 
     protected List<TItem> SelectedItems
     {
-        get => _selectedItems ??= [];
+        get => _selectedItems ??= new List<TItem>();
         private set => _selectedItems = value;
     }
 
     private IEnumerable<TItem> FilteredItems { get; set; } = new List<TItem>();
     protected IEnumerable<TItem> DisplayedItems { get; private set; } = new List<TItem>();
-    protected List<int> ItemsPerPageOptions { get; set; } = [10, 25, 50, 100];
+    protected List<int> ItemsPerPageOptions { get; set; } = new() { 10, 25, 50, 100 };
     protected string ThemeClass => Theme == ThemeType.DarkMode ? "dark-theme" : "light-theme";
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        // Ensure initial state is set
-        _selectedItems ??= [];
+        _selectedItems ??= new List<TItem>();
         FilteredItems = Items;
         UpdateDisplayedItems();
     }
@@ -79,8 +84,8 @@ public class DropbearDataGridBase<TItem> : ComponentBase
         {
             FilteredItems = Items.Where(item => Columns.Any(column =>
                 column.PropertySelector != null &&
-                column.PropertySelector.Compile()(item).ToString()
-                    ?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) == true
+                column.PropertySelector.Compile()(item)?.ToString()
+                    .Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) == true
             ));
         }
 
@@ -98,14 +103,12 @@ public class DropbearDataGridBase<TItem> : ComponentBase
 
         if (_currentSortColumn == column)
         {
-            // If clicking the same column, toggle the sort direction
             _currentSortDirection = _currentSortDirection == SortDirection.Ascending
                 ? SortDirection.Descending
                 : SortDirection.Ascending;
         }
         else
         {
-            // If clicking a new column, default to ascending
             _currentSortColumn = column;
             _currentSortDirection = SortDirection.Ascending;
         }
@@ -124,7 +127,6 @@ public class DropbearDataGridBase<TItem> : ComponentBase
         UpdateDisplayedItems();
     }
 
-    // You might want to add a method to get the current sort direction for a column
     protected SortDirection? GetSortDirection(DataGridColumn<TItem> column)
     {
         return _currentSortColumn == column ? _currentSortDirection : null;
@@ -161,14 +163,19 @@ public class DropbearDataGridBase<TItem> : ComponentBase
 
     protected void ToggleSelection(TItem item, bool isSelected)
     {
-        switch (isSelected)
+        if (isSelected)
         {
-            case true when !SelectedItems.Contains(item):
+            if (!SelectedItems.Contains(item))
+            {
                 SelectedItems.Add(item);
-                break;
-            case false when SelectedItems.Contains(item):
+            }
+        }
+        else
+        {
+            if (SelectedItems.Contains(item))
+            {
                 SelectedItems.Remove(item);
-                break;
+            }
         }
 
         OnSelectionChanged.InvokeAsync(SelectedItems);
@@ -177,15 +184,7 @@ public class DropbearDataGridBase<TItem> : ComponentBase
 
     protected void ToggleSelectAll(bool selectAll)
     {
-        if (selectAll)
-        {
-            SelectedItems = [..Items];
-        }
-        else
-        {
-            SelectedItems.Clear();
-        }
-
+        SelectedItems = selectAll ? Items.ToList() : new List<TItem>();
         OnSelectionChanged.InvokeAsync(SelectedItems);
         StateHasChanged();
     }
@@ -215,7 +214,7 @@ public class DropbearDataGridBase<TItem> : ComponentBase
         var value = column.PropertySelector.Compile()(item);
         if (string.IsNullOrEmpty(column.Format))
         {
-            return value.ToString() ?? string.Empty;
+            return value?.ToString() ?? string.Empty;
         }
 
         if (value is IFormattable formattable)
@@ -223,6 +222,6 @@ public class DropbearDataGridBase<TItem> : ComponentBase
             return formattable.ToString(column.Format, null);
         }
 
-        return value.ToString() ?? string.Empty;
+        return value?.ToString() ?? string.Empty;
     }
 }

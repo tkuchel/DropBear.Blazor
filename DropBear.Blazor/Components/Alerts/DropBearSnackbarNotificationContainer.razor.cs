@@ -10,18 +10,23 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Alerts;
 
+/// <summary>
+///     A container component for displaying snackbar notifications.
+/// </summary>
 public sealed partial class DropBearSnackbarNotificationContainer : DropBearComponentBase, IAsyncDisposable
 {
-    private readonly List<SnackbarInstance> _snackbars = [];
+    private readonly List<SnackbarInstance> _snackbars = new();
 
     [Inject] private ISnackbarNotificationService SnackbarService { get; set; } = default!;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    ///     Disposes of the snackbar notification container asynchronously.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
-        SnackbarService.OnShow -= ShowSnackbarAsync;
-        SnackbarService.OnHideAll -= HideAllSnackbars;
+        UnsubscribeSnackbarServiceEvents();
 
         foreach (var snackbar in _snackbars)
         {
@@ -37,12 +42,31 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         }
     }
 
+    /// <summary>
+    ///     Initializes the snackbar notification container.
+    /// </summary>
     protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SubscribeSnackbarServiceEvents();
+    }
+
+    private void SubscribeSnackbarServiceEvents()
     {
         SnackbarService.OnShow += ShowSnackbarAsync;
         SnackbarService.OnHideAll += HideAllSnackbars;
     }
 
+    private void UnsubscribeSnackbarServiceEvents()
+    {
+        SnackbarService.OnShow -= ShowSnackbarAsync;
+        SnackbarService.OnHideAll -= HideAllSnackbars;
+    }
+
+    /// <summary>
+    ///     Shows a snackbar notification asynchronously.
+    /// </summary>
+    /// <param name="options">The options for the snackbar notification.</param>
     public async Task ShowSnackbarAsync(SnackbarNotificationOptions options)
     {
         var snackbar = new SnackbarInstance
@@ -62,7 +86,7 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         _snackbars.Add(snackbar);
         StateHasChanged();
 
-        await Task.Yield(); // Ensure component is rendered
+        await Task.Yield(); // Ensure the component is rendered
         await snackbar.ComponentRef.ShowAsync();
 
         _ = RemoveSnackbarAfterDuration(snackbar);
@@ -73,11 +97,11 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         if (snackbar.IsDismissible)
         {
             await Task.Delay(snackbar.Duration);
-            await RemoveSnackbar(snackbar);
+            await RemoveSnackbarAsync(snackbar);
         }
     }
 
-    private async Task RemoveSnackbar(SnackbarInstance snackbar)
+    private async Task RemoveSnackbarAsync(SnackbarInstance snackbar)
     {
         if (_snackbars.Remove(snackbar))
         {

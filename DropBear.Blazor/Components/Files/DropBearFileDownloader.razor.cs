@@ -9,11 +9,13 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Files;
 
+/// <summary>
+///     A Blazor component for downloading files with progress indication.
+/// </summary>
 public partial class DropBearFileDownloader : DropBearComponentBase
 {
-    private int _downloadProgress = 0;
-
-    private bool _isDownloading = false;
+    private int _downloadProgress;
+    private bool _isDownloading;
 
     [Parameter] public string FileName { get; set; } = "example_document.pdf";
     [Parameter] public string FileSize { get; set; } = "2.5 MB";
@@ -25,6 +27,9 @@ public partial class DropBearFileDownloader : DropBearComponentBase
 
     private string ThemeClass => Theme == ThemeType.LightMode ? "light-theme" : "dark-theme";
 
+    /// <summary>
+    ///     Starts the file download process.
+    /// </summary>
     private async Task StartDownload()
     {
         if (_isDownloading || DownloadFileAsync == null)
