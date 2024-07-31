@@ -55,7 +55,7 @@
 
 /* Button Variants */
 .dropbear-btn-solid {
-  color: var(--clr-text-white);
+  color: var(--clr-text-black);
   background-color: var(--button-bg-color);
   border-color: var(--button-bg-color);
 }

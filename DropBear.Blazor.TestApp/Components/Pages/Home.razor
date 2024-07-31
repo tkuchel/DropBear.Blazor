@@ -1,0 +1,17 @@
+﻿@page "/"
+@using DropBear.Blazor.Components.Badges
+@using DropBear.Blazor.Enums
+@using DropBear.Blazor.Interfaces
+@rendermode InteractiveServer
+@inject ISnackbarNotificationService SnackbarService
+
+
+<DropBearBadge Color="BadgeColor.Success"
+               Shape="BadgeShape.Normal"
+               Icon="fas fa-check"
+               Text="Completed"
+               Tooltip="Task completed successfully"/>
+
+<DropBearBadge Color="BadgeColor.Warning"
+               Icon="fas fa-exclamation-triangle"
+               Tooltip="Warning: Proceed with caution"/>
