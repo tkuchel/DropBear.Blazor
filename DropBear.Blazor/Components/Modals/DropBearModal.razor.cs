@@ -93,9 +93,4 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 #pragma warning restore CA1308
     }
 
-    private async Task ToggleTheme()
-    {
-        Theme = Theme == ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
-        await JsRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", Id, GetModalClasses());
-    }
 }
