@@ -1,5 +1,6 @@
 ﻿@inject IModalService ModalService
 @inject IJSRuntime JsRuntime
+@using DropBear.Blazor.Arguments.Events
 @using DropBear.Blazor.Interfaces
 @using Microsoft.JSInterop
 @inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
@@ -18,7 +19,7 @@
         <div class="modal-footer">
             @foreach (var button in Buttons)
             {
-                <button class="@GetButtonClasses(button.Color)" @onclick="() => button.OnClick.InvokeAsync()">
+                <button class="@GetButtonClasses(button.Color)" @onclick="@(async () => await button.OnClick.InvokeAsync(new ModalEventArgs(Id, Title, Theme, IsVisible)))">
                     @if (!string.IsNullOrEmpty(button.Icon))
                     {
                         <i class="@button.Icon"></i>

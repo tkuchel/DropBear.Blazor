@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Enums;
 using Microsoft.AspNetCore.Components;
 
@@ -31,5 +32,5 @@ public sealed class ModalButton
     /// <summary>
     ///     Gets the event callback invoked when the button is clicked.
     /// </summary>
-    public EventCallback OnClick { get; init; } = EventCallback.Empty;
+    public EventCallback<ModalEventArgs> OnClick { get; init; }
 }

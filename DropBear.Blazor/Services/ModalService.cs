@@ -32,22 +32,28 @@ public class ModalService : IModalService
 
     public void Show(string modalId)
     {
-        if (_modals.TryGetValue(modalId, out var modal))
+        if (!_modals.TryGetValue(modalId, out var modal))
         {
-            modal.IsVisible = true;
-            OnShow?.Invoke(this, new ModalEventArgs(modalId));
-            OnChange?.Invoke(this, EventArgs.Empty);
+            return;
         }
+
+        modal.IsVisible = true;
+        var args = new ModalEventArgs(modal.Id, modal.Title, modal.Theme, modal.IsVisible);
+        OnShow?.Invoke(this, args);
+        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     public void Close(string modalId)
     {
-        if (_modals.TryGetValue(modalId, out var modal))
+        if (!_modals.TryGetValue(modalId, out var modal))
         {
-            modal.IsVisible = false;
-            OnClose?.Invoke(this, new ModalEventArgs(modalId));
-            OnChange?.Invoke(this, EventArgs.Empty);
+            return;
         }
+
+        modal.IsVisible = false;
+        var args = new ModalEventArgs(modal.Id, modal.Title, modal.Theme, modal.IsVisible);
+        OnClose?.Invoke(this, args);
+        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     public bool IsModalVisible(string modalId)

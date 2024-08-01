@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Components;
 
 namespace DropBear.Blazor.Models;
 
-public class Modal
+public sealed class Modal
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-    public string Title { get; set; } = "Modal Title";
-    public RenderFragment? BodyContent { get; set; }
-    public IReadOnlyCollection<ModalButton> Buttons { get; set; } = Array.Empty<ModalButton>();
-    public ThemeType Theme { get; set; } = ThemeType.LightMode;
-    public bool CloseOnBackdropClick { get; set; } = true;
+    public string Id { get; init; } = Guid.NewGuid().ToString();
+    public string Title { get; init; } = "Modal Title";
+    public RenderFragment? BodyContent { get; init; }
+    public IReadOnlyCollection<ModalButton> Buttons { get; init; } = Array.Empty<ModalButton>();
+    public ThemeType Theme { get; init; } = ThemeType.LightMode;
+    public bool CloseOnBackdropClick { get; init; } = true;
     public bool IsVisible { get; set; }
 }
