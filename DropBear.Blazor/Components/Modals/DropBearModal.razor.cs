@@ -15,7 +15,6 @@ namespace DropBear.Blazor.Components.Modals;
 public sealed partial class DropBearModal<TContext> : DropBearComponentBase, IDisposable where TContext : class
 {
     [Inject] private IModalService ModalService { get; set; } = default!;
-    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
     [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString();
     [Parameter] public string Title { get; set; } = "Modal Title";
