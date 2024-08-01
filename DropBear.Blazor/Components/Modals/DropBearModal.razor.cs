@@ -1,5 +1,6 @@
 ﻿#region
 
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
@@ -10,51 +11,60 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Modals;
 
-/// <summary>
-///     A Blazor component for displaying a modal dialog.
-/// </summary>
 public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 {
-    private CancellationTokenSource? _dismissCancellationTokenSource;
+    [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString();
     [Parameter] public string Title { get; set; } = "Modal Title";
     [Parameter] public RenderFragment BodyContent { get; set; } = default!;
     [Parameter] public IReadOnlyCollection<ModalButton> Buttons { get; set; } = Array.Empty<ModalButton>();
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
     [Parameter] public bool CloseOnBackdropClick { get; set; } = true;
 
-    private bool IsVisible { get; set; }
+    private bool IsVisible => ModalService.IsModalVisible(Id);
 
     public void Dispose()
     {
-        ModalService.OnShow -= ShowModal;
-        ModalService.OnClose -= CloseModal;
-
-        _dismissCancellationTokenSource?.Dispose();
+        ModalService.OnShow -= HandleModalShow;
+        ModalService.OnClose -= HandleModalClose;
+        ModalService.RemoveModal(Id);
     }
 
     protected override void OnInitialized()
     {
-        ModalService.OnShow += ShowModal;
-        ModalService.OnClose += CloseModal;
+        ModalService.OnShow += HandleModalShow;
+        ModalService.OnClose += HandleModalClose;
 
-        _dismissCancellationTokenSource = new CancellationTokenSource();
+        // Register this modal with the ModalService
+        ModalService.AddModal(new Modal
+        {
+            Id = Id,
+            Title = Title,
+            BodyContent = BodyContent,
+            Buttons = new List<ModalButton>(Buttons),
+            Theme = Theme,
+            CloseOnBackdropClick = CloseOnBackdropClick
+        });
     }
 
-    private void ShowModal(object? sender, EventArgs e)
+    private void HandleModalShow(object? sender, ModalEventArgs e)
     {
-        IsVisible = true;
-        StateHasChanged();
+        if (e.ModalId == Id)
+        {
+            StateHasChanged();
+        }
     }
 
-    private void CloseModal(object? sender, EventArgs e)
+    private void HandleModalClose(object? sender, ModalEventArgs e)
     {
-        IsVisible = false;
-        StateHasChanged();
+        if (e.ModalId == Id)
+        {
+            StateHasChanged();
+        }
     }
 
     private void Close()
     {
-        ModalService.Close();
+        ModalService.Close(Id);
     }
 
     private void CloseModalOnBackdropClick()
@@ -76,20 +86,16 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
         return string.Join(' ', classes);
     }
 
-    private static string GetButtonClasses(ButtonColor type)
+    private static string GetButtonClasses(ButtonColor color)
     {
 #pragma warning disable CA1308
-        return $"btn btn-{type.ToString().ToLowerInvariant()}";
+        return $"btn btn-{color.ToString().ToLowerInvariant()}";
 #pragma warning restore CA1308
     }
 
     private async Task ToggleTheme()
     {
-        Theme = Theme is ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
-        if (_dismissCancellationTokenSource is not null)
-        {
-            await JSRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", _dismissCancellationTokenSource.Token,
-                "dropBearModal", GetModalClasses());
-        }
+        Theme = Theme == ThemeType.DarkMode ? ThemeType.LightMode : ThemeType.DarkMode;
+        await JsRuntime.InvokeVoidAsync("DropBearModal.updateModalTheme", Id, GetModalClasses());
     }
 }

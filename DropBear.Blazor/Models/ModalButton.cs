@@ -21,7 +21,7 @@ public sealed class ModalButton
     /// <summary>
     ///     Gets the color type of the button.
     /// </summary>
-    public ButtonColor Type { get; init; } = ButtonColor.Primary;
+    public ButtonColor Color { get; init; } = ButtonColor.Primary;
 
     /// <summary>
     ///     Gets the icon displayed on the button.

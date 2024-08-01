@@ -1,27 +1,22 @@
-﻿namespace DropBear.Blazor.Interfaces;
+﻿#region
 
-/// <summary>
-///     Interface for a service that manages modals.
-/// </summary>
+using DropBear.Blazor.Arguments.Events;
+using DropBear.Blazor.Models;
+
+#endregion
+
+namespace DropBear.Blazor.Interfaces;
+
 public interface IModalService
 {
-    /// <summary>
-    ///     Event triggered when a modal is shown.
-    /// </summary>
-    event EventHandler? OnShow;
+    event EventHandler<ModalEventArgs>? OnShow;
+    event EventHandler<ModalEventArgs>? OnClose;
+    event EventHandler? OnChange;
 
-    /// <summary>
-    ///     Event triggered when a modal is closed.
-    /// </summary>
-    event EventHandler? OnClose;
-
-    /// <summary>
-    ///     Shows a modal.
-    /// </summary>
-    void Show();
-
-    /// <summary>
-    ///     Closes a modal.
-    /// </summary>
-    void Close();
+    void AddModal(Modal modal);
+    void RemoveModal(string modalId);
+    void Show(string modalId);
+    void Close(string modalId);
+    bool IsModalVisible(string modalId);
+    IEnumerable<Modal> GetAllModals();
 }

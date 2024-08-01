@@ -1,32 +1,62 @@
 ﻿#region
 
+using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Interfaces;
+using DropBear.Blazor.Models;
 
 #endregion
 
 namespace DropBear.Blazor.Services;
 
-/// <summary>
-///     Service to manage the display and closure of modals.
-/// </summary>
 public class ModalService : IModalService
 {
-    public event EventHandler? OnShow;
-    public event EventHandler? OnClose;
+    private readonly Dictionary<string, Modal> _modals = new(StringComparer.Ordinal);
 
-    /// <summary>
-    ///     Triggers the OnShow event to display a modal.
-    /// </summary>
-    public void Show()
+    public event EventHandler<ModalEventArgs>? OnShow;
+    public event EventHandler<ModalEventArgs>? OnClose;
+    public event EventHandler? OnChange;
+
+    public void AddModal(Modal modal)
     {
-        OnShow?.Invoke(this, EventArgs.Empty);
+        _modals[modal.Id] = modal;
+        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>
-    ///     Triggers the OnClose event to close a modal.
-    /// </summary>
-    public void Close()
+    public void RemoveModal(string modalId)
     {
-        OnClose?.Invoke(this, EventArgs.Empty);
+        if (_modals.Remove(modalId))
+        {
+            OnChange?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public void Show(string modalId)
+    {
+        if (_modals.TryGetValue(modalId, out var modal))
+        {
+            modal.IsVisible = true;
+            OnShow?.Invoke(this, new ModalEventArgs(modalId));
+            OnChange?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public void Close(string modalId)
+    {
+        if (_modals.TryGetValue(modalId, out var modal))
+        {
+            modal.IsVisible = false;
+            OnClose?.Invoke(this, new ModalEventArgs(modalId));
+            OnChange?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public bool IsModalVisible(string modalId)
+    {
+        return _modals.TryGetValue(modalId, out var modal) && modal.IsVisible;
+    }
+
+    public IEnumerable<Modal> GetAllModals()
+    {
+        return _modals.Values;
     }
 }
