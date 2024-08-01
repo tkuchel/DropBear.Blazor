@@ -3,6 +3,7 @@
 using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
+using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,14 +12,21 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Modals;
 
-public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
+public sealed partial class DropBearModal<TContext> : DropBearComponentBase, IDisposable where TContext : class
 {
+    [Inject] private IModalService ModalService { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+
     [Parameter] public string Id { get; set; } = Guid.NewGuid().ToString();
     [Parameter] public string Title { get; set; } = "Modal Title";
-    [Parameter] public RenderFragment BodyContent { get; set; } = default!;
-    [Parameter] public IReadOnlyCollection<ModalButton> Buttons { get; set; } = Array.Empty<ModalButton>();
+    [Parameter] public RenderFragment<TContext> BodyContent { get; set; } = default!;
+
+    [Parameter]
+    public IReadOnlyCollection<ModalButton<TContext>> Buttons { get; set; } = Array.Empty<ModalButton<TContext>>();
+
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
     [Parameter] public bool CloseOnBackdropClick { get; set; } = true;
+    [Parameter] public TContext Context { get; set; } = default!;
 
     private bool IsVisible => ModalService.IsModalVisible(Id);
 
@@ -35,18 +43,19 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
         ModalService.OnClose += HandleModalClose;
 
         // Register this modal with the ModalService
-        ModalService.AddModal(new Modal
+        ModalService.AddModal(new Modal<TContext>
         {
             Id = Id,
             Title = Title,
             BodyContent = BodyContent,
-            Buttons = new List<ModalButton>(Buttons),
+            Buttons = new List<ModalButton<TContext>>(Buttons),
             Theme = Theme,
-            CloseOnBackdropClick = CloseOnBackdropClick
+            CloseOnBackdropClick = CloseOnBackdropClick,
+            Context = Context
         });
     }
 
-    private void HandleModalShow(object? sender, ModalEventArgs e)
+    private void HandleModalShow(object? sender, ModalEventArgs<object> e)
     {
         if (e.ModalId == Id)
         {
@@ -54,7 +63,7 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
         }
     }
 
-    private void HandleModalClose(object? sender, ModalEventArgs e)
+    private void HandleModalClose(object? sender, ModalEventArgs<object> e)
     {
         if (e.ModalId == Id)
         {
@@ -93,4 +102,8 @@ public sealed partial class DropBearModal : DropBearComponentBase, IDisposable
 #pragma warning restore CA1308
     }
 
+    private async Task OnButtonClickAsync(ModalButton<TContext> button)
+    {
+        await button.OnClick.InvokeAsync(new ModalEventArgs<TContext>(Id, Title, IsVisible, Context));
+    }
 }

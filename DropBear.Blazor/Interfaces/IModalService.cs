@@ -9,14 +9,14 @@ namespace DropBear.Blazor.Interfaces;
 
 public interface IModalService
 {
-    event EventHandler<ModalEventArgs>? OnShow;
-    event EventHandler<ModalEventArgs>? OnClose;
+    event EventHandler<ModalEventArgs<object>>? OnShow;
+    event EventHandler<ModalEventArgs<object>>? OnClose;
     event EventHandler? OnChange;
 
-    void AddModal(Modal modal);
+    void AddModal<TContext>(Modal<TContext> modal) where TContext : class;
     void RemoveModal(string modalId);
     void Show(string modalId);
     void Close(string modalId);
     bool IsModalVisible(string modalId);
-    IEnumerable<Modal> GetAllModals();
+    IEnumerable<IModal> GetAllModals();
 }

@@ -10,13 +10,13 @@ namespace DropBear.Blazor.Services;
 
 public class ModalService : IModalService
 {
-    private readonly Dictionary<string, Modal> _modals = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, IModal> _modals = new(StringComparer.Ordinal);
 
-    public event EventHandler<ModalEventArgs>? OnShow;
-    public event EventHandler<ModalEventArgs>? OnClose;
+    public event EventHandler<ModalEventArgs<object>>? OnShow;
+    public event EventHandler<ModalEventArgs<object>>? OnClose;
     public event EventHandler? OnChange;
 
-    public void AddModal(Modal modal)
+    public void AddModal<TContext>(Modal<TContext> modal) where TContext : class
     {
         _modals[modal.Id] = modal;
         OnChange?.Invoke(this, EventArgs.Empty);
@@ -32,28 +32,22 @@ public class ModalService : IModalService
 
     public void Show(string modalId)
     {
-        if (!_modals.TryGetValue(modalId, out var modal))
+        if (_modals.TryGetValue(modalId, out var modal))
         {
-            return;
+            modal.IsVisible = true;
+            OnShow?.Invoke(this, new ModalEventArgs<object>(modal.Id, modal.Title, modal.IsVisible, modal.Context));
+            OnChange?.Invoke(this, EventArgs.Empty);
         }
-
-        modal.IsVisible = true;
-        var args = new ModalEventArgs(modal.Id, modal.Title, modal.Theme, modal.IsVisible);
-        OnShow?.Invoke(this, args);
-        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     public void Close(string modalId)
     {
-        if (!_modals.TryGetValue(modalId, out var modal))
+        if (_modals.TryGetValue(modalId, out var modal))
         {
-            return;
+            modal.IsVisible = false;
+            OnClose?.Invoke(this, new ModalEventArgs<object>(modal.Id, modal.Title, modal.IsVisible, modal.Context));
+            OnChange?.Invoke(this, EventArgs.Empty);
         }
-
-        modal.IsVisible = false;
-        var args = new ModalEventArgs(modal.Id, modal.Title, modal.Theme, modal.IsVisible);
-        OnClose?.Invoke(this, args);
-        OnChange?.Invoke(this, EventArgs.Empty);
     }
 
     public bool IsModalVisible(string modalId)
@@ -61,7 +55,7 @@ public class ModalService : IModalService
         return _modals.TryGetValue(modalId, out var modal) && modal.IsVisible;
     }
 
-    public IEnumerable<Modal> GetAllModals()
+    public IEnumerable<IModal> GetAllModals()
     {
         return _modals.Values;
     }

@@ -11,26 +11,25 @@ namespace DropBear.Blazor.Models;
 /// <summary>
 ///     Represents a button in a modal dialog.
 /// </summary>
-// ReSharper disable once ClassNeverInstantiated.Global
-public sealed class ModalButton
+public sealed class ModalButton<TContext> where TContext : class
 {
     /// <summary>
-    ///     Gets the text displayed on the button.
+    ///     Gets or initializes the text displayed on the button.
     /// </summary>
     public string Text { get; init; } = "Close";
 
     /// <summary>
-    ///     Gets the color type of the button.
+    ///     Gets or initializes the color type of the button.
     /// </summary>
     public ButtonColor Color { get; init; } = ButtonColor.Primary;
 
     /// <summary>
-    ///     Gets the icon displayed on the button.
+    ///     Gets or initializes the icon displayed on the button.
     /// </summary>
     public string Icon { get; init; } = "fas fa-times";
 
     /// <summary>
-    ///     Gets the event callback invoked when the button is clicked.
+    ///     Gets or initializes the event callback invoked when the button is clicked.
     /// </summary>
-    public EventCallback<ModalEventArgs> OnClick { get; init; }
+    public EventCallback<ModalEventArgs<TContext>> OnClick { get; init; }
 }

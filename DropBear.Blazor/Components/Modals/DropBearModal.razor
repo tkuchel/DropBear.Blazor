@@ -1,8 +1,4 @@
-﻿@inject IModalService ModalService
-@inject IJSRuntime JsRuntime
-@using DropBear.Blazor.Arguments.Events
-@using DropBear.Blazor.Interfaces
-@using Microsoft.JSInterop
+﻿@typeparam TContext where TContext : class
 @inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 
 <div class="@GetModalClasses()" id="@Id" @onclick="CloseModalOnBackdropClick">
@@ -14,12 +10,12 @@
             </button>
         </div>
         <div class="modal-body">
-            @BodyContent
+            @BodyContent(Context)
         </div>
         <div class="modal-footer">
             @foreach (var button in Buttons)
             {
-                <button class="@GetButtonClasses(button.Color)" @onclick="@(async () => await button.OnClick.InvokeAsync(new ModalEventArgs(Id, Title, Theme, IsVisible)))">
+                <button class="@GetButtonClasses(button.Color)" @onclick="() => OnButtonClickAsync(button)">
                     @if (!string.IsNullOrEmpty(button.Icon))
                     {
                         <i class="@button.Icon"></i>
