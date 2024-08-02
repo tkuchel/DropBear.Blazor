@@ -2,15 +2,15 @@
 .snackbar {
   display: flex;
   align-items: center;
-  border-radius: 4px;
-  padding: 12px 16px;
+  border-radius: var(--border-radius-md);
+  padding: var(--padding-default);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   animation: slideInUp 0.3s ease-out;
   position: relative;
   overflow: hidden;
   pointer-events: auto; /* Re-enable pointer events for the snackbar itself */
   opacity: 1 !important; /* Force full opacity */
-  transform: translateY(0) !important; /* Ensure it's not translated off-screen */
+  /*transform: translateY(0) !important; !* Ensure it's not translated off-screen *!*/
   width: 100%; /* Ensures the snackbar takes full width of its container */
   box-sizing: border-box; /* Includes padding in the width calculation */
 }
@@ -65,7 +65,7 @@
   color: inherit;
   font-weight: bold;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: var(--padding-default);
   margin-left: 8px;
   text-transform: uppercase;
 }
