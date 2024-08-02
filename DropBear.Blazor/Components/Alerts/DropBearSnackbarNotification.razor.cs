@@ -191,6 +191,10 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         {
             await Console.Error.WriteLineAsync($"Error hiding snackbar: {ex.Message}");
         }
+        catch (ObjectDisposedException)
+        {
+            // CancellationTokenSource was already disposed, ignore
+        }
     }
 
     private async Task WaitForDismissalAsync()
