@@ -11,35 +11,63 @@ namespace DropBear.Blazor.Components.Loaders;
 /// <summary>
 ///     A Blazor component for displaying a progress bar for long wait times.
 /// </summary>
-public sealed partial class LongWaitProgressBar : DropBearComponentBase
+public sealed partial class LongWaitProgressBar : DropBearComponentBase, IDisposable
 {
-    [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
-    [Parameter] public string Title { get; set; } = "Long Wait";
-    [Parameter] public string Message { get; set; } = "Please wait while we process your request.";
-    [Parameter] public bool ShowCancelButton { get; set; } = true;
-    [Parameter] public int Progress { get; set; }
-    [Parameter] public EventCallback OnCancel { get; set; }
+    private const int UpdateInterval = 100; // Interval in milliseconds
+    private const int StepSize = 1; // Step size for progress increment
 
-    /// <summary>
-    ///     Gets the CSS class based on the selected theme.
-    /// </summary>
-    /// <returns>A string representing the CSS class.</returns>
-    private string GetThemeCssClass()
+    private int _currentProgress;
+    private Timer? _timer;
+    [Parameter] public string Title { get; set; } = "Please wait...";
+    [Parameter] public string Message { get; set; } = "Please wait while we process your request.";
+    [Parameter] public int Progress { get; set; }
+    [Parameter] public bool ShowCancelButton { get; set; }
+    [Parameter] public string CancelButtonText { get; set; } = "Cancel";
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
+
+    private string ThemeClass => Theme is ThemeType.DarkMode ? "theme-dark" : "theme-light";
+
+    public void Dispose()
     {
-        return Theme switch
-        {
-            ThemeType.DarkMode => "theme-dark",
-            ThemeType.LightMode => "theme-light",
-            _ => "theme-dark"
-        };
+        _timer?.Dispose();
     }
 
-    /// <summary>
-    ///     Handles the cancel button click event.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    private async Task HandleCancelClick()
+    protected override void OnInitialized()
     {
-        await OnCancel.InvokeAsync();
+        _currentProgress = Progress;
+        _timer = new Timer(UpdateProgress, null, Timeout.Infinite, UpdateInterval);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Progress != _currentProgress)
+        {
+            _timer?.Change(0, UpdateInterval); // Start or restart the timer
+        }
+    }
+
+    private void UpdateProgress(object? state)
+    {
+        if (_currentProgress < Progress)
+        {
+            _currentProgress = Math.Min(_currentProgress + StepSize, Progress);
+        }
+        else if (_currentProgress > Progress)
+        {
+            _currentProgress = Math.Max(_currentProgress - StepSize, Progress);
+        }
+
+        if (_currentProgress == Progress)
+        {
+            _timer?.Change(Timeout.Infinite, UpdateInterval); // Stop the timer
+        }
+
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void Cancel()
+    {
+        _ = OnCancel.InvokeAsync();
     }
 }
