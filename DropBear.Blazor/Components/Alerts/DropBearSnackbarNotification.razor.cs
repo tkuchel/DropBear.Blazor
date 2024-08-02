@@ -58,9 +58,8 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_isInitialized)
+        if (firstRender)
         {
-            _isInitialized = true;
             await JsRuntime.InvokeVoidAsync("console.log", "Snackbar component rendered");
             await JsRuntime.InvokeVoidAsync("console.log", $"Snackbar ID: {SnackbarId}");
             await ShowAsync();
@@ -69,6 +68,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     public async Task ShowAsync()
     {
+        if (IsVisible)
+        {
+            return; // Prevent showing if already visible
+        }
+
         IsVisible = true;
         _shouldRender = true;
         StateHasChanged();

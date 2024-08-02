@@ -1,27 +1,18 @@
 ﻿// DropBearSnackbar
 window.DropBearSnackbar = (function () {
-  const removalQueue = [];
-  let isProcessingRemoval = false;
+  const snackbars = new Map();
 
-  function processRemovalQueue() {
-    if (isProcessingRemoval || removalQueue.length === 0) return;
-
-    isProcessingRemoval = true;
-    const snackbarId = removalQueue.shift();
-
+  function removeSnackbar(snackbarId) {
     const snackbar = document.getElementById(snackbarId);
     if (snackbar) {
-      console.log(`Removing snackbar ${snackbarId}`);
-      snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
       snackbar.addEventListener('animationend', () => {
         snackbar.remove();
-        isProcessingRemoval = false;
-        processRemovalQueue();
-      }, {once: true});
+        snackbars.delete(snackbarId);
+      }, { once: true });
+      snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
     } else {
       console.warn(`Snackbar ${snackbarId} not found for removal`);
-      isProcessingRemoval = false;
-      processRemovalQueue();
+      snackbars.delete(snackbarId);
     }
   }
 
@@ -29,14 +20,14 @@ window.DropBearSnackbar = (function () {
     startProgress(snackbarId, duration) {
       console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
 
-      // Ensure the snackbar is visible
+      if (snackbars.has(snackbarId)) {
+        console.warn(`Snackbar ${snackbarId} already exists. Removing old instance.`);
+        this.hideSnackbar(snackbarId);
+      }
+
       this.showSnackbar(snackbarId);
 
-      // Verify the snackbar after a short delay
-      setTimeout(() => this.verifySnackbar(snackbarId), 100);
-
       const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
-
       if (progressBar) {
         console.log('Progress bar found, setting up animation');
         progressBar.style.transition = 'none';
@@ -52,8 +43,7 @@ window.DropBearSnackbar = (function () {
         console.error('Progress bar not found');
       }
 
-      // Schedule snackbar removal
-      this.scheduleSnackbarRemoval(snackbarId, duration);
+      snackbars.set(snackbarId, setTimeout(() => this.hideSnackbar(snackbarId), duration));
     },
 
     showSnackbar(snackbarId) {
@@ -70,41 +60,13 @@ window.DropBearSnackbar = (function () {
 
     hideSnackbar(snackbarId) {
       console.log(`Hiding snackbar ${snackbarId}`);
-      const snackbar = document.getElementById(snackbarId);
-      if (snackbar) {
-        snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
-        snackbar.addEventListener('animationend', () => {
-          console.log(`Animation ended for snackbar ${snackbarId}, removing from DOM`);
-          snackbar.remove();
-        }, {once: true});
-      } else {
-        console.error(`Snackbar ${snackbarId} not found when trying to hide it`);
-      }
-    },
-
-    scheduleSnackbarRemoval(snackbarId, duration) {
-      console.log(`Scheduling removal of snackbar ${snackbarId} after ${duration}ms`);
-      setTimeout(() => {
-        console.log(`Time's up for snackbar ${snackbarId}, initiating removal`);
-        this.hideSnackbar(snackbarId);
-      }, duration);
+      clearTimeout(snackbars.get(snackbarId));
+      removeSnackbar(snackbarId);
     },
 
     disposeSnackbar(snackbarId) {
       console.log(`Disposing snackbar ${snackbarId}`);
       this.hideSnackbar(snackbarId);
-    },
-
-    verifySnackbar(snackbarId) {
-      const snackbar = document.getElementById(snackbarId);
-      if (snackbar) {
-        console.log('Snackbar found in DOM:', snackbar);
-        console.log('Snackbar visibility:', window.getComputedStyle(snackbar).visibility);
-        console.log('Snackbar display:', window.getComputedStyle(snackbar).display);
-        console.log('Snackbar opacity:', window.getComputedStyle(snackbar).opacity);
-      } else {
-        console.error('Snackbar not found in DOM');
-      }
     }
   };
 })();

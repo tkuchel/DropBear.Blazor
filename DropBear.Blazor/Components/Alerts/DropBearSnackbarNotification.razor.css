@@ -3,12 +3,11 @@
   bottom: 20px;
   right: 20px;
   display: flex;
-  flex-direction: column-reverse; /* Change this to show new snackbars at the bottom */
+  flex-direction: column-reverse;
   gap: 10px;
-  max-width: 400px;
+  max-width: min(400px, calc(100% - 40px)); /* Ensures it fits on smaller screens */
   width: 100%;
-  z-index: 9999 !important;
-  pointer-events: none; /* Allow clicking through the container */
+  z-index: 9999;
 }
 
 .snackbar {
@@ -23,6 +22,8 @@
   pointer-events: auto; /* Re-enable pointer events for the snackbar itself */
   opacity: 1 !important; /* Force full opacity */
   transform: translateY(0) !important; /* Ensure it's not translated off-screen */
+  width: 100%; /* Ensures the snackbar takes full width of its container */
+  box-sizing: border-box; /* Includes padding in the width calculation */
 }
 
 .snackbar-dark {
