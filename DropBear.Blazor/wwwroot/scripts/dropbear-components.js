@@ -1,31 +1,25 @@
-﻿window.DropBearSnackbar = (function () {
+﻿// DropBearSnackbar
+window.DropBearSnackbar = (function () {
   const removalQueue = [];
   let isProcessingRemoval = false;
 
   function processRemovalQueue() {
-    console.log('Processing removal queue:', removalQueue);
     if (isProcessingRemoval || removalQueue.length === 0) return;
 
     isProcessingRemoval = true;
     const snackbarId = removalQueue.shift();
 
-    console.log(`Attempting to remove snackbar: ${snackbarId}`);
-    const snackbar = document.querySelector(`#${CSS.escape(snackbarId)}`);
+    const snackbar = document.getElementById(snackbarId);
     if (snackbar) {
-      console.log('Snackbar found, starting removal animation');
-      snackbar.style.animation = 'slideOutAndShrink 0.3s ease-out forwards';
+      console.log(`Removing snackbar ${snackbarId}`);
+      snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
       snackbar.addEventListener('animationend', () => {
-        console.log('Removal animation ended, removing snackbar from DOM');
-        if (snackbar.parentNode) {
-          snackbar.parentNode.removeChild(snackbar);
-        } else {
-          snackbar.remove();
-        }
+        snackbar.remove();
         isProcessingRemoval = false;
         processRemovalQueue();
       }, {once: true});
     } else {
-      console.warn(`Snackbar with id ${snackbarId} not found for removal`);
+      console.warn(`Snackbar ${snackbarId} not found for removal`);
       isProcessingRemoval = false;
       processRemovalQueue();
     }
@@ -33,9 +27,14 @@
 
   return {
     startProgress(snackbarId, duration) {
-      // Call this function in the startProgress method
-      this.verifySnackbar(snackbarId);
       console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
+
+      // Ensure the snackbar is visible
+      this.showSnackbar(snackbarId);
+
+      // Verify the snackbar after a short delay
+      setTimeout(() => this.verifySnackbar(snackbarId), 100);
+
       const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
 
       if (progressBar) {
@@ -52,41 +51,65 @@
       } else {
         console.error('Progress bar not found');
       }
+
+      // Schedule snackbar removal
+      this.scheduleSnackbarRemoval(snackbarId, duration);
+    },
+
+    showSnackbar(snackbarId) {
+      console.log(`Showing snackbar ${snackbarId}`);
+      const snackbar = document.getElementById(snackbarId);
+      if (snackbar) {
+        snackbar.style.display = 'flex';
+        snackbar.style.opacity = '1';
+        console.log(`Snackbar ${snackbarId} display set to flex and opacity set to 1`);
+      } else {
+        console.error(`Snackbar ${snackbarId} not found when trying to show it`);
+      }
     },
 
     hideSnackbar(snackbarId) {
-      console.log(`Attempting to hide snackbar ${snackbarId}`);
+      console.log(`Hiding snackbar ${snackbarId}`);
       const snackbar = document.getElementById(snackbarId);
       if (snackbar) {
-        console.log('Snackbar found, adding to removal queue');
-        removalQueue.push(snackbarId);
-        processRemovalQueue();
+        snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
+        snackbar.addEventListener('animationend', () => {
+          console.log(`Animation ended for snackbar ${snackbarId}, removing from DOM`);
+          snackbar.remove();
+        }, {once: true});
       } else {
-        console.error(`Snackbar with id ${snackbarId} not found for hiding`);
+        console.error(`Snackbar ${snackbarId} not found when trying to hide it`);
       }
+    },
+
+    scheduleSnackbarRemoval(snackbarId, duration) {
+      console.log(`Scheduling removal of snackbar ${snackbarId} after ${duration}ms`);
+      setTimeout(() => {
+        console.log(`Time's up for snackbar ${snackbarId}, initiating removal`);
+        this.hideSnackbar(snackbarId);
+      }, duration);
     },
 
     disposeSnackbar(snackbarId) {
       console.log(`Disposing snackbar ${snackbarId}`);
       this.hideSnackbar(snackbarId);
+    },
+
+    verifySnackbar(snackbarId) {
+      const snackbar = document.getElementById(snackbarId);
+      if (snackbar) {
+        console.log('Snackbar found in DOM:', snackbar);
+        console.log('Snackbar visibility:', window.getComputedStyle(snackbar).visibility);
+        console.log('Snackbar display:', window.getComputedStyle(snackbar).display);
+        console.log('Snackbar opacity:', window.getComputedStyle(snackbar).opacity);
+      } else {
+        console.error('Snackbar not found in DOM');
+      }
     }
   };
 })();
 
-window.DropBearSnackbar.verifySnackbar = function (snackbarId) {
-  setTimeout(() => {
-    const snackbar = document.getElementById(snackbarId);
-    if (snackbar) {
-      console.log('Snackbar found in DOM:', snackbar);
-      console.log('Snackbar visibility:', window.getComputedStyle(snackbar).visibility);
-      console.log('Snackbar display:', window.getComputedStyle(snackbar).display);
-      console.log('Snackbar opacity:', window.getComputedStyle(snackbar).opacity);
-    } else {
-      console.error('Snackbar not found in DOM');
-    }
-  }, 100);
-};
-
+// DropBearModal
 window.DropBearModal = (function () {
   return {
     initialize() {
@@ -121,6 +144,7 @@ window.DropBearModal = (function () {
   };
 })();
 
+// DropBearFileUploader
 window.DropBearFileUploader = (function () {
   let droppedFiles = [];
 
@@ -192,6 +216,7 @@ window.DropBearFileUploader = (function () {
   };
 })();
 
+// Utility function for file download
 window.downloadFileFromStream = (fileName, byteArray) => {
   const blob = new Blob([byteArray], {type: "application/octet-stream"});
   const url = window.URL.createObjectURL(blob);
@@ -204,6 +229,7 @@ window.downloadFileFromStream = (fileName, byteArray) => {
   window.URL.revokeObjectURL(url);
 };
 
+// DropBearContextMenu
 window.DropBearContextMenu = (function () {
   class ContextMenu {
     constructor(element, dotNetReference) {

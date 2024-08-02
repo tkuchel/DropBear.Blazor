@@ -14,13 +14,12 @@ namespace DropBear.Blazor.Components.Alerts;
 /// </summary>
 public sealed partial class DropBearSnackbarNotification : DropBearComponentBase, IAsyncDisposable
 {
-    private CancellationTokenSource? _dismissCancellationTokenSource;
     private bool _isDismissed;
     private bool _isDisposed;
     private bool _isInitialized;
     private bool _shouldRender;
 
-    [Inject] private IJSRuntime? JsRuntime { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
     [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public string Message { get; set; } = string.Empty;
@@ -31,12 +30,12 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
     [Parameter] public string ActionText { get; set; } = "Dismiss";
     [Parameter] public EventCallback OnAction { get; set; }
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
     private bool IsVisible { get; set; }
     [Parameter] public string SnackbarId { get; set; } = Guid.NewGuid().ToString("N");
 
-    /// <summary>
-    ///     Disposes the snackbar asynchronously.
-    /// </summary>
     public async ValueTask DisposeAsync()
     {
         if (_isDisposed)
@@ -45,8 +44,6 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         }
 
         _isDisposed = true;
-
-        await CancelDismissalAsync();
 
         if (!_isDismissed)
         {
@@ -66,8 +63,7 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
             _isInitialized = true;
             await JsRuntime.InvokeVoidAsync("console.log", "Snackbar component rendered");
             await JsRuntime.InvokeVoidAsync("console.log", $"Snackbar ID: {SnackbarId}");
-
-            await InvokeAsync(StateHasChanged);
+            await ShowAsync();
         }
     }
 
@@ -77,32 +73,20 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         _shouldRender = true;
         StateHasChanged();
 
-        if (Duration > 0)
-        {
-            await Task.Yield(); // Ensure the component has rendered
-            _dismissCancellationTokenSource = new CancellationTokenSource();
+        await Task.Yield(); // Ensure the component has rendered
 
-            if (JsRuntime is not null)
-            {
-                Console.WriteLine($"Showing snackbar with ID {SnackbarId} and duration {Duration}ms");
-                await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", _dismissCancellationTokenSource.Token,
-                    SnackbarId, Duration);
-            }
-
-            await WaitForDismissalAsync();
-        }
+        Console.WriteLine($"Showing snackbar with ID {SnackbarId} and duration {Duration}ms");
+        await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", SnackbarId, Duration);
     }
 
     public async Task DismissAsync()
     {
-        if (_isDismissed)
+        if (!IsVisible)
         {
             return;
         }
 
-        _isDismissed = true;
         Console.WriteLine($"Dismissing snackbar with ID {SnackbarId}");
-        await CancelDismissalAsync();
         await HideSnackbarAsync();
 
         IsVisible = false;
@@ -117,7 +101,6 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
     private async Task OnActionClick()
     {
-        await CancelDismissalAsync();
         await OnAction.InvokeAsync();
         await DismissAsync();
     }
@@ -146,31 +129,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         };
     }
 
-    private async Task CancelDismissalAsync()
-    {
-        try
-        {
-            await _dismissCancellationTokenSource?.CancelAsync()!;
-            _dismissCancellationTokenSource?.Dispose();
-        }
-        catch (ObjectDisposedException)
-        {
-            // CancellationTokenSource was already disposed, ignore
-        }
-    }
-
     private async Task DisposeSnackbarAsync()
     {
         try
         {
-            if (JsRuntime is not null)
-            {
-                if (_dismissCancellationTokenSource is not null)
-                {
-                    await JsRuntime.InvokeVoidAsync("DropBearSnackbar.disposeSnackbar",
-                        _dismissCancellationTokenSource.Token, SnackbarId);
-                }
-            }
+            await JsRuntime.InvokeVoidAsync("DropBearSnackbar.disposeSnackbar", SnackbarId);
         }
         catch (JSException ex)
         {
@@ -182,39 +145,11 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
     {
         try
         {
-            if (JsRuntime is not null)
-            {
-                if (_dismissCancellationTokenSource is not null)
-                {
-                    await JsRuntime.InvokeVoidAsync("DropBearSnackbar.hideSnackbar",
-                        _dismissCancellationTokenSource.Token, SnackbarId);
-                }
-            }
+            await JsRuntime.InvokeVoidAsync("DropBearSnackbar.hideSnackbar", SnackbarId);
         }
         catch (JSException ex)
         {
             await Console.Error.WriteLineAsync($"Error hiding snackbar: {ex.Message}");
-        }
-        catch (ObjectDisposedException)
-        {
-            // CancellationTokenSource was already disposed, ignore
-        }
-    }
-
-    private async Task WaitForDismissalAsync()
-    {
-        try
-        {
-            if (_dismissCancellationTokenSource is not null)
-            {
-                await Task.Delay(Duration, _dismissCancellationTokenSource.Token);
-            }
-
-            await DismissAsync();
-        }
-        catch (TaskCanceledException)
-        {
-            // Dismissal was cancelled, do nothing
         }
     }
 }
