@@ -98,7 +98,7 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         await Task.Yield(); // Ensure the component is rendered
         await snackbar.ComponentRef.ShowAsync();
 
-        _ = RemoveSnackbarAfterDuration(snackbar);
+        await RemoveSnackbarAfterDuration(snackbar);
     }
 
     private async Task RemoveSnackbarAfterDuration(SnackbarInstance snackbar)
