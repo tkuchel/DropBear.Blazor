@@ -33,26 +33,26 @@
                 <tr class="datagrid-row header">
                     @if (EnableMultiSelect)
                     {
-                        <th class="datagrid-cell" style="width: 40px;">
-                            <input type="checkbox" @onchange="@(e => ToggleSelectAll(e.Value is bool b && b))"/>
-                        </th>
+                    <th class="datagrid-cell" style="width: 40px;">
+                        <input type="checkbox" @onchange="@(e => ToggleSelectAll(e.Value is bool b && b))" />
+                    </th>
                     }
                     @foreach (var column in _columns)
                     {
-                        <th class="datagrid-cell" style="min-width: @(column.Width)px;" @onclick="@(() => SortBy(column))">
-                            <div class="datagrid-cell-content">
-                                @column.Title
-                            </div>
+                    <th class="datagrid-cell" style="min-width: @(column.Width)px;" @onclick="@(() => SortBy(column))">
+                        <div class="datagrid-cell-content">
+                            @column.Title
                             @if (column.Sortable)
                             {
-                                var sortDirection = GetSortDirection(column);
-                                <i class="fas @(sortDirection == SortDirection.Ascending ? "fa-sort-up" : sortDirection == SortDirection.Descending ? "fa-sort-down" : "fa-sort")"></i>
+                            var sortDirection = GetSortDirection(column);
+                            <i class="fas @(sortDirection == SortDirection.Ascending ? "fa-sort-up" : sortDirection == SortDirection.Descending ? "fa-sort-down" : "fa-sort") datagrid-cell-sort-icon"></i>
                             }
-                        </th>
+                        </div>
+                    </th>
                     }
                     @if (AllowEdit || AllowDelete)
                     {
-                        <th class="datagrid-cell datagrid-cell-actions">Actions</th>
+                    <th class="datagrid-cell datagrid-cell-actions">Actions</th>
                     }
                 </tr>
                 </thead>
