@@ -57,6 +57,7 @@
 
 .snackbar-message {
   margin: 0;
+  font-size: 12px;
 }
 
 .snackbar-action {
@@ -64,6 +65,7 @@
   border: none;
   color: inherit;
   font-weight: 500;
+  font-size: 14px;
   cursor: pointer;
   padding: 4px;
   margin-left: 4px;

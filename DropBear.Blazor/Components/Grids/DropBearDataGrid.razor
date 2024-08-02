@@ -33,14 +33,16 @@
                 <tr class="datagrid-row header">
                     @if (EnableMultiSelect)
                     {
-                        <th class="datagrid-cell">
-                            <input type="checkbox" @onchange="@(e => ToggleSelectAll(e.Value is true))"/>
+                        <th class="datagrid-cell" style="width: 40px;">
+                            <input type="checkbox" @onchange="@(e => ToggleSelectAll(e.Value is bool b && b))"/>
                         </th>
                     }
                     @foreach (var column in _columns)
                     {
-                        <th class="datagrid-cell" style="width: @(column.Width)px" @onclick="@(() => SortBy(column))">
-                            @column.Title
+                        <th class="datagrid-cell" style="min-width: @(column.Width)px;" @onclick="@(() => SortBy(column))">
+                            <div class="datagrid-cell-content">
+                                @column.Title
+                            </div>
                             @if (column.Sortable)
                             {
                                 var sortDirection = GetSortDirection(column);
@@ -50,7 +52,7 @@
                     }
                     @if (AllowEdit || AllowDelete)
                     {
-                        <th class="datagrid-cell">Actions</th>
+                        <th class="datagrid-cell datagrid-cell-actions">Actions</th>
                     }
                 </tr>
                 </thead>
@@ -60,26 +62,28 @@
                     <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")">
                         @if (EnableMultiSelect)
                         {
-                            <td class="datagrid-cell">
-                                <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="@(e => ToggleSelection(item, e.Value is true))"/>
+                            <td class="datagrid-cell" style="width: 40px;">
+                                <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="@(e => ToggleSelection(item, e.Value is bool b && b))"/>
                             </td>
                         }
                         @foreach (var column in _columns)
                         {
-                            <td class="datagrid-cell">
-                                @if (column.Template != null)
-                                {
-                                    @column.Template(item)
-                                }
-                                else
-                                {
-                                    @GetFormattedValue(item, column)
-                                }
+                            <td class="datagrid-cell" style="min-width: @(column.Width)px;">
+                                <div class="datagrid-cell-content">
+                                    @if (column.Template != null)
+                                    {
+                                        @column.Template(item)
+                                    }
+                                    else
+                                    {
+                                        @GetFormattedValue(item, column)
+                                    }
+                                </div>
                             </td>
                         }
                         @if (AllowEdit || AllowDelete)
                         {
-                            <td class="datagrid-cell">
+                            <td class="datagrid-cell datagrid-cell-actions">
                                 @if (AllowEdit)
                                 {
                                     <button class="btn-icon" @onclick="@(() => EditItem(item))">
