@@ -29,27 +29,37 @@
 
   return {
     startProgress(snackbarId, duration) {
-      const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
-      console.info('startProgress', snackbarId, duration);
+      try {
+        console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
 
-      if (progressBar) {
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '100%';
-        progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
+        const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
+        console.info('startProgress', snackbarId, duration);
 
-        setTimeout(() => {
-          progressBar.style.transition = `width ${duration}ms linear`;
-          progressBar.style.width = '0%';
-        }, 10);
-      } else {
-        console.error('Progress bar not found');
+        if (progressBar) {
+          progressBar.style.transition = 'none';
+          progressBar.style.width = '100%';
+          progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
+
+          setTimeout(() => {
+            progressBar.style.transition = `width ${duration}ms linear`;
+            progressBar.style.width = '0%';
+          }, 10);
+        } else {
+          console.error('Progress bar not found');
+        }
+      } catch (error) {
+        console.error('Error in startProgress:', error);
       }
     },
 
     hideSnackbar(snackbarId) {
-      console.log(`Hiding snackbar with ID ${snackbarId}`);
-      removalQueue.push(snackbarId);
-      processRemovalQueue();
+      try {
+        console.log(`Hiding snackbar ${snackbarId}`);
+        removalQueue.push(snackbarId);
+        processRemovalQueue();
+      } catch (error) {
+        console.error('Error in hideSnackbar:', error);
+      }
     },
 
     disposeSnackbar(snackbarId) {
