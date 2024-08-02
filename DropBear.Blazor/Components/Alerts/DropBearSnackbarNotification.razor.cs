@@ -64,6 +64,9 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         if (!_isInitialized)
         {
             _isInitialized = true;
+            await JsRuntime.InvokeVoidAsync("console.log", "Snackbar component rendered");
+            await JsRuntime.InvokeVoidAsync("console.log", $"Snackbar ID: {SnackbarId}");
+
             await InvokeAsync(StateHasChanged);
         }
     }

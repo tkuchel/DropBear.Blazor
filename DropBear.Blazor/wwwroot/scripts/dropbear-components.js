@@ -33,6 +33,8 @@
 
   return {
     startProgress(snackbarId, duration) {
+      // Call this function in the startProgress method
+      this.verifySnackbar(snackbarId);
       console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
       const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
 
@@ -53,9 +55,15 @@
     },
 
     hideSnackbar(snackbarId) {
-      console.log(`Queueing snackbar ${snackbarId} for removal`);
-      removalQueue.push(snackbarId);
-      processRemovalQueue();
+      console.log(`Attempting to hide snackbar ${snackbarId}`);
+      const snackbar = document.getElementById(snackbarId);
+      if (snackbar) {
+        console.log('Snackbar found, adding to removal queue');
+        removalQueue.push(snackbarId);
+        processRemovalQueue();
+      } else {
+        console.error(`Snackbar with id ${snackbarId} not found for hiding`);
+      }
     },
 
     disposeSnackbar(snackbarId) {
@@ -64,6 +72,20 @@
     }
   };
 })();
+
+window.DropBearSnackbar.verifySnackbar = function (snackbarId) {
+  setTimeout(() => {
+    const snackbar = document.getElementById(snackbarId);
+    if (snackbar) {
+      console.log('Snackbar found in DOM:', snackbar);
+      console.log('Snackbar visibility:', window.getComputedStyle(snackbar).visibility);
+      console.log('Snackbar display:', window.getComputedStyle(snackbar).display);
+      console.log('Snackbar opacity:', window.getComputedStyle(snackbar).opacity);
+    } else {
+      console.error('Snackbar not found in DOM');
+    }
+  }, 100);
+};
 
 window.DropBearModal = (function () {
   return {
