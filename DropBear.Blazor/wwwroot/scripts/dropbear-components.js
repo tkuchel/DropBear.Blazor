@@ -8,7 +8,7 @@ window.DropBearSnackbar = (function () {
       snackbar.addEventListener('animationend', () => {
         snackbar.remove();
         snackbars.delete(snackbarId);
-      }, { once: true });
+      }, {once: true});
       snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
     } else {
       console.warn(`Snackbar ${snackbarId} not found for removal`);
@@ -59,9 +59,14 @@ window.DropBearSnackbar = (function () {
     },
 
     hideSnackbar(snackbarId) {
-      console.log(`Hiding snackbar ${snackbarId}`);
-      clearTimeout(snackbars.get(snackbarId));
-      removeSnackbar(snackbarId);
+      if (snackbars.has(snackbarId)) {
+        console.log(`Hiding snackbar ${snackbarId}`);
+        clearTimeout(snackbars.get(snackbarId));
+        snackbars.delete(snackbarId);
+        removeSnackbar(snackbarId);
+      } else {
+        console.warn(`Snackbar ${snackbarId} not found in active snackbars`);
+      }
     },
 
     disposeSnackbar(snackbarId) {
@@ -70,6 +75,7 @@ window.DropBearSnackbar = (function () {
     }
   };
 })();
+
 
 // DropBearModal
 window.DropBearModal = (function () {
