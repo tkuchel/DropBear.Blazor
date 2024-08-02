@@ -81,10 +81,10 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
 
             if (JsRuntime is not null)
             {
+                Console.WriteLine($"Showing snackbar with ID {SnackbarId} and duration {Duration}ms");
                 await JsRuntime.InvokeVoidAsync("DropBearSnackbar.startProgress", _dismissCancellationTokenSource.Token,
                     SnackbarId, Duration);
             }
-
 
             await WaitForDismissalAsync();
         }
@@ -98,6 +98,7 @@ public sealed partial class DropBearSnackbarNotification : DropBearComponentBase
         }
 
         _isDismissed = true;
+        Console.WriteLine($"Dismissing snackbar with ID {SnackbarId}");
         await CancelDismissalAsync();
         await HideSnackbarAsync();
 

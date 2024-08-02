@@ -47,6 +47,7 @@
     },
 
     hideSnackbar(snackbarId) {
+      console.log(`Hiding snackbar with ID ${snackbarId}`);
       removalQueue.push(snackbarId);
       processRemovalQueue();
     },
