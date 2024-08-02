@@ -1,6 +1,5 @@
 ﻿#region
 
-using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using Microsoft.AspNetCore.Components;
 
@@ -11,12 +10,13 @@ namespace DropBear.Blazor.Components.Loaders;
 /// <summary>
 ///     A Blazor component for displaying a progress bar for long wait times.
 /// </summary>
-public sealed partial class LongWaitProgressBar : DropBearComponentBase, IDisposable
+public sealed partial class LongWaitProgressBar : IDisposable
 {
     private const int UpdateInterval = 100; // Interval in milliseconds
     private const int StepSize = 1; // Step size for progress increment
 
     private int _currentProgress;
+    private bool _isIndeterminate = true;
     private Timer? _timer;
     [Parameter] public string Title { get; set; } = "Please wait...";
     [Parameter] public string Message { get; set; } = "Please wait while we process your request.";
@@ -25,6 +25,7 @@ public sealed partial class LongWaitProgressBar : DropBearComponentBase, IDispos
     [Parameter] public string CancelButtonText { get; set; } = "Cancel";
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
+    [Parameter] public EventCallback<(string OperationName, int ProgressPercentage)> ProgressChanged { get; set; }
 
     private string ThemeClass => Theme is ThemeType.DarkMode ? "theme-dark" : "theme-light";
 
@@ -41,9 +42,22 @@ public sealed partial class LongWaitProgressBar : DropBearComponentBase, IDispos
 
     protected override void OnParametersSet()
     {
-        if (Progress != _currentProgress)
+        if (_isIndeterminate)
         {
+            if (Progress <= 0)
+            {
+                return;
+            }
+
+            _isIndeterminate = false;
             _timer?.Change(0, UpdateInterval); // Start or restart the timer
+        }
+        else
+        {
+            if (Progress != _currentProgress)
+            {
+                _timer?.Change(0, UpdateInterval); // Start or restart the timer
+            }
         }
     }
 
