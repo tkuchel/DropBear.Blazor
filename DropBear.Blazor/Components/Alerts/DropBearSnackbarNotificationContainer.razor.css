@@ -1,19 +1,12 @@
 ﻿.snackbar-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 55px;
+  right: 330px;
   display: flex;
   flex-direction: column-reverse;
   gap: 10px;
-  max-width: 500px;
+  max-width: min(400px, calc(100% - 40px)); /* Ensures it fits on smaller screens */
   width: 100%;
   z-index: 9999;
 }
 
-@media (max-width: 600px) {
-  .snackbar-container {
-    left: 20px;
-    right: 20px;
-    max-width: calc(100% - 40px);
-  }
-}

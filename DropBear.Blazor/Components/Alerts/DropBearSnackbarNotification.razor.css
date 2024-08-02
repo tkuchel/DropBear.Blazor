@@ -1,15 +1,4 @@
-﻿.snackbar-container {
-  position: fixed;
-  bottom: 55px;
-  right: 330px;
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 10px;
-  max-width: min(400px, calc(100% - 40px)); /* Ensures it fits on smaller screens */
-  width: 100%;
-  z-index: 9999;
-}
-
+﻿
 .snackbar {
   display: flex;
   align-items: center;
