@@ -1,90 +1,72 @@
-﻿@inherits DropbearDataGrid<TItem>
+﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 @using DropBear.Blazor.Enums
 @typeparam TItem
 
 <div class="dropbear-datagrid-container @ThemeClass">
     <div class="dropbear-datagrid">
         <div class="datagrid-header">
-            <h2>
-                <i class="fas fa-table"></i> @Title
-            </h2>
+            <h2>@Title</h2>
             <div class="datagrid-actions">
                 @if (EnableSearch)
                 {
                     <div class="search-wrapper">
-                        <input type="text"
-                               placeholder="Search..."
-                               class="search-input"
-                               @oninput="OnSearchInput"
-                               value="@SearchTerm"
-                               aria-label="Search items">
-                        <button class="btn btn-search" aria-label="Search" @onclick="PerformSearch">
+                        <input type="text" class="search-input" placeholder="Search..." @oninput="OnSearchInput"/>
+                        <button class="btn-search" @onclick="PerformSearch">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
                 }
                 @if (AllowAdd)
                 {
-                    <button class="btn btn-primary" @onclick="AddItem">
-                        <i class="fas fa-plus"></i> Add Item
-                    </button>
+                    <button class="btn-primary" @onclick="AddItem"><i class="fas fa-plus"></i> Add</button>
                 }
             </div>
         </div>
+
+        <CascadingValue Value="this">
+            @Columns
+        </CascadingValue>
+
         <div class="datagrid-table-wrapper">
-            <table class="datagrid-table" role="grid" aria-label="@Title">
+            <table class="datagrid-table">
                 <thead>
-                <tr class="datagrid-row header" role="row">
+                <tr class="datagrid-row header">
                     @if (EnableMultiSelect)
                     {
-                        <th class="datagrid-cell checkbox" role="columnheader">
-                            <input type="checkbox"
-                                   checked="@(SelectedItems.Count == Items.Count())"
-                                   @onchange="e => ToggleSelectAll(e.Value is bool and true)"
-                                   aria-label="Select all items">
+                        <th class="datagrid-cell">
+                            <input type="checkbox" @onchange="@(e => ToggleSelectAll(e.Value is true))"/>
                         </th>
                     }
-                    @foreach (var column in Columns.Where(c => c.Visible))
+                    @foreach (var column in _columns)
                     {
-                        <th class="datagrid-cell @(column.Sortable ? "sortable" : "")" role="columnheader" @onclick="() => SortBy(column)">
-                            @if (column.HeaderTemplate != null)
-                            {
-                                @column.HeaderTemplate
-                            }
-                            else
-                            {
-                                <span>@column.Title</span>
-                            }
+                        <th class="datagrid-cell" style="width: @(column.Width)px" @onclick="@(() => SortBy(column))">
+                            @column.Title
                             @if (column.Sortable)
                             {
                                 var sortDirection = GetSortDirection(column);
-                                <i class="fas @(sortDirection == null ? "fa-sort" : sortDirection == SortDirection.Ascending ? "fa-sort-up" : "fa-sort-down")">
-                                </i>
+                                <i class="fas @(sortDirection == SortDirection.Ascending ? "fa-sort-up" : sortDirection == SortDirection.Descending ? "fa-sort-down" : "fa-sort")"></i>
                             }
                         </th>
                     }
                     @if (AllowEdit || AllowDelete)
                     {
-                        <th class="datagrid-cell" role="columnheader">Actions</th>
+                        <th class="datagrid-cell">Actions</th>
                     }
                 </tr>
                 </thead>
                 <tbody>
                 @foreach (var item in DisplayedItems)
                 {
-                    <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")" role="row">
+                    <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")">
                         @if (EnableMultiSelect)
                         {
-                            <td class="datagrid-cell checkbox" role="gridcell">
-                                <input type="checkbox"
-                                       checked="@(SelectedItems.Contains(item))"
-                                       @onchange="e => ToggleSelection(item, e.Value is bool and true)"
-                                       aria-label="Select item">
+                            <td class="datagrid-cell">
+                                <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="@(e => ToggleSelection(item, e.Value is true))"/>
                             </td>
                         }
-                        @foreach (var column in Columns.Where(c => c.Visible))
+                        @foreach (var column in _columns)
                         {
-                            <td class="datagrid-cell @column.CssClass" role="gridcell">
+                            <td class="datagrid-cell">
                                 @if (column.Template != null)
                                 {
                                     @column.Template(item)
@@ -97,17 +79,17 @@
                         }
                         @if (AllowEdit || AllowDelete)
                         {
-                            <td class="datagrid-cell actions" role="gridcell">
+                            <td class="datagrid-cell">
                                 @if (AllowEdit)
                                 {
-                                    <button class="btn btn-icon" title="Edit" aria-label="Edit item" @onclick="() => EditItem(item)">
+                                    <button class="btn-icon" @onclick="@(() => EditItem(item))">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 }
                                 @if (AllowDelete)
                                 {
-                                    <button class="btn btn-icon" title="Delete" aria-label="Delete item" @onclick="() => DeleteItem(item)">
-                                        <i class="fas fa-trash-alt"></i>
+                                    <button class="btn-icon" @onclick="@(() => DeleteItem(item))">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 }
                             </td>
@@ -117,21 +99,22 @@
                 </tbody>
             </table>
         </div>
+
         @if (EnablePagination)
         {
             <div class="datagrid-footer">
                 <div class="pagination">
-                    <button @onclick="PreviousPage" disabled="@(CurrentPage == 1)">
+                    <button class="btn-icon" @onclick="PreviousPage" disabled="@(CurrentPage == 1)">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <span>Page @CurrentPage of @TotalPages</span>
-                    <button @onclick="NextPage" disabled="@(CurrentPage == TotalPages)">
+                    <button class="btn-icon" @onclick="NextPage" disabled="@(CurrentPage == TotalPages)">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
                 <div class="items-per-page">
                     <label for="itemsPerPage">Items per page:</label>
-                    <select id="itemsPerPage" @bind="ItemsPerPage" aria-label="Select number of items per page">
+                    <select id="itemsPerPage" @bind="ItemsPerPage">
                         @foreach (var option in ItemsPerPageOptions)
                         {
                             <option value="@option">@option</option>
@@ -142,3 +125,8 @@
         }
     </div>
 </div>
+
+@code {
+    // This empty @code block is necessary for the file to be recognized as a Razor component.
+    // All the logic is now in the separate DropBearDataGrid.razor.cs file.
+}
