@@ -3,15 +3,19 @@
   let isProcessingRemoval = false;
 
   function processRemovalQueue() {
+    console.log('Processing removal queue:', removalQueue);
     if (isProcessingRemoval || removalQueue.length === 0) return;
 
     isProcessingRemoval = true;
     const snackbarId = removalQueue.shift();
 
+    console.log(`Attempting to remove snackbar: ${snackbarId}`);
     const snackbar = document.querySelector(`#${CSS.escape(snackbarId)}`);
     if (snackbar) {
+      console.log('Snackbar found, starting removal animation');
       snackbar.style.animation = 'slideOutAndShrink 0.3s ease-out forwards';
       snackbar.addEventListener('animationend', () => {
+        console.log('Removal animation ended, removing snackbar from DOM');
         if (snackbar.parentNode) {
           snackbar.parentNode.removeChild(snackbar);
         } else {
@@ -29,40 +33,33 @@
 
   return {
     startProgress(snackbarId, duration) {
-      try {
-        console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
+      console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
+      const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
 
-        const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
-        console.info('startProgress', snackbarId, duration);
+      if (progressBar) {
+        console.log('Progress bar found, setting up animation');
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '100%';
+        progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
 
-        if (progressBar) {
-          progressBar.style.transition = 'none';
-          progressBar.style.width = '100%';
-          progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
-
-          setTimeout(() => {
-            progressBar.style.transition = `width ${duration}ms linear`;
-            progressBar.style.width = '0%';
-          }, 10);
-        } else {
-          console.error('Progress bar not found');
-        }
-      } catch (error) {
-        console.error('Error in startProgress:', error);
+        setTimeout(() => {
+          console.log('Starting progress bar animation');
+          progressBar.style.transition = `width ${duration}ms linear`;
+          progressBar.style.width = '0%';
+        }, 10);
+      } else {
+        console.error('Progress bar not found');
       }
     },
 
     hideSnackbar(snackbarId) {
-      try {
-        console.log(`Hiding snackbar ${snackbarId}`);
-        removalQueue.push(snackbarId);
-        processRemovalQueue();
-      } catch (error) {
-        console.error('Error in hideSnackbar:', error);
-      }
+      console.log(`Queueing snackbar ${snackbarId} for removal`);
+      removalQueue.push(snackbarId);
+      processRemovalQueue();
     },
 
     disposeSnackbar(snackbarId) {
+      console.log(`Disposing snackbar ${snackbarId}`);
       this.hideSnackbar(snackbarId);
     }
   };
