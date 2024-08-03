@@ -2,6 +2,7 @@
 
 using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Enums;
+using DropBear.Blazor.Exceptions;
 using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
 
@@ -67,13 +68,4 @@ public sealed class SnackbarNotificationService : ISnackbarNotificationService
     {
         OnHideAll?.Invoke(this, EventArgs.Empty);
     }
-}
-
-/// <summary>
-///     Custom exception for snackbar-related errors.
-/// </summary>
-public class SnackbarException : Exception
-{
-    public SnackbarException(string message) : base(message) { }
-    public SnackbarException(string message, Exception innerException) : base(message, innerException) { }
 }

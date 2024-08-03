@@ -44,5 +44,5 @@ public sealed class PageAlert
     /// <summary>
     ///     Gets or sets a value indicating whether the alert is dismissible.
     /// </summary>
-    public bool IsDismissible { get; set; } = true;
+    public bool IsDismissible { get; init; } = true;
 }

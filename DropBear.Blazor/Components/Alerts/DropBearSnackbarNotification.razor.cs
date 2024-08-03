@@ -2,7 +2,7 @@
 
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
-using DropBear.Blazor.Services;
+using DropBear.Blazor.Exceptions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
