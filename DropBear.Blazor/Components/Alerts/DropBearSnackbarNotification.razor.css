@@ -10,7 +10,7 @@
   overflow: hidden;
   pointer-events: auto; /* Re-enable pointer events for the snackbar itself */
   opacity: 1 !important; /* Force full opacity */
-  /*transform: translateY(0) !important; !* Ensure it's not translated off-screen *!*/
+  transform: translateY(0) translateX(-50%) !important; /* Force full visibility */
   width: 100%; /* Ensures the snackbar takes full width of its container */
   box-sizing: border-box; /* Includes padding in the width calculation */
 }
