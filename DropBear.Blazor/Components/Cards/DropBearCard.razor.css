@@ -164,7 +164,7 @@
 
 .card-footer {
   padding: var(--spacing-md) var(--spacing-lg);
-  padding-top: 10px;
+  padding-top: 10px !important;
   border-top: 1px solid var(--dark-border);
   display: flex;
   justify-content: flex-end;
