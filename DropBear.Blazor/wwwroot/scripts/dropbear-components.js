@@ -8,11 +8,24 @@ window.DropBearSnackbar = (function () {
       snackbar.addEventListener('animationend', () => {
         snackbar.remove();
         snackbars.delete(snackbarId);
-      }, {once: true});
+      }, { once: true });
       snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
     } else {
       console.warn(`Snackbar ${snackbarId} not found for removal`);
       snackbars.delete(snackbarId);
+    }
+  }
+
+  function showSnackbar(snackbarId) {
+    console.log(`Showing snackbar ${snackbarId}`);
+    const snackbar = document.getElementById(snackbarId);
+    if (snackbar) {
+      snackbar.style.display = 'flex';
+      snackbar.style.opacity = '1';
+      snackbar.classList.add('snackbar'); // Add this line to ensure correct class
+      console.log(`Snackbar ${snackbarId} display set to flex and opacity set to 1`);
+    } else {
+      console.error(`Snackbar ${snackbarId} not found when trying to show it`);
     }
   }
 
@@ -25,7 +38,7 @@ window.DropBearSnackbar = (function () {
         this.hideSnackbar(snackbarId);
       }
 
-      this.showSnackbar(snackbarId);
+      showSnackbar(snackbarId);
 
       const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
       if (progressBar) {
@@ -46,18 +59,6 @@ window.DropBearSnackbar = (function () {
       snackbars.set(snackbarId, setTimeout(() => this.hideSnackbar(snackbarId), duration));
     },
 
-    showSnackbar(snackbarId) {
-      console.log(`Showing snackbar ${snackbarId}`);
-      const snackbar = document.getElementById(snackbarId);
-      if (snackbar) {
-        snackbar.style.display = 'flex';
-        snackbar.style.opacity = '1';
-        console.log(`Snackbar ${snackbarId} display set to flex and opacity set to 1`);
-      } else {
-        console.error(`Snackbar ${snackbarId} not found when trying to show it`);
-      }
-    },
-
     hideSnackbar(snackbarId) {
       if (snackbars.has(snackbarId)) {
         console.log(`Hiding snackbar ${snackbarId}`);
@@ -75,6 +76,7 @@ window.DropBearSnackbar = (function () {
     }
   };
 })();
+
 
 
 // DropBearModal

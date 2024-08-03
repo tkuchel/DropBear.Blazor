@@ -52,7 +52,7 @@ public sealed class PageAlertService : IPageAlertService
     /// <param name="isDismissible">Is the alert dismissible</param>
     /// <param name="theme">The theme of the alert.</param>
     /// <param name="durationMs">The duration in milliseconds for the alert to be displayed.</param>
-    public void AddAlert(string title, string message, AlertType type, bool isDismissible,
+    public void AddAlert(string title, string message, AlertType type, bool isDismissible = true,
         ThemeType theme = ThemeType.DarkMode,
         int? durationMs = 5000)
     {
@@ -85,7 +85,7 @@ public sealed class PageAlertService : IPageAlertService
     /// <param name="isDismissible">Is the alert dismissible</param>
     /// <param name="theme">The theme of the alert.</param>
     /// <param name="durationMs">The duration in milliseconds for the alert to be displayed.</param>
-    public async Task AddAlertAsync(string title, string message, AlertType type, bool isDismissible, ThemeType theme,
+    public async Task AddAlertAsync(string title, string message, AlertType type, bool isDismissible = true, ThemeType theme = ThemeType.DarkMode,
         int? durationMs = 5000)
     {
         await Task.Run(() => AddAlert(title, message, type, isDismissible, theme, durationMs)).ConfigureAwait(false);
