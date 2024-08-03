@@ -8,7 +8,7 @@ using DropBear.Blazor.Models;
 
 namespace DropBear.Blazor.Services;
 
-public class ModalService : IModalService
+public sealed class ModalService : IModalService
 {
     private readonly Dictionary<string, IModal> _modals = new(StringComparer.Ordinal);
 

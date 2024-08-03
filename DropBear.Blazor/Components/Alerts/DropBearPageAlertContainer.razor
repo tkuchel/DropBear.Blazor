@@ -10,6 +10,7 @@
             Message="@alert.Message"
             Type="@alert.Type"
             Theme="@alert.Theme"
+            IsDismissible="@alert.IsDismissible"
             OnClose="@(() => AlertService.RemoveAlert(alert.Id))"/>
     }
 </div>
