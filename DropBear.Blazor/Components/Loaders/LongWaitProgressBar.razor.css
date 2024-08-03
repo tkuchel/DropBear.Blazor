@@ -6,7 +6,7 @@
   --gradient-end: var(--clr-heliotrope);
 }
 
-.container {
+.loading-card-container {
   display: flex;
   flex-direction: column;
   gap: calc(var(--spacing-unit) * var(--golden-ratio));

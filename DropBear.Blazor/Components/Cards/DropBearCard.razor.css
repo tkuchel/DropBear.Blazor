@@ -67,6 +67,7 @@
   display: flex;
   flex-direction: column;
   height: 100%; /* Ensure the card takes full height of its container */
+  animation: fadeIn var(--transition-normal);
 }
 
 .card:hover {
@@ -163,6 +164,7 @@
 
 .card-footer {
   padding: var(--spacing-md) var(--spacing-lg);
+  padding-top: 10px;
   border-top: 1px solid var(--dark-border);
   display: flex;
   justify-content: flex-end;
@@ -266,10 +268,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.card {
-  animation: fadeIn var(--transition-normal);
 }
 
 /* Responsive adjustments */
