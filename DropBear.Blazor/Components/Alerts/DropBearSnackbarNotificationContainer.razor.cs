@@ -18,9 +18,7 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
 {
     private readonly List<SnackbarInstance> _snackbars = [];
 
-    [Inject] private ISnackbarNotificationService SnackbarService { get; set; } = default!;
-
-    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Inject] private ISnackbarNotificationService SnackbarService { get; set; } = null!;
 
     /// <summary>
     ///     Disposes of the snackbar notification container asynchronously.
@@ -33,7 +31,10 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         {
             try
             {
-                await snackbar.ComponentRef.DisposeAsync();
+                if (snackbar.ComponentRef is not null)
+                {
+                    await snackbar.ComponentRef.DisposeAsync();
+                }
             }
             catch (JSDisconnectedException)
             {
@@ -64,50 +65,45 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         SnackbarService.OnHideAll -= HideAllSnackbars;
     }
 
-    /// <summary>
-    ///     Shows a snackbar notification asynchronously.
-    /// </summary>
-    /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments containing snackbar options.</param>
-#pragma warning disable MA0155
-    private async void ShowSnackbarAsync(object? sender, SnackbarNotificationEventArgs e)
-#pragma warning restore MA0155
+    private void ShowSnackbarAsync(object? sender, SnackbarNotificationEventArgs e)
     {
-        await ShowSnackbarInternalAsync(e.Options);
+        _ = InvokeAsync(async () =>
+        {
+            try
+            {
+                await ShowSnackbarInternalAsync(e.Options);
+            }
+            catch (Exception ex)
+            {
+                await Console.Error.WriteLineAsync($"Error showing snackbar: {ex.Message}");
+            }
+        });
     }
 
     private async Task ShowSnackbarInternalAsync(SnackbarNotificationOptions options)
     {
-        var snackbar = new SnackbarInstance
-        {
-            Id = Guid.NewGuid(),
-            Title = options.Title,
-            Message = options.Message,
-            Type = options.Type,
-            Theme = options.Theme,
-            Duration = options.Duration,
-            IsDismissible = options.IsDismissible,
-            ActionText = options.ActionText,
-            OnAction = options.OnAction,
-            ComponentRef = new DropBearSnackbarNotification()
-        };
+        var snackbar = new SnackbarInstance(options);
 
         _snackbars.Add(snackbar);
         StateHasChanged();
 
         await Task.Yield(); // Ensure the component is rendered
-        await snackbar.ComponentRef.ShowAsync();
 
-        await RemoveSnackbarAfterDuration(snackbar);
+        if (snackbar.ComponentRef != null)
+        {
+            await snackbar.ComponentRef.ShowAsync();
+        }
+
+        if (snackbar is { IsDismissible: true, Duration: > 0 })
+        {
+            _ = RemoveSnackbarAfterDurationAsync(snackbar);
+        }
     }
 
-    private async Task RemoveSnackbarAfterDuration(SnackbarInstance snackbar)
+    private async Task RemoveSnackbarAfterDurationAsync(SnackbarInstance snackbar)
     {
-        if (snackbar.IsDismissible)
-        {
-            await Task.Delay(snackbar.Duration);
-            await RemoveSnackbarAsync(snackbar);
-        }
+        await Task.Delay(snackbar.Duration);
+        await RemoveSnackbarAsync(snackbar);
     }
 
     private async Task RemoveSnackbarAsync(SnackbarInstance snackbar)
@@ -116,7 +112,10 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         {
             try
             {
-                await snackbar.ComponentRef.DismissAsync();
+                if (snackbar.ComponentRef is not null)
+                {
+                    await snackbar.ComponentRef.DismissAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -127,19 +126,59 @@ public sealed partial class DropBearSnackbarNotificationContainer : DropBearComp
         }
     }
 
-#pragma warning disable MA0155
-    private async void HideAllSnackbars(object? sender, EventArgs e)
-#pragma warning restore MA0155
+    private void HideAllSnackbars(object? sender, EventArgs e)
     {
-        var tasks = _snackbars.Select(s => s.ComponentRef.DismissAsync());
+        _ = InvokeAsync(async () =>
+        {
+            try
+            {
+                await HideAllSnackbarsInternalAsync();
+            }
+            catch (Exception ex)
+            {
+                await Console.Error.WriteLineAsync($"Error hiding all snackbars: {ex.Message}");
+            }
+        });
+    }
+
+    private async Task HideAllSnackbarsInternalAsync()
+    {
+        var tasks = _snackbars.Select(s => s.ComponentRef?.DismissAsync() ?? Task.CompletedTask);
         await Task.WhenAll(tasks);
         _snackbars.Clear();
         StateHasChanged();
     }
 
+    private async Task OnSnackbarAction(SnackbarInstance snackbar)
+    {
+        try
+        {
+            await snackbar.OnAction.Invoke();
+
+            await RemoveSnackbarAsync(snackbar);
+        }
+        catch (Exception ex)
+        {
+            await Console.Error.WriteLineAsync($"Error handling snackbar action: {ex.Message}");
+        }
+    }
+
     private sealed class SnackbarInstance : SnackbarNotificationOptions
     {
-        public Guid Id { get; init; }
-        public DropBearSnackbarNotification ComponentRef { get; set; } = default!;
+        public SnackbarInstance(SnackbarNotificationOptions options)
+        {
+            Id = Guid.NewGuid();
+            Title = options.Title;
+            Message = options.Message;
+            Type = options.Type;
+            Theme = options.Theme;
+            Duration = options.Duration;
+            IsDismissible = options.IsDismissible;
+            ActionText = options.ActionText;
+            OnAction = options.OnAction;
+        }
+
+        public Guid Id { get; }
+        public DropBearSnackbarNotification? ComponentRef { get; set; }
     }
 }

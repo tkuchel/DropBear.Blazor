@@ -16,54 +16,35 @@ window.DropBearSnackbar = (function () {
     }
   }
 
-  function showSnackbar(snackbarId) {
-    console.log(`Showing snackbar ${snackbarId}`);
-    const snackbar = document.getElementById(snackbarId);
-    if (snackbar) {
-      snackbar.style.display = 'flex';
-      snackbar.style.opacity = '1';
-      snackbar.classList.add('snackbar'); // Add this line to ensure correct class
-      console.log(`Snackbar ${snackbarId} display set to flex and opacity set to 1`);
-    } else {
-      console.error(`Snackbar ${snackbarId} not found when trying to show it`);
-    }
-  }
-
   return {
     startProgress(snackbarId, duration) {
-      console.log(`Starting progress for snackbar ${snackbarId} with duration ${duration}`);
-
-      if (snackbars.has(snackbarId)) {
-        console.warn(`Snackbar ${snackbarId} already exists. Removing old instance.`);
-        this.hideSnackbar(snackbarId);
+      const snackbar = document.getElementById(snackbarId);
+      if (!snackbar) {
+        console.error(`Snackbar ${snackbarId} not found`);
+        return;
       }
 
-      showSnackbar(snackbarId);
-
-      const progressBar = document.querySelector(`#${CSS.escape(snackbarId)} .snackbar-progress`);
-      if (progressBar) {
-        console.log('Progress bar found, setting up animation');
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '100%';
-        progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
-
-        setTimeout(() => {
-          console.log('Starting progress bar animation');
-          progressBar.style.transition = `width ${duration}ms linear`;
-          progressBar.style.width = '0%';
-        }, 10);
-      } else {
+      const progressBar = snackbar.querySelector('.snackbar-progress');
+      if (!progressBar) {
         console.error('Progress bar not found');
+        return;
       }
+
+      progressBar.style.transition = 'none';
+      progressBar.style.width = '100%';
+      progressBar.style.backgroundColor = getComputedStyle(progressBar).getPropertyValue('color');
+
+      setTimeout(() => {
+        progressBar.style.transition = `width ${duration}ms linear`;
+        progressBar.style.width = '0%';
+      }, 10);
 
       snackbars.set(snackbarId, setTimeout(() => this.hideSnackbar(snackbarId), duration));
     },
 
     hideSnackbar(snackbarId) {
       if (snackbars.has(snackbarId)) {
-        console.log(`Hiding snackbar ${snackbarId}`);
         clearTimeout(snackbars.get(snackbarId));
-        snackbars.delete(snackbarId);
         removeSnackbar(snackbarId);
       } else {
         console.warn(`Snackbar ${snackbarId} not found in active snackbars`);
@@ -71,13 +52,10 @@ window.DropBearSnackbar = (function () {
     },
 
     disposeSnackbar(snackbarId) {
-      console.log(`Disposing snackbar ${snackbarId}`);
       this.hideSnackbar(snackbarId);
     }
   };
 })();
-
-
 
 // DropBearModal
 window.DropBearModal = (function () {

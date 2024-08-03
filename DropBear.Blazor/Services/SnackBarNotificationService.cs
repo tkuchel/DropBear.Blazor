@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Diagnostics;
 using DropBear.Blazor.Arguments.Events;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Interfaces;
@@ -15,15 +14,15 @@ namespace DropBear.Blazor.Services;
 /// </summary>
 public sealed class SnackbarNotificationService : ISnackbarNotificationService
 {
-    public event EventHandler? OnHideAll;
+    /// <summary>
+    ///     Event triggered when a new snackbar should be shown.
+    /// </summary>
+    public event EventHandler<SnackbarNotificationEventArgs>? OnShow;
 
     /// <summary>
-    ///     Hides all snackbar notifications.
+    ///     Event triggered when all snackbars should be hidden.
     /// </summary>
-    public void HideAll()
-    {
-        OnHideAll?.Invoke(this, EventArgs.Empty);
-    }
+    public event EventHandler? OnHideAll;
 
     /// <summary>
     ///     Shows a snackbar notification with the specified message and options.
@@ -31,7 +30,7 @@ public sealed class SnackbarNotificationService : ISnackbarNotificationService
     /// <param name="message">The message to display.</param>
     /// <param name="type">The type of the snackbar.</param>
     /// <param name="theme">The theme of the snackbar.</param>
-    /// <param name="duration">The duration to display the snackbar.</param>
+    /// <param name="duration">The duration to display the snackbar in milliseconds.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     public Task ShowAsync(string message, SnackbarType type = SnackbarType.Information,
         ThemeType theme = ThemeType.DarkMode, int duration = 5000)
@@ -57,11 +56,24 @@ public sealed class SnackbarNotificationService : ISnackbarNotificationService
         }
         catch (Exception ex)
         {
-            // Log the exception or handle it as appropriate for your application
-            Debug.WriteLine($"Error showing snackbar: {ex.Message}");
-            return Task.FromException(ex);
+            return Task.FromException(new SnackbarException("Error showing snackbar", ex));
         }
     }
 
-    public event EventHandler<SnackbarNotificationEventArgs>? OnShow;
+    /// <summary>
+    ///     Hides all snackbar notifications.
+    /// </summary>
+    public void HideAll()
+    {
+        OnHideAll?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+/// <summary>
+///     Custom exception for snackbar-related errors.
+/// </summary>
+public class SnackbarException : Exception
+{
+    public SnackbarException(string message) : base(message) { }
+    public SnackbarException(string message, Exception innerException) : base(message, innerException) { }
 }
