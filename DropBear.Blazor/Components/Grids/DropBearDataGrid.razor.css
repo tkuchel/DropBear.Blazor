@@ -239,6 +239,7 @@
   color: var(--text-secondary);
   cursor: pointer;
   transition: color var(--transition-normal), transform var(--transition-normal);
+  padding: var(--padding-default);
 }
 
 .btn-icon:hover {
