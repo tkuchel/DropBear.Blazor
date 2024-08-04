@@ -1,0 +1,29 @@
+﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
+
+<div class="validation-errors @(_isCollapsed ? "validation-errors--collapsed" : "")" style="display: @(ValidationResult?.IsValid == false ? "block" : "none")">
+    <div class="validation-errors__header" @onclick="ToggleCollapse">
+        <h3 class="validation-errors__title">
+            <i class="fas fa-exclamation-triangle"></i>
+            Validation Errors
+        </h3>
+        <i class="fas fa-chevron-up validation-errors__icon"></i>
+    </div>
+    <ul class="validation-errors__list">
+        @if (ValidationResult is { IsValid: false })
+        {
+            foreach (var error in ValidationResult.Errors)
+            {
+                <li class="validation-errors__item">
+                    <div class="validation-errors__item-icon-wrapper">
+                        <div class="validation-errors__item-icon-glow"></div>
+                        <i class="fas fa-exclamation-circle validation-errors__item-icon"></i>
+                    </div>
+                    <div class="validation-errors__item-content">
+                        <div class="validation-errors__item-parameter">@error.Parameter</div>
+                        <div class="validation-errors__item-message">@error.ErrorMessage</div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
