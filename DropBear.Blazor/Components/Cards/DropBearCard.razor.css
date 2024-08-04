@@ -52,8 +52,8 @@
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl);
+  gap: var(--gap);
+  padding: var(--padding-default);
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -92,7 +92,7 @@
   display: flex;
   align-items: center;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--dark-border) !important;
+  border-bottom: 1px solid var(--dark-border);
   background: var(--dark-header-gradient);
 }
 
@@ -128,7 +128,7 @@
 }
 
 .card-body {
-  padding: var(--spacing-lg);
+  padding: var(--padding-default) !important;
   font-size: var(--font-size-sm);
   flex-grow: 1; /* Allow the body to grow and push the footer down */
   display: flex;

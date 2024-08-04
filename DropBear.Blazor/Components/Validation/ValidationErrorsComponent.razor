@@ -1,6 +1,6 @@
 ﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 
-<div class="validation-errors @(_isCollapsed ? "validation-errors--collapsed" : "")" style="display: @(ValidationResult?.IsValid == false ? "block" : "none")">
+<div class="validation-errors @(_isCollapsed ? "validation-errors--collapsed" : "") mt-2" style="display: @(ValidationResult?.IsValid == false ? "block" : "none")">
     <div class="validation-errors__header" @onclick="ToggleCollapse">
         <h3 class="validation-errors__title">
             <i class="fas fa-exclamation-triangle"></i>
