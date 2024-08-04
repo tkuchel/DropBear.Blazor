@@ -29,7 +29,7 @@ public sealed class PageAlert
     /// <summary>
     ///     Gets or sets the type of the alert.
     /// </summary>
-    public AlertType Type { get; init; } = AlertType.Info;
+    public AlertType Type { get; init; } = AlertType.Information;
 
     /// <summary>
     ///     Gets or sets the theme of the alert.

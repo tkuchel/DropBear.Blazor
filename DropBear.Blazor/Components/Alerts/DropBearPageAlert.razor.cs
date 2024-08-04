@@ -15,7 +15,7 @@ public sealed partial class DropBearPageAlert : DropBearComponentBase
 {
     private static readonly Dictionary<AlertType, string> IconClasses = new()
     {
-        { AlertType.Info, "fas fa-info-circle" },
+        { AlertType.Information, "fas fa-info-circle" },
         { AlertType.Success, "fas fa-check-circle" },
         { AlertType.Warning, "fas fa-exclamation-triangle" },
         { AlertType.Danger, "fas fa-times-circle" },
@@ -24,7 +24,7 @@ public sealed partial class DropBearPageAlert : DropBearComponentBase
 
     [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public string Message { get; set; } = string.Empty;
-    [Parameter] public AlertType Type { get; set; } = AlertType.Info;
+    [Parameter] public AlertType Type { get; set; } = AlertType.Information;
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
     [Parameter] public bool IsDismissible { get; set; } = true;
     [Parameter] public EventCallback OnClose { get; set; } = EventCallback.Empty;

@@ -2,32 +2,41 @@
 @using DropBear.Blazor.Enums
 @typeparam TItem
 
-<div class="dropbear-datagrid-container @ThemeClass">
-    <div class="dropbear-datagrid">
-        @if (IsLoading)
-        {
-            @if (LoadingTemplate != null)
-            {
-                @LoadingTemplate
-            }
-            else
-            {
-                <div class="datagrid-loading">Loading...</div>
-            }
-        }
-        else if (!HasData)
-        {
-            @if (NoDataTemplate != null)
-            {
-                @NoDataTemplate
-            }
-            else
-            {
-                <div class="datagrid-no-data">No data available.</div>
-            }
-        }
-        else
-        {
+
+@if (IsLoading)
+{
+    @if (LoadingTemplate != null)
+    {
+        @LoadingTemplate
+    }
+    else
+    {
+        <div>
+            <p>
+                Loading...
+            </p>
+        </div>
+    }
+}
+else if (!HasData)
+{
+    @if (NoDataTemplate != null)
+    {
+        @NoDataTemplate
+    }
+    else
+    {
+        <div>
+            <p>
+                No data available.
+            </p>
+        </div>
+    }
+}
+else
+{
+    <div class="dropbear-datagrid-container @ThemeClass">
+        <div class="dropbear-datagrid">
             <div class="datagrid-header">
                 <h2>@Title</h2>
                 <div class="datagrid-actions">
@@ -46,11 +55,9 @@
                     }
                 </div>
             </div>
-
             <CascadingValue Value="this">
                 @Columns
             </CascadingValue>
-
             <div class="datagrid-table-wrapper">
                 <table class="datagrid-table">
                     <thead>
@@ -127,7 +134,6 @@
                     </tbody>
                 </table>
             </div>
-
             @if (EnablePagination)
             {
                 <div class="datagrid-footer">
@@ -151,11 +157,14 @@
                     </div>
                 </div>
             }
-        }
+        </div>
     </div>
-</div>
+}
+
 
 @code {
     // This empty @code block is necessary for the file to be recognized as a Razor component.
     // All the logic is now in the separate DropBearDataGrid.razor.cs file.
 }
+
+

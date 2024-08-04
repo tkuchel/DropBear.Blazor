@@ -8,7 +8,7 @@ public enum AlertType
     /// <summary>
     ///     Informational alert.
     /// </summary>
-    Info,
+    Information,
 
     /// <summary>
     ///     Success alert.
