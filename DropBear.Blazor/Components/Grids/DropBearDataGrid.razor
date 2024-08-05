@@ -78,18 +78,20 @@ else
                     {
                         <tr>
                             <td colspan="@TotalColumnCount">
-                                @if (NoDataTemplate != null)
-                                {
-                                    @NoDataTemplate
-                                }
-                                else
-                                {
-                                    <div>
-                                        <p>
-                                            No data available.
-                                        </p>
-                                    </div>
-                                }
+                                <div class="no-data-container">
+                                    @if (NoDataTemplate != null)
+                                    {
+                                        @NoDataTemplate
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <p>
+                                                No data available.
+                                            </p>
+                                        </div>
+                                    }
+                                </div>
                             </td>
                         </tr>
                     }

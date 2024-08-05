@@ -27,6 +27,10 @@
 }
 
 /* Common Styles */
+.no-data-container {
+  padding: var(--padding-default);
+}
+
 .dropbear-datagrid-container {
   margin: var(--spacing-sm);
 }
