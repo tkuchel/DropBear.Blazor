@@ -128,7 +128,7 @@
 }
 
 .card-body {
-  padding: var(--padding-default) !important;
+  padding: var(--padding-default) calc(var(--padding-default) + 10px) !important;
   font-size: var(--font-size-sm);
   flex-grow: 1; /* Allow the body to grow and push the footer down */
   display: flex;
