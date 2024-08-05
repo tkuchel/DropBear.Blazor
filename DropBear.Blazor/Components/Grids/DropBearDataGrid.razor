@@ -5,6 +5,7 @@
 
 @if (IsLoading)
 {
+    // If loading the entire datagrid is hidden
     @if (LoadingTemplate != null)
     {
         @LoadingTemplate
@@ -14,21 +15,6 @@
         <div>
             <p>
                 Loading...
-            </p>
-        </div>
-    }
-}
-else if (!HasData)
-{
-    @if (NoDataTemplate != null)
-    {
-        @NoDataTemplate
-    }
-    else
-    {
-        <div>
-            <p>
-                No data available.
             </p>
         </div>
     }
@@ -88,49 +74,68 @@ else
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in DisplayedItems)
+                    @if (!HasData)
                     {
-                        <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")">
-                            @if (EnableMultiSelect)
-                            {
-                                <td class="datagrid-cell" style="width: 40px;">
-                                    <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="@(e => ToggleSelection(item, e.Value is bool b && b))"/>
-                                </td>
-                            }
-                            @foreach (var column in _columns)
-                            {
-                                <td class="datagrid-cell" style="min-width: @(column.Width)px;">
-                                    <div class="datagrid-cell-content">
-                                        @if (column.Template != null)
-                                        {
-                                            @column.Template(item)
-                                        }
-                                        else
-                                        {
-                                            @GetFormattedValue(item, column)
-                                        }
-                                    </div>
-                                </td>
-                            }
-                            @if (AllowEdit || AllowDelete)
-                            {
-                                <td class="datagrid-cell datagrid-cell-actions">
-                                    @if (AllowEdit)
-                                    {
-                                        <button class="btn-icon" @onclick="@(() => EditItem(item))">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    }
-                                    @if (AllowDelete)
-                                    {
-                                        <button class="btn-icon" @onclick="@(() => DeleteItem(item))">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    }
-                                </td>
-                            }
-                        </tr>
+                        @if (NoDataTemplate != null)
+                        {
+                            @NoDataTemplate
+                        }
+                        else
+                        {
+                            <div>
+                                <p>
+                                    No data available.
+                                </p>
+                            </div>
+                        }
                     }
+                    else
+                    {
+                        @foreach (var item in DisplayedItems)
+                        {
+                            <tr class="datagrid-row @(SelectedItems.Contains(item) ? "selected" : "")">
+                                @if (EnableMultiSelect)
+                                {
+                                    <td class="datagrid-cell" style="width: 40px;">
+                                        <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="@(e => ToggleSelection(item, e.Value is bool b && b))"/>
+                                    </td>
+                                }
+                                @foreach (var column in _columns)
+                                {
+                                    <td class="datagrid-cell" style="min-width: @(column.Width)px;">
+                                        <div class="datagrid-cell-content">
+                                            @if (column.Template != null)
+                                            {
+                                                @column.Template(item)
+                                            }
+                                            else
+                                            {
+                                                @GetFormattedValue(item, column)
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                                @if (AllowEdit || AllowDelete)
+                                {
+                                    <td class="datagrid-cell datagrid-cell-actions">
+                                        @if (AllowEdit)
+                                        {
+                                            <button class="btn-icon" @onclick="@(() => EditItem(item))">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        }
+                                        @if (AllowDelete)
+                                        {
+                                            <button class="btn-icon" @onclick="@(() => DeleteItem(item))">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+
                     </tbody>
                 </table>
             </div>
@@ -166,5 +171,3 @@ else
     // This empty @code block is necessary for the file to be recognized as a Razor component.
     // All the logic is now in the separate DropBearDataGrid.razor.cs file.
 }
-
-
