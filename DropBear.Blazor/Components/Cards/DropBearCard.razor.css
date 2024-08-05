@@ -15,7 +15,7 @@
 
   /* Shared variables */
   --card-radius: var(--border-radius-md);
-  --card-shadow: var(--shadow-md);
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --card-hover-shadow: var(--shadow-md);
 
   /* Button colors */
@@ -27,25 +27,25 @@
   /* Light theme gradients */
   --light-header-gradient: linear-gradient(
     135deg,
-    hsl(0, 0%, 95%),
-    hsl(0, 0%, 98%)
+    hsl(0, 0%, 98%),
+    hsl(0, 0%, 93%)
   );
   --light-footer-gradient: linear-gradient(
     135deg,
-    hsl(0, 0%, 95%),
-    hsl(0, 0%, 98%)
+    hsl(0, 0%, 98%),
+    hsl(0, 0%, 93%)
   );
 
   /* Dark theme gradients */
   --dark-header-gradient: linear-gradient(
     135deg,
-    hsl(230, 9%, 15%),
-    hsl(230, 9%, 17%)
+    hsl(230, 9%, 18%),
+    hsl(230, 9%, 13%)
   );
   --dark-footer-gradient: linear-gradient(
     135deg,
-    hsl(230, 9%, 15%),
-    hsl(230, 9%, 17%)
+    hsl(230, 9%, 18%),
+    hsl(230, 9%, 13%)
   );
 }
 
@@ -59,11 +59,12 @@
 }
 
 .card {
+  font-family: "Poppins", sans-serif;
+  font-size: calc(var(--font-size-md));
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   overflow: hidden;
-  transition: box-shadow var(--transition-normal),
-  transform var(--transition-normal);
+  transition: box-shadow var(--transition-normal);
   display: flex;
   flex-direction: column;
   height: 100%; /* Ensure the card takes full height of its container */
@@ -72,7 +73,6 @@
 
 .card:hover {
   box-shadow: var(--card-hover-shadow);
-  transform: translateY(-4px);
 }
 
 /* Theme-specific styles */
@@ -91,7 +91,7 @@
 .card-header {
   display: flex;
   align-items: center;
-  padding: 10px 15px;
+  padding: 10px 15px !important;
   border-bottom: 1px solid var(--dark-border);
   background: var(--dark-header-gradient);
 }
