@@ -91,7 +91,7 @@
 .card-header {
   display: flex;
   align-items: center;
-  padding: 5px 15px;
+  padding: 10px 15px;
   border-bottom: 1px solid var(--dark-border);
   background: var(--dark-header-gradient);
 }
