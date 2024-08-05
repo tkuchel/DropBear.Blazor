@@ -52,7 +52,6 @@
 }
 
 /* Theme-specific styles */
-
 .datagrid-header {
   background: var(--accent-gradient);
   color: var(--bg-primary);
@@ -65,10 +64,10 @@
 .datagrid-header h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: calc(var(--font-size-base) * var(--sqrt-golden-ratio));
+  font-size: var(--font-size-md);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap);
 
 }
 
@@ -197,7 +196,7 @@
 
 .datagrid-footer {
   background-color: var(--bg-secondary);
-  padding: 1rem;
+  padding: var(--padding-default);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -227,8 +226,7 @@
 .datagrid-footer .pagination span,
 .datagrid-footer label {
   font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
-  align-items: center;
-  gap: var(--spacing-sm);
+  margin: 0 5px;
 }
 
 .datagrid-footer .items-per-page {

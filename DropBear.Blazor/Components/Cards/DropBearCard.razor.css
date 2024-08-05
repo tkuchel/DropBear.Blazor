@@ -91,9 +91,15 @@
 .card-header {
   display: flex;
   align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 5px 15px;
   border-bottom: 1px solid var(--dark-border);
   background: var(--dark-header-gradient);
+}
+
+.card-title {
+  margin: 0;
+  font-size: var(--font-size-md) !important;
+  font-weight: 600 !important;
 }
 
 /* Adjustments for cards without icons */
@@ -111,11 +117,6 @@
   margin-right: var(--spacing-md);
 }
 
-.card-title {
-  margin: 0;
-  font-size: calc(var(--font-size-base) / var(--sqrt-golden-ratio));
-  font-weight: 600;
-}
 
 .light-theme .card-icon,
 .light-theme .card-title {
