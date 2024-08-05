@@ -33,6 +33,7 @@
 
 .dropbear-datagrid-container {
   margin: var(--spacing-sm);
+  padding: var(--padding-default);
 }
 
 .dropbear-datagrid {

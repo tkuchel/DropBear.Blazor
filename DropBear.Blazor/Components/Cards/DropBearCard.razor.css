@@ -99,7 +99,7 @@
 .card-title {
   margin: 0;
   font-size: var(--font-size-md) !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
 }
 
 /* Adjustments for cards without icons */
