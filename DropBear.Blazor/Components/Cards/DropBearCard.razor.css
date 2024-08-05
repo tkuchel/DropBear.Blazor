@@ -14,9 +14,9 @@
   --dark-border: hsl(230, 9%, 25%);
 
   /* Shared variables */
-  --card-radius: var(--border-radius-lg);
+  --card-radius: var(--border-radius-md);
   --card-shadow: var(--shadow-md);
-  --card-hover-shadow: var(--shadow-lg);
+  --card-hover-shadow: var(--shadow-md);
 
   /* Button colors */
   --btn-primary: var(--clr-malibu);
@@ -26,24 +26,24 @@
 
   /* Light theme gradients */
   --light-header-gradient: linear-gradient(
-    to bottom,
+    135deg,
     hsl(0, 0%, 95%),
     hsl(0, 0%, 98%)
   );
   --light-footer-gradient: linear-gradient(
-    to top,
+    135deg,
     hsl(0, 0%, 95%),
     hsl(0, 0%, 98%)
   );
 
   /* Dark theme gradients */
   --dark-header-gradient: linear-gradient(
-    to bottom,
+    135deg,
     hsl(230, 9%, 15%),
     hsl(230, 9%, 17%)
   );
   --dark-footer-gradient: linear-gradient(
-    to top,
+    135deg,
     hsl(230, 9%, 15%),
     hsl(230, 9%, 17%)
   );
@@ -55,7 +55,7 @@
   gap: var(--gap);
   padding: var(--padding-default);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: var(--spacing-sm);
 }
 
 .card {

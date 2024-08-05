@@ -12,7 +12,7 @@ public sealed partial class DropBearList<T> : DropBearComponentBase where T : cl
     [Parameter] public IReadOnlyCollection<T>? Items { get; set; }
     [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public string HeaderIcon { get; set; } = string.Empty;
-    [Parameter] public string HeaderColor { get; set; } = "#f44336"; // Default to a neutral red color
+    [Parameter] public string HeaderColor { get; set; } = "#95989C"; // Default to a neutral grey color
     [Parameter] public RenderFragment<T> ItemTemplate { get; set; } = null!;
 
     private bool IsCollapsed { get; set; }
