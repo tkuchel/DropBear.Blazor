@@ -66,6 +66,11 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private bool IsLoading { get; set; } = true;
     private bool HasData => FilteredItems.Any();
 
+    private int TotalColumnCount =>
+        _columns.Count
+        + (EnableMultiSelect ? 1 : 0)
+        + (AllowEdit || AllowDelete ? 1 : 0);
+
     public void AddColumn(DataGridColumn<TItem> column)
     {
         _columns.Add(column);

@@ -76,18 +76,22 @@ else
                     <tbody>
                     @if (!HasData)
                     {
-                        @if (NoDataTemplate != null)
-                        {
-                            @NoDataTemplate
-                        }
-                        else
-                        {
-                            <div>
-                                <p>
-                                    No data available.
-                                </p>
-                            </div>
-                        }
+                        <tr>
+                            <td colspan="@TotalColumnCount">
+                                @if (NoDataTemplate != null)
+                                {
+                                    @NoDataTemplate
+                                }
+                                else
+                                {
+                                    <div>
+                                        <p>
+                                            No data available.
+                                        </p>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
                     }
                     else
                     {
