@@ -36,4 +36,9 @@
     <Folder Include="Utilities\"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Modals\DropBearModal.razor" />
+    <UpToDateCheckInput Remove="Components\Modals\DropBearModalContainer.razor" />
+  </ItemGroup>
+
 </Project>

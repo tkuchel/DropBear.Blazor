@@ -7,10 +7,13 @@ using DropBear.Blazor.Models;
 
 namespace DropBear.Blazor.Interfaces;
 
-public interface IModalService
+public interface IModalService<TContext> where TContext : class
 {
-    event EventHandler<ModalEventArgs<object>>? OnShow;
-    event EventHandler<ModalEventArgs<object>>? OnClose;
+    event EventHandler<ModalEventArgs<TContext>>? OnShow;
+
+    event EventHandler<ModalEventArgs<TContext>>? OnClose;
+    // ... other members
+
     event EventHandler? OnChange;
 
     void AddModal<TContext>(Modal<TContext> modal) where TContext : class;

@@ -12,7 +12,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<IPageAlertService, PageAlertService>();
 builder.Services.AddScoped<IDynamicContextMenuService, DynamicContextMenuService>();
 builder.Services.AddSingleton<ISnackbarNotificationService, SnackbarNotificationService>();
-builder.Services.AddScoped<IModalService, ModalService>();
 
 var app = builder.Build();
 
