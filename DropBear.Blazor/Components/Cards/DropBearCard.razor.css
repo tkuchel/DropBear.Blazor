@@ -19,10 +19,14 @@
   --card-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 
   /* Button colors */
-  --btn-primary: var(--clr-malibu);
+  --btn-default: var(--clr-mine-shaft);
+  --btn-secondary: var(--clr-rock-blue);
+  --btn-success: var(--clr-pastel-green);
   --btn-warning: var(--clr-mustard);
   --btn-error: var(--clr-persimmon);
-  --btn-secondary: var(--clr-rock-blue);
+  --btn-information: var(--clr-malibu);
+  --btn-primary: var(--clr-malibu);
+
 
   /* Light theme gradients */
   --light-header-gradient: linear-gradient(
@@ -102,21 +106,17 @@
   font-weight: 500 !important;
 }
 
-/* Adjustments for cards without icons */
-.card-header:not(:has(.card-icon)) .card-title {
-  margin-left: 0;
-}
-
-.light-theme .card-header {
-  border-bottom-color: var(--light-border);
-  background: var(--light-header-gradient);
-}
-
 .card-icon {
   font-size: calc(var(--font-size-base) / var(--sqrt-golden-ratio));
   margin-right: var(--spacing-md);
 }
 
+/* Ensure text remains visible on gradient backgrounds */
+.card-header,
+.card-footer {
+  position: relative;
+  z-index: 1;
+}
 
 .light-theme .card-icon,
 .light-theme .card-title {
@@ -126,6 +126,12 @@
 .dark-theme .card-icon,
 .dark-theme .card-title {
   color: var(--dark-text);
+}
+
+
+.light-theme .card-header {
+  border-bottom-color: var(--light-border);
+  background: var(--light-header-gradient);
 }
 
 .card-body {
@@ -142,13 +148,6 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-}
-
-/* Ensure text remains visible on gradient backgrounds */
-.card-header,
-.card-footer {
-  position: relative;
-  z-index: 1;
 }
 
 .card-header::after,
@@ -182,15 +181,16 @@
   color: var(--light-text);
 }
 
+/* Adjustments for cards without icons */
+.card-header:not(:has(.card-icon)) .card-title {
+  margin-left: 0;
+}
+
 .light-theme .card-footer {
   border-top-color: var(--light-border);
   background: var(--light-footer-gradient);
 }
 
-/* Ensure proper text color for light theme buttons */
-.light-theme .btn {
-  color: var(--light-card-bg);
-}
 
 /* Add this to reduce space in compact cards */
 .compact {
@@ -226,12 +226,28 @@
   gap: var(--spacing-xs);
 }
 
+/* Ensure proper text color for light theme buttons */
+.light-theme .btn {
+  color: var(--light-text);
+}
+
 .btn:hover {
   transform: scale(1.05);
 }
 
-.btn-primary {
-  background-color: var(--btn-primary);
+.btn-default {
+  background-color: var(--btn-default);
+  color: var(--dark-card-bg);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  color: var(--dark-card-bg);
+}
+
+/* Success button style */
+.btn-success {
+  background-color: var(--btn-success);
   color: var(--dark-card-bg);
 }
 
@@ -245,20 +261,17 @@
   color: var(--dark-card-bg);
 }
 
-.btn-secondary {
-  background-color: var(--btn-secondary);
+.btn-information {
+  background-color: var(--btn-information);
   color: var(--dark-card-bg);
 }
 
-/* Success button style */
-.btn-success {
-  background-color: var(--clr-pastel-green);
+.btn-primary {
+  background-color: var(--btn-primary);
   color: var(--dark-card-bg);
 }
 
-.btn-success:hover {
-  background-color: var(--clr-lime);
-}
+/* Hover styles */
 
 /* Animations */
 @keyframes fadeIn {

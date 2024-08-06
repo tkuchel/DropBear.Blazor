@@ -15,10 +15,13 @@ public partial class DropBearCard : ComponentBase
 {
     private static readonly Dictionary<ButtonColor, string> ButtonClasses = new()
     {
-        { ButtonColor.Default, "btn-primary" },
+        { ButtonColor.Default, "btn-default" },
         { ButtonColor.Secondary, "btn-secondary" },
         { ButtonColor.Success, "btn-success" },
-        { ButtonColor.Warning, "btn-warning" }
+        { ButtonColor.Warning, "btn-warning" },
+        { ButtonColor.Error, "btn-error" },
+        { ButtonColor.Information, "btn-information" },
+        { ButtonColor.Primary, "btn-primary" }
     };
 
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.LightMode;
