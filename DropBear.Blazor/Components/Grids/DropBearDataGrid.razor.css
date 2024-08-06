@@ -6,7 +6,12 @@
   --text-primary: #ffffff;
   --text-secondary: #a4b1cd;
   --accent-color: #4ebafd;
-  --accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);
+  /*--accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);*/
+  --acccent-gradient: linear-gradient(
+    135deg,
+    hsl(230, 9%, 18%),
+    hsl(230, 9%, 13%)
+  );
   --border-color: #40444b;
   --hover-bg: rgba(78, 186, 253, 0.1);
   --clr-rock-blue: #5a7a9a;
@@ -20,7 +25,12 @@
   --text-primary: #333333;
   --text-secondary: #666666;
   --accent-color: #3b8fd9;
-  --accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);
+  /*--accent-gradient: linear-gradient(135deg, #4ebafd, #3b8fd9);*/
+  --accent-gradient: linear-gradient(
+    135deg,
+    hsl(0, 0%, 98%),
+    hsl(0, 0%, 93%)
+  );
   --border-color: #d1d5db;
   --hover-bg: rgba(59, 143, 217, 0.1);
   --clr-rock-blue: #a0b4c8;
@@ -34,6 +44,7 @@
 .dropbear-datagrid-container {
   margin: var(--spacing-sm);
   padding: var(--padding-default);
+  max-width: 1200px;
 }
 
 .dropbear-datagrid {
