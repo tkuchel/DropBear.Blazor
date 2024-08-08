@@ -21,7 +21,7 @@
 }
 
 .context-menu {
-  position: absolute;
+  position: fixed;
   background-color: var(--clr-dark-background);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-xs);

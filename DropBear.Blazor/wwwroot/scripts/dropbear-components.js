@@ -160,10 +160,9 @@ window.DropBearContextMenu = (function () {
 
     handleContextMenu(e) {
       e.preventDefault();
-      const rect = this.element.getBoundingClientRect();
-      const x = Math.round(e.clientX - rect.left);
-      const y = Math.round(e.clientY - rect.top);
-      console.log(`Context menu triggered at X: ${x}, Y: ${y} (relative to container)`);
+      const x = e.pageX;
+      const y = e.pageY;
+      console.log(`Context menu triggered at X: ${x}, Y: ${y} (absolute to document)`);
       this.show(x, y);
     }
 
