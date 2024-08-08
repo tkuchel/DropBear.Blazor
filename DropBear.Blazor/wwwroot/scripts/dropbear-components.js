@@ -131,13 +131,13 @@ window.DropBearFileUploader = (function () {
 
 // Utility function for file download
 window.downloadFileFromStream = (fileName, byteArray, contentType) => {
-  const blob = new Blob([byteArray], { type: contentType || "application/octet-stream" });
-  const url = window.URL.createObjectURL(blob);
+  const blob = new Blob([byteArray], { type: contentType });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
+  a.style.display = 'none';
   a.href = url;
   a.download = fileName;
+  document.body.appendChild(a);
   a.click();
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
