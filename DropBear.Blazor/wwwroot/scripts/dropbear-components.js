@@ -131,10 +131,7 @@ window.DropBearFileUploader = (function () {
 
 // Utility function for file download
 window.downloadFileFromStream = (fileName, byteArray, contentType) => {
-  // For PNGs, ensure we're using the correct content type
-  const actualContentType = fileName.toLowerCase().endsWith('.png') ? 'image/png' : contentType;
-
-  const blob = new Blob([byteArray], { type: actualContentType });
+  const blob = new Blob([byteArray], { type: contentType });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.style.display = 'none';
