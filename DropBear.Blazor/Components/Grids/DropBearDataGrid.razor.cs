@@ -37,6 +37,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     [Parameter] public EventCallback<TItem> OnEditItem { get; set; }
     [Parameter] public EventCallback<TItem> OnDeleteItem { get; set; }
     [Parameter] public EventCallback<List<TItem>> OnSelectionChanged { get; set; }
+    [Parameter] public EventCallback<TItem> OnRowClicked { get; set; }
 
     [Parameter] public RenderFragment Columns { get; set; } = default!;
     [Parameter] public RenderFragment? LoadingTemplate { get; set; }
@@ -70,6 +71,11 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         _columns.Count
         + (EnableMultiSelect ? 1 : 0)
         + (AllowEdit || AllowDelete ? 1 : 0);
+
+    private async Task HandleRowClick(TItem item)
+    {
+        await OnRowClicked.InvokeAsync(item);
+    }
 
     public void AddColumn(DataGridColumn<TItem> column)
     {
