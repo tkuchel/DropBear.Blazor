@@ -28,9 +28,11 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IReadOnlyCollection<ContextMenuItem> MenuItems { get; set; } = Array.Empty<ContextMenuItem>();
-    [Parameter] public EventCallback<ContextMenuItem> OnItemClicked { get; set; }
-    [Parameter] public string MenuType { get; set; } = string.Empty;
-    [Parameter] public object Context { get; set; } = new();
+
+    [Parameter] public EventCallback<(ContextMenuItem, object)> OnItemClicked { get; set; }
+    [Parameter] public Func<object> GetContext { get; set; } = () => new object();
+
+
     [Parameter] public bool UseDynamicService { get; set; }
 
     public async ValueTask DisposeAsync()
@@ -113,7 +115,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
 
     private async Task OnItemClick(ContextMenuItem item)
     {
-        await OnItemClicked.InvokeAsync(item);
+        await OnItemClicked.InvokeAsync((item, GetContext()));
         Hide();
     }
 }

@@ -6,6 +6,7 @@ using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 #endregion
 
@@ -76,7 +77,11 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     {
         await OnRowClicked.InvokeAsync(item);
     }
-
+    private async Task HandleRowContextMenu(MouseEventArgs e, TItem item)
+    {
+        await HandleRowClick(item);
+        // The context menu will be handled by the DropBearContextMenu component
+    }
     public void AddColumn(DataGridColumn<TItem> column)
     {
         _columns.Add(column);
