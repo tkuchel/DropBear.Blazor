@@ -13,6 +13,10 @@
   background-color: var(--clr-malibu);
 }
 
+.context-menu-container {
+  position: relative;
+}
+
 .context-menu {
   position: absolute;
   background-color: var(--clr-dark-background);

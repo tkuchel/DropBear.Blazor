@@ -8,7 +8,7 @@ window.DropBearSnackbar = (function () {
       snackbar.addEventListener('animationend', () => {
         snackbar.remove();
         snackbars.delete(snackbarId);
-      }, { once: true });
+      }, {once: true});
       snackbar.style.animation = 'slideOutDown 0.3s ease-out forwards';
     } else {
       console.warn(`Snackbar ${snackbarId} not found for removal`);
@@ -160,8 +160,11 @@ window.DropBearContextMenu = (function () {
 
     handleContextMenu(e) {
       e.preventDefault();
-      console.log(`Context menu triggered at X: ${e.clientX}, Y: ${e.clientY}`);
-      this.show(e.clientX, e.clientY);
+      const rect = this.element.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      console.log(`Context menu triggered at X: ${x}, Y: ${y} (relative to container)`);
+      this.show(x, y);
     }
 
     handleDocumentClick() {
@@ -175,6 +178,7 @@ window.DropBearContextMenu = (function () {
       this.dotNetReference.invokeMethodAsync('Show', x, y)
         .catch(error => console.error('Error invoking Show method:', error));
     }
+
 
     dispose() {
       this.element.removeEventListener('contextmenu', this.handleContextMenu);
