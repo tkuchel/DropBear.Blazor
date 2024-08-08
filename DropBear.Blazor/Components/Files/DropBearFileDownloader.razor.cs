@@ -23,7 +23,7 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase, IDis
     [Parameter] public string FileIconClass { get; set; } = "fas fa-file-pdf";
     [Parameter] public ThemeType Theme { get; set; } = ThemeType.DarkMode;
 
-    [Parameter] public Func<Stream, IProgress<int>, Task<MemoryStream>>? DownloadFileAsync { get; set; }
+    [Parameter] public Func<IProgress<int>, Task<MemoryStream>>? DownloadFileAsync { get; set; }
     [Parameter] public EventCallback<bool> OnDownloadComplete { get; set; }
 
     private string ThemeClass => Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
@@ -57,8 +57,7 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase, IDis
                 StateHasChanged();
             });
 
-            using var downloadStream = new MemoryStream();
-            using var resultStream = await DownloadFileAsync(downloadStream, progress);
+            using var resultStream = await DownloadFileAsync(progress);
 
             resultStream.Position = 0;
             var byteArray = resultStream.ToArray();
