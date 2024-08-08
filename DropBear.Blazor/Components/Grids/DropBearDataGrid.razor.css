@@ -364,8 +364,8 @@ select:hover {
 .datagrid-row.selected[b-6ubnkg47ng] {
   position: relative;
   overflow: hidden;
-  background-color: var(--accent-color); /* Highlight with background color */
-  animation: smoothPulse 3s ease-in-out infinite;
+  background-color: var(--accent-color-light); /* Highlight with background color */
+  animation: smoothPulse 6s ease-in-out infinite;
   /* border: 1px solid red;  Temporary border for debugging */
 }
 

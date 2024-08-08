@@ -57,41 +57,6 @@ window.DropBearSnackbar = (function () {
   };
 })();
 
-// DropBearModal
-window.DropBearModal = (function () {
-  return {
-    initialize() {
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-          DotNet.invokeMethodAsync('DropBear.Blazor', 'CloseModalOnEscape');
-        }
-      });
-    },
-    focusFirstInput(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        const input = modal.querySelector('input, select, textarea');
-        if (input) {
-          input.focus();
-        }
-      }
-    },
-    updateModalTheme(modalId, themeClass) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.remove("theme-dark", "theme-light");
-        modal.classList.add(themeClass);
-      }
-    },
-    hideModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) {
-        modal.classList.remove("active");
-      }
-    }
-  };
-})();
-
 // DropBearFileUploader
 window.DropBearFileUploader = (function () {
   let droppedFiles = [];
@@ -184,29 +149,37 @@ window.DropBearContextMenu = (function () {
       this.element = element;
       this.dotNetReference = dotNetReference;
       this.initialize();
+      console.log(`ContextMenu initialized for element: ${element.id}`);
     }
 
     initialize() {
       this.element.addEventListener('contextmenu', this.handleContextMenu.bind(this));
       document.addEventListener('click', this.handleDocumentClick.bind(this));
+      console.log('Event listeners added');
     }
 
     handleContextMenu(e) {
       e.preventDefault();
+      console.log(`Context menu triggered at X: ${e.clientX}, Y: ${e.clientY}`);
       this.show(e.clientX, e.clientY);
     }
 
     handleDocumentClick() {
-      this.dotNetReference.invokeMethodAsync('Hide');
+      console.log('Document clicked, hiding context menu');
+      this.dotNetReference.invokeMethodAsync('Hide')
+        .catch(error => console.error('Error invoking Hide method:', error));
     }
 
     show(x, y) {
-      this.dotNetReference.invokeMethodAsync('Show', x, y);
+      console.log(`Showing context menu at X: ${x}, Y: ${y}`);
+      this.dotNetReference.invokeMethodAsync('Show', x, y)
+        .catch(error => console.error('Error invoking Show method:', error));
     }
 
     dispose() {
       this.element.removeEventListener('contextmenu', this.handleContextMenu);
       document.removeEventListener('click', this.handleDocumentClick);
+      console.log(`ContextMenu disposed for element: ${this.element.id}`);
     }
   }
 
@@ -214,6 +187,7 @@ window.DropBearContextMenu = (function () {
 
   return {
     initialize(elementId, dotNetReference) {
+      console.log(`Initializing ContextMenu for element: ${elementId}`);
       const element = document.getElementById(elementId);
       if (!element) {
         console.error(`Element with id '${elementId}' not found.`);
@@ -225,11 +199,17 @@ window.DropBearContextMenu = (function () {
         this.dispose(elementId);
       }
 
-      const menuInstance = new ContextMenu(element, dotNetReference);
-      menuInstances.set(elementId, menuInstance);
+      try {
+        const menuInstance = new ContextMenu(element, dotNetReference);
+        menuInstances.set(elementId, menuInstance);
+        console.log(`ContextMenu instance created for element: ${elementId}`);
+      } catch (error) {
+        console.error(`Error initializing ContextMenu for element '${elementId}':`, error);
+      }
     },
 
     show(elementId, x, y) {
+      console.log(`Attempting to show context menu for element: ${elementId}`);
       const menuInstance = menuInstances.get(elementId);
       if (menuInstance) {
         menuInstance.show(x, y);
@@ -239,16 +219,22 @@ window.DropBearContextMenu = (function () {
     },
 
     dispose(elementId) {
+      console.log(`Disposing ContextMenu for element: ${elementId}`);
       const menuInstance = menuInstances.get(elementId);
       if (menuInstance) {
         menuInstance.dispose();
         menuInstances.delete(elementId);
+        console.log(`ContextMenu instance removed for element: ${elementId}`);
+      } else {
+        console.warn(`No ContextMenu instance found to dispose for element: ${elementId}`);
       }
     },
 
     disposeAll() {
-      menuInstances.forEach((instance, elementId) => instance.dispose());
+      console.log('Disposing all ContextMenu instances');
+      menuInstances.forEach((instance, elementId) => this.dispose(elementId));
       menuInstances.clear();
+      console.log('All ContextMenu instances disposed');
     }
   };
 })();

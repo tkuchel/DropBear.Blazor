@@ -1,6 +1,6 @@
 ﻿@inherits DropBear.Blazor.Components.Bases.DropBearComponentBase
 
-<div @ref="_triggerElement" @oncontextmenu="OnContextMenu" @oncontextmenu:preventDefault>
+<div @ref="_triggerElement" id="@_contextMenuId" @oncontextmenu="OnContextMenu" @oncontextmenu:preventDefault>
     @ChildContent
 </div>
 

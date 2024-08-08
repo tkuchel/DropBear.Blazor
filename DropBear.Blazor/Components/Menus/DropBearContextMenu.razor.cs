@@ -5,26 +5,26 @@ using DropBear.Blazor.Interfaces;
 using DropBear.Blazor.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
 #endregion
 
 namespace DropBear.Blazor.Components.Menus;
 
-/// <summary>
-///     A Blazor component for displaying a context menu.
-/// </summary>
 public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncDisposable
 {
-    private CancellationTokenSource? _dismissCancellationTokenSource;
+    private readonly string _contextMenuId = $"context-menu-{Guid.NewGuid()}";
     private bool _isVisible;
     private bool _jsInitialized;
     private int _left;
     private DotNetObjectReference<DropBearContextMenu>? _objectReference;
     private int _top;
-    private ElementReference? _triggerElement; // The element that will trigger the context menu
-    [Inject] private IJSRuntime? JsRuntime { get; set; }
+
+    private ElementReference _triggerElement;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private IDynamicContextMenuService? DynamicContextMenuService { get; set; }
+    [Inject] private ILogger<DropBearContextMenu> Logger { get; set; } = null!;
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public IReadOnlyCollection<ContextMenuItem> MenuItems { get; set; } = Array.Empty<ContextMenuItem>();
@@ -33,73 +33,44 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     [Parameter] public object Context { get; set; } = new();
     [Parameter] public bool UseDynamicService { get; set; }
 
-    /// <summary>
-    ///     Disposes the context menu.
-    /// </summary>
     public async ValueTask DisposeAsync()
     {
-        if (_jsInitialized && JsRuntime is not null)
+        if (_jsInitialized)
         {
             try
             {
-                if (_dismissCancellationTokenSource is not null)
-                {
-                    await JsRuntime.InvokeVoidAsync("dropBearContextMenu.dispose",
-                        _dismissCancellationTokenSource.Token, _triggerElement);
-
-                    _dismissCancellationTokenSource.Dispose();
-                }
+                await JsRuntime.InvokeVoidAsync("DropBearContextMenu.dispose", _contextMenuId);
             }
-            catch (JSException)
+            catch (JSException ex)
             {
-                // JavaScript interop is not available
+                Logger.LogError(ex, "Failed to dispose context menu");
             }
         }
 
         _objectReference?.Dispose();
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (UseDynamicService && DynamicContextMenuService is not null)
-        {
-            await DynamicContextMenuService.GetMenuItemsAsync(Context, MenuType);
-        }
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _dismissCancellationTokenSource = new CancellationTokenSource();
             _objectReference = DotNetObjectReference.Create(this);
             await InitializeJavaScript();
         }
     }
 
-    /// <summary>
-    ///     Initializes the JavaScript interop.
-    /// </summary>
     private async Task InitializeJavaScript()
     {
-        if (JsRuntime is not null)
+        try
         {
-            try
-            {
-                if (_dismissCancellationTokenSource is not null)
-                {
-                    await JsRuntime.InvokeVoidAsync("dropBearContextMenu.initialize",
-                        _dismissCancellationTokenSource.Token, _triggerElement,
-                        _objectReference);
-                }
-
-                _jsInitialized = true;
-            }
-            catch (JSException)
-            {
-                // JavaScript interop is not available (e.g., prerendering)
-                _jsInitialized = false;
-            }
+            await JsRuntime.InvokeVoidAsync("DropBearContextMenu.initialize", _contextMenuId, _objectReference);
+            _jsInitialized = true;
+            Logger.LogInformation("ContextMenu initialized with ID: {ContextMenuId}", _contextMenuId);
+        }
+        catch (JSException ex)
+        {
+            Logger.LogError(ex, "Failed to initialize JavaScript for ContextMenu");
+            _jsInitialized = false;
         }
     }
 
@@ -109,6 +80,7 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
         _left = left;
         _top = top;
         _isVisible = true;
+        Logger.LogDebug("Show method invoked: Left={Left}, Top={Top}", left, top);
         StateHasChanged();
     }
 
@@ -116,18 +88,26 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     public void Hide()
     {
         _isVisible = false;
+        Logger.LogDebug("Hide method invoked");
         StateHasChanged();
     }
 
     private async Task OnContextMenu(MouseEventArgs e)
     {
-        if (_jsInitialized && JsRuntime is not null)
+        if (_jsInitialized)
         {
-            if (_dismissCancellationTokenSource is not null)
+            try
             {
-                await JsRuntime.InvokeVoidAsync("dropBearContextMenu.show", _dismissCancellationTokenSource.Token,
-                    e.ClientX, e.ClientY, _objectReference);
+                await JsRuntime.InvokeVoidAsync("DropBearContextMenu.show", _contextMenuId, e.ClientX, e.ClientY);
             }
+            catch (JSException ex)
+            {
+                Logger.LogError(ex, "Failed to show context menu");
+            }
+        }
+        else
+        {
+            Logger.LogWarning("Attempted to show context menu, but JavaScript is not initialized");
         }
     }
 
