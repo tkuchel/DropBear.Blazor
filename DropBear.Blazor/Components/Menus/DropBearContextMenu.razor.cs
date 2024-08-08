@@ -75,12 +75,12 @@ public sealed partial class DropBearContextMenu : DropBearComponentBase, IAsyncD
     }
 
     [JSInvokable]
-    public void Show(int left, int top)
+    public void Show(double left, double top)
     {
-        _left = left;
-        _top = top;
+        _left = (int)Math.Round(left);
+        _top = (int)Math.Round(top);
         _isVisible = true;
-        Logger.LogDebug("Show method invoked: Left={Left}, Top={Top}", left, top);
+        Logger.LogDebug("Show method invoked: Left={Left}, Top={Top}", _left, _top);
         StateHasChanged();
     }
 

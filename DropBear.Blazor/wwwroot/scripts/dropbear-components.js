@@ -161,8 +161,8 @@ window.DropBearContextMenu = (function () {
     handleContextMenu(e) {
       e.preventDefault();
       const rect = this.element.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
       console.log(`Context menu triggered at X: ${x}, Y: ${y} (relative to container)`);
       this.show(x, y);
     }
@@ -178,7 +178,6 @@ window.DropBearContextMenu = (function () {
       this.dotNetReference.invokeMethodAsync('Show', x, y)
         .catch(error => console.error('Error invoking Show method:', error));
     }
-
 
     dispose() {
       this.element.removeEventListener('contextmenu', this.handleContextMenu);
