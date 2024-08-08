@@ -69,6 +69,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: var(--z-index-fixed);
   /*line-height: var(--line-height-base);*/
 }
 
@@ -163,6 +165,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: var(--bg-primary);
+  position: relative;
 }
 
 .datagrid-header .datagrid-cell {
@@ -344,6 +348,7 @@ select:hover {
   background: var(--accent-color);
   opacity: 0;
   animation: smoothPulse 3s ease-in-out infinite;
+  z-index: var(--z-index-sticky);
 }
 
 @keyframes smoothPulse {
