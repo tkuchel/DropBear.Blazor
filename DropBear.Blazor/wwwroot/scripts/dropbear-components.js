@@ -130,8 +130,8 @@ window.DropBearFileUploader = (function () {
 })();
 
 // Utility function for file download
-window.downloadFileFromStream = (fileName, byteArray) => {
-  const blob = new Blob([byteArray], {type: "application/octet-stream"});
+window.downloadFileFromStream = (fileName, byteArray, contentType) => {
+  const blob = new Blob([byteArray], { type: contentType || "application/octet-stream" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   document.body.appendChild(a);
@@ -140,8 +140,8 @@ window.downloadFileFromStream = (fileName, byteArray) => {
   a.download = fileName;
   a.click();
   window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
 };
-
 // DropBearContextMenu
 window.DropBearContextMenu = (function () {
   class ContextMenu {

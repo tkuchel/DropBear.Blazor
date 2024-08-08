@@ -25,6 +25,7 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase, IDis
 
     [Parameter] public Func<IProgress<int>, Task<MemoryStream>>? DownloadFileAsync { get; set; }
     [Parameter] public EventCallback<bool> OnDownloadComplete { get; set; }
+    [Parameter] public string ContentType { get; set; } = "application/octet-stream";
 
     private string ThemeClass => Theme is ThemeType.LightMode ? "light-theme" : "dark-theme";
 
@@ -57,13 +58,14 @@ public sealed partial class DropBearFileDownloader : DropBearComponentBase, IDis
                 StateHasChanged();
             });
 
-            using var resultStream = await DownloadFileAsync(progress);
+            var resultStream = await DownloadFileAsync(progress);
 
             resultStream.Position = 0;
             var byteArray = resultStream.ToArray();
 
+            // Use the ContentType parameter
             await JsRuntime.InvokeVoidAsync("downloadFileFromStream", _dismissCancellationTokenSource.Token, FileName,
-                byteArray);
+                byteArray, ContentType);
 
             await OnDownloadComplete.InvokeAsync(true);
         }

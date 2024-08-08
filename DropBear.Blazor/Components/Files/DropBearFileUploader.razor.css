@@ -5,11 +5,19 @@
 }
 
 .file-upload-component {
-  background-color: var(--clr-dark-background);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-lg);
-  color: var(--clr-silver-sand);
   box-shadow: var(--shadow-md);
+}
+
+.dark-theme .file-upload-component {
+  background-color: var(--clr-dark-background);
+  color: var(--clr-silver-sand);
+}
+
+.light-theme .file-upload-component {
+  background-color: var(--clr-light-background, #ffffff);
+  color: var(--clr-text-dark, #333333);
 }
 
 .file-upload-completed-list {
@@ -27,7 +35,14 @@
 
 .file-upload-dropzone.dragover {
   border-color: var(--clr-viking);
+}
+
+.dark-theme .file-upload-dropzone.dragover {
   background-color: rgba(78, 186, 253, 0.1);
+}
+
+.light-theme .file-upload-dropzone.dragover {
+  background-color: rgba(78, 186, 253, 0.05);
 }
 
 .file-upload-dropzone i {
@@ -67,10 +82,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.05);
   border-radius: var(--border-radius-sm);
   padding: var(--padding-default);
   margin-bottom: var(--spacing-sm);
+}
+
+.dark-theme .file-upload-item {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.light-theme .file-upload-item {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .file-upload-info {
@@ -128,10 +150,17 @@
 
 .file-upload-progress {
   height: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius-sm);
   margin-top: var(--spacing-sm);
   overflow: hidden;
+}
+
+.dark-theme .file-upload-progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.light-theme .file-upload-progress {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .file-upload-progress-bar {
