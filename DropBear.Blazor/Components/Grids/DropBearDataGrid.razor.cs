@@ -77,11 +77,13 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     {
         await OnRowClicked.InvokeAsync(item);
     }
+
     private async Task HandleRowContextMenu(MouseEventArgs e, TItem item)
     {
         await HandleRowClick(item);
         // The context menu will be handled by the DropBearContextMenu component
     }
+
     public void AddColumn(DataGridColumn<TItem> column)
     {
         _columns.Add(column);
@@ -140,7 +142,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         {
             FilteredItems = Items.Where(item => _columns.Exists(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
-            ));
+            )).ToList(); // Use ToList() to materialize the query
         }
 
         CurrentPage = 1;
