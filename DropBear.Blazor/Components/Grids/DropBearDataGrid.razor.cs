@@ -23,6 +23,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
     private List<TItem>? _selectedItems;
     private ElementReference searchInput;
+    private bool _isInitialized = false;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
 
     [Parameter] public string Title { get; set; } = "Data Grid";
@@ -94,6 +95,12 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         await base.OnInitializedAsync();
         _selectedItems ??= [];
         await LoadDataAsync();
+        _isInitialized = true;
+    }
+
+    protected override bool ShouldRender()
+    {
+        return _isInitialized;
     }
 
     private async Task LoadDataAsync()
@@ -131,7 +138,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private async Task PerformSearch()
     {
         IsLoading = true;
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
 
         await Task.Delay(200); // Simulate search delay
 
@@ -143,15 +150,15 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         {
             FilteredItems = Items.Where(item => _columns.Any(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
-            ));
+            )).ToList();
         }
 
         CurrentPage = 1;
         UpdateDisplayedItems();
 
         IsLoading = false;
-        await InvokeAsync(StateHasChanged);
-        await searchInput.FocusAsync();
+        StateHasChanged();
+        await InvokeAsync(() => searchInput.FocusAsync());
     }
 
     private void UpdateDisplayedItems()

@@ -24,6 +24,12 @@ public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
 
     protected override void OnInitialized()
     {
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
         if (ParentGrid == null)
         {
             throw new InvalidOperationException(
