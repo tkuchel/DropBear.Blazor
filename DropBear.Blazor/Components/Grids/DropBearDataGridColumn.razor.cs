@@ -11,6 +11,7 @@ namespace DropBear.Blazor.Components.Grids;
 public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
 {
     private bool _isInitialized;
+
     [CascadingParameter] private DropBearDataGrid<TItem> ParentGrid { get; set; } = default!;
 
     [Parameter] public string PropertyName { get; set; } = string.Empty;
@@ -30,7 +31,7 @@ public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
             return;
         }
 
-        if (ParentGrid == null)
+        if (ParentGrid is null)
         {
             throw new InvalidOperationException(
                 $"{nameof(DropBearDataGridColumn<TItem>)} must be used within a {nameof(DropBearDataGrid<TItem>)}");

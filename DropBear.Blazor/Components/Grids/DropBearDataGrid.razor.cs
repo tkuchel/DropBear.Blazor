@@ -87,15 +87,13 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
     public void AddColumn(DataGridColumn<TItem> column)
     {
-        if (_isInitialized)
+        if (!_columns.TrueForAll(c => c.PropertyName != column.PropertyName))
         {
-            return; // Don't add columns after initialization
+            return;
         }
 
-        if (!_columns.Any(c => c.PropertyName == column.PropertyName))
-        {
-            _columns.Add(column);
-        }
+        _columns.Add(column);
+        StateHasChanged();
     }
 
     public void ResetColumns()
@@ -160,8 +158,6 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         StateHasChanged();
 
         await Task.Delay(200); // Simulate search delay
-
-        ResetColumns(); // Reset columns before searching
 
         if (string.IsNullOrWhiteSpace(SearchTerm))
         {
