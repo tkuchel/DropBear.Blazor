@@ -1,7 +1,6 @@
 ﻿#region
 
 using System.Collections.ObjectModel;
-using System.Globalization;
 using DropBear.Blazor.Components.Bases;
 using DropBear.Blazor.Enums;
 using DropBear.Blazor.Models;
@@ -22,7 +21,8 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private DataGridColumn<TItem> _currentSortColumn = new();
     private SortDirection _currentSortDirection = SortDirection.Ascending;
 
-    private Collection<TItem>? _selectedItems;
+    private List<TItem>? _selectedItems;
+    private ElementReference searchInput;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
 
     [Parameter] public string Title { get; set; } = "Data Grid";
@@ -48,22 +48,22 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private int CurrentPage { get; set; } = 1;
     private int TotalPages => (int)Math.Ceiling(FilteredItems.Count() / (double)ItemsPerPage);
 
-    private Collection<TItem> SelectedItems
+    private List<TItem> SelectedItems
     {
         get => _selectedItems ??= [];
         // ReSharper disable once UnusedMember.Local
         set => _selectedItems = value;
     }
 
-    private IEnumerable<TItem> FilteredItems { get; set; } = new List<TItem>();
-    private IEnumerable<TItem> DisplayedItems { get; set; } = new List<TItem>();
+    private IEnumerable<TItem> FilteredItems { get; set; } = Enumerable.Empty<TItem>();
+    private IEnumerable<TItem> DisplayedItems { get; set; } = Enumerable.Empty<TItem>();
 
     private IReadOnlyCollection<int> ItemsPerPageOptions { get; } =
         new ReadOnlyCollection<int>(new List<int> { 10, 25, 50, 100 });
-    private ElementReference searchInput;
+
     private string ThemeClass => Theme is ThemeType.DarkMode ? "dark-theme" : "light-theme";
 
-    public IReadOnlyCollection<DataGridColumn<TItem>> GetColumns => _columns.AsReadOnly();
+    public IReadOnlyList<DataGridColumn<TItem>> GetColumns => _columns.AsReadOnly();
 
     private bool IsLoading { get; set; } = true;
     private bool HasData => FilteredItems.Any();
@@ -106,7 +106,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
         // This is for a future implementation where the datagrid will be able to load data from a service
 
-        FilteredItems = Items;
+        FilteredItems = Items.ToList(); // Create a new list here
         UpdateDisplayedItems();
 
         IsLoading = false;
@@ -131,26 +131,25 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private async Task PerformSearch()
     {
         IsLoading = true;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
 
         await Task.Delay(200); // Simulate search delay
 
         if (string.IsNullOrWhiteSpace(SearchTerm))
         {
-            FilteredItems = Items.ToList(); // Create a new list to ensure change detection
+            FilteredItems = Items.ToList();
         }
         else
         {
             FilteredItems = Items.Where(item => _columns.Any(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
-            )).ToList();
+            ));
         }
 
         CurrentPage = 1;
         UpdateDisplayedItems();
 
         IsLoading = false;
-        // After search is complete
         await InvokeAsync(StateHasChanged);
         await searchInput.FocusAsync();
     }
@@ -159,9 +158,10 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     {
         DisplayedItems = FilteredItems
             .Skip((CurrentPage - 1) * ItemsPerPage)
-            .Take(ItemsPerPage)
-            .ToList(); // Materialize the query to ensure change detection
+            .Take(ItemsPerPage);
     }
+
+
 
     private static bool MatchesSearchTerm(object? value, string searchTerm, string format)
     {
@@ -184,6 +184,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     {
         return string.IsNullOrEmpty(format) ? dateTime.ToString("d") : dateTime.ToString(format);
     }
+
     private void SortBy(DataGridColumn<TItem> column)
     {
         if (!column.Sortable)

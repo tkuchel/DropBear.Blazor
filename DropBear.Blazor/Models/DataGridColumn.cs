@@ -33,8 +33,6 @@ public sealed class DataGridColumn<TItem>
 
     // Custom sort function
     public Func<IEnumerable<TItem>, bool, IEnumerable<TItem>>? CustomSort { get; set; }
-
-    // Custom filter function
     public Func<IEnumerable<TItem>, string, IEnumerable<TItem>>? CustomFilter { get; set; }
 
     // Header template
