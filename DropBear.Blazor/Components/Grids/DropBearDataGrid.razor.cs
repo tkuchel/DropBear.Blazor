@@ -60,7 +60,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
     private IReadOnlyCollection<int> ItemsPerPageOptions { get; } =
         new ReadOnlyCollection<int>(new List<int> { 10, 25, 50, 100 });
-
+    private ElementReference searchInput;
     private string ThemeClass => Theme is ThemeType.DarkMode ? "dark-theme" : "light-theme";
 
     public IReadOnlyCollection<DataGridColumn<TItem>> GetColumns => _columns.AsReadOnly();
@@ -125,6 +125,7 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     {
         SearchTerm = e.Value?.ToString() ?? string.Empty;
         await PerformSearch();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task PerformSearch()
@@ -136,52 +137,53 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
         if (string.IsNullOrWhiteSpace(SearchTerm))
         {
-            FilteredItems = Items;
+            FilteredItems = Items.ToList(); // Create a new list to ensure change detection
         }
         else
         {
-            FilteredItems = Items.Where(item => _columns.Exists(column =>
+            FilteredItems = Items.Where(item => _columns.Any(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
-            )).ToList(); // Use ToList() to materialize the query
+            )).ToList();
         }
 
         CurrentPage = 1;
         UpdateDisplayedItems();
 
         IsLoading = false;
-        StateHasChanged();
+        // After search is complete
+        await InvokeAsync(StateHasChanged);
+        await searchInput.FocusAsync();
+    }
+
+    private void UpdateDisplayedItems()
+    {
+        DisplayedItems = FilteredItems
+            .Skip((CurrentPage - 1) * ItemsPerPage)
+            .Take(ItemsPerPage)
+            .ToList(); // Materialize the query to ensure change detection
     }
 
     private static bool MatchesSearchTerm(object? value, string searchTerm, string format)
     {
-        if (value is null)
+        if (value is null || string.IsNullOrWhiteSpace(searchTerm))
         {
             return false;
         }
 
-        // Handle different types of data
-        return value switch
+        var valueString = value switch
         {
-            DateTime dateTime => MatchesDateSearch(dateTime, searchTerm, format),
-            DateTimeOffset dateTimeOffset => MatchesDateSearch(dateTimeOffset.DateTime, searchTerm, format),
-            _ => value.ToString()?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false
+            DateTime dateTime => FormatDateTime(dateTime, format),
+            DateTimeOffset dateTimeOffset => FormatDateTime(dateTimeOffset.DateTime, format),
+            _ => value.ToString()
         };
+
+        return valueString?.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
-    private static bool MatchesDateSearch(DateTime dateTime, string searchTerm, string format)
+    private static string FormatDateTime(DateTime dateTime, string format)
     {
-        // Try to parse the search term as a date
-        if (DateTime.TryParse(searchTerm, CultureInfo.InvariantCulture, DateTimeStyles.None, out var searchDate))
-        {
-            return dateTime.Date == searchDate.Date;
-        }
-
-        // If not a full date, try to match parts of the formatted date string
-        var formattedDate =
-            dateTime.ToString(string.IsNullOrEmpty(format) ? "d" : format, CultureInfo.InvariantCulture);
-        return formattedDate.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+        return string.IsNullOrEmpty(format) ? dateTime.ToString("d") : dateTime.ToString(format);
     }
-
     private void SortBy(DataGridColumn<TItem> column)
     {
         if (!column.Sortable)
@@ -218,13 +220,6 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private SortDirection? GetSortDirection(DataGridColumn<TItem> column)
     {
         return _currentSortColumn == column ? _currentSortDirection : null;
-    }
-
-    private void UpdateDisplayedItems()
-    {
-        DisplayedItems = FilteredItems
-            .Skip((CurrentPage - 1) * ItemsPerPage)
-            .Take(ItemsPerPage);
     }
 
     private void PreviousPage()
