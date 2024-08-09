@@ -87,13 +87,21 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
     public void AddColumn(DataGridColumn<TItem> column)
     {
-        _columns.Add(column);
+        if (!_columns.Any(c => c.PropertyName == column.PropertyName))
+        {
+            _columns.Add(column);
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _selectedItems ??= [];
+
+        // Wait for the next render to ensure columns are initialized
+        await InvokeAsync(StateHasChanged);
+        await Task.Yield();
+
         await LoadDataAsync();
         _isInitialized = true;
     }

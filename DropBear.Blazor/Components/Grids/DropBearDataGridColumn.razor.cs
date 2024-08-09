@@ -22,13 +22,11 @@ public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
     [Parameter] public RenderFragment<TItem> Template { get; set; } = default!;
     [Parameter] public Func<IEnumerable<TItem>, bool, IEnumerable<TItem>> CustomSort { get; set; } = default!;
 
+    private bool _isInitialized = false;
+
     protected override void OnInitialized()
     {
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
+        if (_isInitialized) return;
 
         if (ParentGrid == null)
         {
@@ -50,5 +48,6 @@ public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
         };
 
         ParentGrid.AddColumn(column);
+        _isInitialized = true;
     }
 }
