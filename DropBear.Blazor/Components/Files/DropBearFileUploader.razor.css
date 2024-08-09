@@ -16,7 +16,7 @@
 }
 
 .light-theme .file-upload-component {
-  background-color: var(--clr-light-background, #ffffff);
+  background-color: var(--clr-surface-light, #ffffff);
   color: var(--clr-text-dark, #333333);
 }
 
@@ -92,7 +92,7 @@
 }
 
 .light-theme .file-upload-item {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var( --clr-confirmation);
 }
 
 .file-upload-info {
@@ -107,7 +107,7 @@
 .file-upload-meta,
 .file-upload-status {
   font-size: var(--font-size-sm);
-  color: var(--clr-rock-blue);
+  color: var(--clr-text-dark);
 }
 
 .file-upload-remove-btn {

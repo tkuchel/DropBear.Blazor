@@ -97,11 +97,11 @@
 }
 
 .light-theme .file-icon {
-  color: var(--clr-cornflower-blue);
+  color: var(--clr-viking);
 }
 
 .light-theme .file-size {
-  color: var(--clr-rock-blue);
+  color: var(--clr-text-dark);
 }
 
 .light-theme .download-progress {
@@ -113,8 +113,8 @@
 }
 
 .light-theme .download-button {
-  background-color: var(--clr-cornflower-blue);
-  color: #fff;
+  background-color: var(--clr-viking);
+  color: #000;
 }
 
 .light-theme .download-button:hover:not(:disabled) {

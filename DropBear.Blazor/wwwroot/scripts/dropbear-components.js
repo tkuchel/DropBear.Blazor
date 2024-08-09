@@ -142,12 +142,14 @@ window.downloadFileFromStream = (fileName, byteArray, contentType) => {
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
 };
+
 // DropBearContextMenu
 window.DropBearContextMenu = (function () {
   class ContextMenu {
     constructor(element, dotNetReference) {
       this.element = element;
       this.dotNetReference = dotNetReference;
+      this.isDisposed = false;
       this.initialize();
       console.log(`ContextMenu initialized for element: ${element.id}`);
     }
@@ -167,9 +169,20 @@ window.DropBearContextMenu = (function () {
     }
 
     handleDocumentClick() {
+      if (this.isDisposed) {
+        console.log('Context menu instance already disposed, skipping hide invocation.');
+        return;
+      }
+
       console.log('Document clicked, hiding context menu');
       this.dotNetReference.invokeMethodAsync('Hide')
-        .catch(error => console.error('Error invoking Hide method:', error));
+        .catch(error => {
+          if (error.message.includes("There is no tracked object with id")) {
+            console.warn('DotNetObjectReference was disposed before hide could be invoked, ignoring error.');
+          } else {
+            console.error('Error invoking Hide method:', error);
+          }
+        });
     }
 
     show(x, y) {
@@ -181,6 +194,7 @@ window.DropBearContextMenu = (function () {
     dispose() {
       this.element.removeEventListener('contextmenu', this.handleContextMenu);
       document.removeEventListener('click', this.handleDocumentClick);
+      this.isDisposed = true;
       console.log(`ContextMenu disposed for element: ${this.element.id}`);
     }
   }
@@ -240,3 +254,4 @@ window.DropBearContextMenu = (function () {
     }
   };
 })();
+
