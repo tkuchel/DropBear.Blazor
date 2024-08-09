@@ -87,6 +87,11 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
     public void AddColumn(DataGridColumn<TItem> column)
     {
+        if (_isInitialized)
+        {
+            return; // Don't add columns after initialization
+        }
+
         if (!_columns.Any(c => c.PropertyName == column.PropertyName))
         {
             _columns.Add(column);
@@ -150,19 +155,18 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
         await Task.Delay(200); // Simulate search delay
 
-        if (string.IsNullOrWhiteSpace(SearchTerm))
-        {
-            FilteredItems = Items.ToList();
-        }
-        else
-        {
-            FilteredItems = Items.Where(item => _columns.Any(column =>
+        var newFilteredItems = string.IsNullOrWhiteSpace(SearchTerm)
+            ? Items.ToList()
+            : Items.Where(item => _columns.Any(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
             )).ToList();
-        }
 
-        CurrentPage = 1;
-        UpdateDisplayedItems();
+        if (!FilteredItems.SequenceEqual(newFilteredItems))
+        {
+            FilteredItems = newFilteredItems;
+            CurrentPage = 1;
+            UpdateDisplayedItems();
+        }
 
         IsLoading = false;
         StateHasChanged();
