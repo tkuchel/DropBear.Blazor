@@ -37,9 +37,15 @@ else
                         {
                             <div class="search-wrapper">
                                 <input @ref="searchInput" type="text" class="search-input" placeholder="Search..." @oninput="OnSearchInput" @bind="SearchTerm"/>
-                                <button class="btn-search" @onclick="PerformSearch">
-                                    <i class="fas fa-search"></i>
-                                </button>
+                                @if (_isSearching)
+                                {
+                                <span class="search-indicator">Searching...</span>
+                                <!-- Or use the dot animation: -->
+                                <!-- <span class="search-indicator-dots"></span> -->
+                                }
+                                @* <button class="btn-search" @onclick="PerformSearch"> *@
+                                @*     <i class="fas fa-search"></i> *@
+                                @* </button> *@
                             </div>
                         }
                         @if (AllowAdd)

@@ -101,14 +101,62 @@
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--clr-border);;
-  padding: 0.5rem 1rem;
   border-radius: 4px 0 0 4px;
   transition: background-color var(--transition-normal);
+  /* Make room for the indicator */
+  padding: 0.5rem 30px 0.5rem 1rem;
 }
 
 .search-input:focus {
   outline: none;
   background-color: var(--bg-tertiary);
+}
+
+.search-indicator {
+  position: absolute;
+  right: 10px;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Alternative dot animation */
+.search-indicator-dots {
+  position: absolute;
+  right: 10px;
+  color: var(--text-secondary);
+}
+
+.search-indicator-dots::after {
+  content: '...';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60% {
+    content: '...';
+  }
+  80%, 100% {
+    content: '';
+  }
 }
 
 .btn-search {

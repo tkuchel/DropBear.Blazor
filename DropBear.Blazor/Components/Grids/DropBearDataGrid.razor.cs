@@ -15,13 +15,13 @@ namespace DropBear.Blazor.Components.Grids;
 ///     A Blazor component for rendering a data grid with sorting, searching, and pagination capabilities.
 /// </summary>
 /// <typeparam name="TItem">The type of the data items.</typeparam>
-public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
+public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase, IDisposable
 {
     private readonly List<DataGridColumn<TItem>> _columns = [];
     private DataGridColumn<TItem> _currentSortColumn = new();
     private SortDirection _currentSortDirection = SortDirection.Ascending;
     private bool _isInitialized;
-
+    private bool _isSearching = false;
     private List<TItem>? _selectedItems;
     private ElementReference searchInput;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
@@ -44,7 +44,8 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     [Parameter] public RenderFragment Columns { get; set; } = default!;
     [Parameter] public RenderFragment? LoadingTemplate { get; set; }
     [Parameter] public RenderFragment? NoDataTemplate { get; set; }
-
+    private Timer? _debounceTimer;
+    private const int DebounceDelay = 300; // milliseconds
     private string SearchTerm { get; set; } = string.Empty;
     private int CurrentPage { get; set; } = 1;
     private int TotalPages => (int)Math.Ceiling(FilteredItems.Count() / (double)ItemsPerPage);
@@ -145,16 +146,30 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         }
     }
 
-    private async Task OnSearchInput(ChangeEventArgs e)
+    private void OnSearchInput(ChangeEventArgs e)
     {
         SearchTerm = e.Value?.ToString() ?? string.Empty;
-        await PerformSearch();
-        await InvokeAsync(StateHasChanged);
+
+        _debounceTimer?.Dispose();
+        _debounceTimer = new Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await PerformSearch();
+                StateHasChanged();
+            });
+        }, null, DebounceDelay, Timeout.Infinite);
+    }
+
+    public void Dispose()
+    {
+        _debounceTimer?.Dispose();
     }
 
     private async Task PerformSearch()
     {
-        IsLoading = true;
+        // IsLoading = true;
+        _isSearching = true;
         StateHasChanged();
 
         await Task.Delay(200); // Simulate search delay
@@ -173,7 +188,8 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         CurrentPage = 1;
         UpdateDisplayedItems();
 
-        IsLoading = false;
+        // IsLoading = false;
+        _isSearching = false;
         await InvokeAsync(StateHasChanged);
         await searchInput.FocusAsync();
     }
