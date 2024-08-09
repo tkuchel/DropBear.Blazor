@@ -29,7 +29,7 @@ else
                     @if (EnableSearch)
                     {
                         <div class="search-wrapper">
-                            <input type="text" class="search-input" placeholder="Search..." @oninput="OnSearchInput"/>
+                            <input type="text" class="search-input" placeholder="Search..." @oninput="OnSearchInput" @bind="SearchTerm"/>
                             <button class="btn-search" @onclick="PerformSearch">
                                 <i class="fas fa-search"></i>
                             </button>
