@@ -10,6 +10,7 @@ namespace DropBear.Blazor.Components.Grids;
 
 public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
 {
+    private bool _isInitialized;
     [CascadingParameter] private DropBearDataGrid<TItem> ParentGrid { get; set; } = default!;
 
     [Parameter] public string PropertyName { get; set; } = string.Empty;
@@ -22,11 +23,12 @@ public sealed partial class DropBearDataGridColumn<TItem> : ComponentBase
     [Parameter] public RenderFragment<TItem> Template { get; set; } = default!;
     [Parameter] public Func<IEnumerable<TItem>, bool, IEnumerable<TItem>> CustomSort { get; set; } = default!;
 
-    private bool _isInitialized = false;
-
     protected override void OnInitialized()
     {
-        if (_isInitialized) return;
+        if (_isInitialized)
+        {
+            return;
+        }
 
         if (ParentGrid == null)
         {

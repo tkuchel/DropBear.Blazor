@@ -20,10 +20,10 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
     private readonly List<DataGridColumn<TItem>> _columns = [];
     private DataGridColumn<TItem> _currentSortColumn = new();
     private SortDirection _currentSortDirection = SortDirection.Ascending;
+    private bool _isInitialized;
 
     private List<TItem>? _selectedItems;
     private ElementReference searchInput;
-    private bool _isInitialized = false;
     [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
 
     [Parameter] public string Title { get; set; } = "Data Grid";
@@ -98,6 +98,12 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
         }
     }
 
+    public void ResetColumns()
+    {
+        _columns.Clear();
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -155,22 +161,25 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
 
         await Task.Delay(200); // Simulate search delay
 
-        var newFilteredItems = string.IsNullOrWhiteSpace(SearchTerm)
-            ? Items.ToList()
-            : Items.Where(item => _columns.Any(column =>
+        ResetColumns(); // Reset columns before searching
+
+        if (string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            FilteredItems = Items.ToList();
+        }
+        else
+        {
+            FilteredItems = Items.Where(item => _columns.Any(column =>
                 MatchesSearchTerm(column.PropertySelector?.Compile()(item), SearchTerm, column.Format)
             )).ToList();
-
-        if (!FilteredItems.SequenceEqual(newFilteredItems))
-        {
-            FilteredItems = newFilteredItems;
-            CurrentPage = 1;
-            UpdateDisplayedItems();
         }
 
+        CurrentPage = 1;
+        UpdateDisplayedItems();
+
         IsLoading = false;
-        StateHasChanged();
-        await InvokeAsync(() => searchInput.FocusAsync());
+        await InvokeAsync(StateHasChanged);
+        await searchInput.FocusAsync();
     }
 
     private void UpdateDisplayedItems()
@@ -179,7 +188,6 @@ public sealed partial class DropBearDataGrid<TItem> : DropBearComponentBase
             .Skip((CurrentPage - 1) * ItemsPerPage)
             .Take(ItemsPerPage);
     }
-
 
 
     private static bool MatchesSearchTerm(object? value, string searchTerm, string format)
