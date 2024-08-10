@@ -58,7 +58,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--gap);
   padding: var(--padding-default);
-  max-width: 1200px;
+  max-width: 100%;
   margin: var(--spacing-sm);
 }
 

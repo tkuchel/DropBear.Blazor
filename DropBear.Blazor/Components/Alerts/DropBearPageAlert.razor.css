@@ -1,6 +1,6 @@
 ﻿/* Alert Component Styles - Dark and Light Themes with Animations and Accessibility */
 .alert-showcase {
-  max-width: 1200px;
+  max-width: 100%;
   margin: var(--spacing-xl) auto;
   display: flex;
   gap: var(--spacing-xl);
