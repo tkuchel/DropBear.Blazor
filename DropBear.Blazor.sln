@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DropBear.Blazor", "DropBear.Blazor\DropBear.Blazor.csproj", "{0881424B-200B-4000-823A-C7BD35B3BD92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropBear.Blazor.TestApp", "DropBear.Blazor.TestApp\DropBear.Blazor.TestApp.csproj", "{CE46A1A1-D2C1-4044-83F1-81C4226A5F53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0881424B-200B-4000-823A-C7BD35B3BD92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0881424B-200B-4000-823A-C7BD35B3BD92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0881424B-200B-4000-823A-C7BD35B3BD92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE46A1A1-D2C1-4044-83F1-81C4226A5F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE46A1A1-D2C1-4044-83F1-81C4226A5F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE46A1A1-D2C1-4044-83F1-81C4226A5F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE46A1A1-D2C1-4044-83F1-81C4226A5F53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
