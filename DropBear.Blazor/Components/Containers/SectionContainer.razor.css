@@ -1,0 +1,17 @@
+﻿/* /wwwroot/css/container.css */
+.section-container {
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%; /* Ensures the container uses full width unless constrained by max-width */
+}
+
+.section-container.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-container .section {
+  margin-bottom: 20px; /* Adds spacing between sections */
+}

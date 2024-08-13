@@ -1,0 +1,8 @@
+﻿@* /Components/ContainerComponent.razor *@
+<div class="@ContainerClass" style="@(MaxWidth != null ? $"max-width:{MaxWidth};" : "")">
+    @ChildContent
+</div>
+
+@code {
+    // Intentionally left blank
+}
