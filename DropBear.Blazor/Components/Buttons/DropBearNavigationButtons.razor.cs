@@ -10,8 +10,8 @@ namespace DropBear.Blazor.Components.Buttons;
 public sealed partial class DropBearNavigationButtons : ComponentBase
 {
     private DotNetObjectReference<DropBearNavigationButtons> _objRef;
+    private bool isJsInitialized;
     private bool IsVisible { get; set; }
-    private bool isJsInitialized = false;
     [Parameter] public string BackButtonTop { get; set; } = "20px";
     [Parameter] public string BackButtonLeft { get; set; } = "80px";
     [Parameter] public string HomeButtonTop { get; set; } = "20px";
@@ -20,7 +20,7 @@ public sealed partial class DropBearNavigationButtons : ComponentBase
     [Parameter] public string ScrollTopButtonRight { get; set; } = "20px";
 
     /// <summary>
-    /// Initializes the JavaScript interop after the component has rendered.
+    ///     Initializes the JavaScript interop after the component has rendered.
     /// </summary>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -31,8 +31,9 @@ public sealed partial class DropBearNavigationButtons : ComponentBase
             isJsInitialized = true;
         }
     }
+
     /// <summary>
-    /// Cleans up resources when the component is disposed.
+    ///     Cleans up resources when the component is disposed.
     /// </summary>
     public async ValueTask DisposeAsync()
     {
@@ -40,24 +41,26 @@ public sealed partial class DropBearNavigationButtons : ComponentBase
         {
             await JSRuntime.InvokeVoidAsync("DropBearNavigationButtons.dispose");
         }
+
         _objRef?.Dispose();
     }
 
     /// <summary>
     ///     Navigates to the previous page in the browser history.
     /// </summary>
-    private void GoBack()
+    private async Task GoBack()
     {
         try
         {
-            NavigationManager.NavigateTo(NavigationManager.Uri);
+            await JSRuntime.InvokeVoidAsync("DropBearNavigationButtons.goBack");
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error navigating back: {ex.Message}");
+            await Console.Error.WriteLineAsync($"Error navigating back: {ex.Message}");
             // Consider logging this error or showing a user-friendly message
         }
     }
+
 
     /// <summary>
     ///     Navigates to the home page of the application.

@@ -1,7 +1,8 @@
 ﻿/* /wwwroot/css/container.css */
 .section-container {
-  margin: 0 auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Ensure items stack vertically */
+  gap: 5px; /* Adds space between sections */
   box-sizing: border-box;
   width: 100%; /* Ensures the container uses full width unless constrained by max-width */
 }

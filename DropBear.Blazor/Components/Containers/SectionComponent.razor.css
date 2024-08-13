@@ -1,8 +1,9 @@
 ﻿/* /wwwroot/css/section.css */
 .section-component-section {
-  margin-bottom: 20px; /* Adds space between each section */
-  padding: 10px; /* Adds padding inside each section */
-  border: 1px solid #ddd; /* Adds a light border around each section */
-  border-radius: 5px; /* Rounds the corners of each section */
-  background-color: #f9f9f9; /* Sets a light background color for each section */
+  display: block; /* Each section takes up the full width */
+  width: 100%;    /* Make sure each section spans the full width */
+  padding: 10px;  /* Add padding inside each section */
+  border: 1px solid #ddd; /* Add a light border around each section */
+  border-radius: 5px; /* Round the corners of each section */
+  background-color:hsl(206, 30%, 95%); /* Set a light background color for each section */
 }

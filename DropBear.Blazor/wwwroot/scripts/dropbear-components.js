@@ -286,6 +286,10 @@ window.DropBearNavigationButtons = (function () {
       });
     },
 
+    goBack() {
+      window.history.back();
+    },
+
     dispose() {
       if (dotNetReference) {
         window.removeEventListener('scroll', handleScroll);
