@@ -25,19 +25,7 @@
   transform: scale(1.1);
 }
 
-.back-button {
-  top: 20px;
-  left: 20px;
-}
-
-.home-button {
-  top: 20px;
-  left: 80px;
-}
-
 .scroll-top-button {
-  bottom: 20px;
-  right: 20px;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-normal), visibility var(--transition-normal);

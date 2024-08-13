@@ -7,26 +7,40 @@ using Microsoft.JSInterop;
 
 namespace DropBear.Blazor.Components.Buttons;
 
-public partial class DropBearNavigationButtons : ComponentBase
+public sealed partial class DropBearNavigationButtons : ComponentBase
 {
-    private DotNetObjectReference<DropBearNavigationButtons> objRef;
+    private DotNetObjectReference<DropBearNavigationButtons> _objRef;
     private bool IsVisible { get; set; }
+    private bool isJsInitialized = false;
+    [Parameter] public string BackButtonTop { get; set; } = "20px";
+    [Parameter] public string BackButtonLeft { get; set; } = "80px";
+    [Parameter] public string HomeButtonTop { get; set; } = "20px";
+    [Parameter] public string HomeButtonLeft { get; set; } = "140px";
+    [Parameter] public string ScrollTopButtonBottom { get; set; } = "20px";
+    [Parameter] public string ScrollTopButtonRight { get; set; } = "20px";
 
     /// <summary>
-    ///     Initializes the component and sets up the JavaScript interop.
+    /// Initializes the JavaScript interop after the component has rendered.
     /// </summary>
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        objRef = DotNetObjectReference.Create(this);
-        await JSRuntime.InvokeVoidAsync("DropBearNavigationButtons.initialize", objRef);
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("DropBearNavigationButtons.initialize", _objRef);
+            isJsInitialized = true;
+        }
     }
-
     /// <summary>
-    ///     Cleans up resources when the component is disposed.
+    /// Cleans up resources when the component is disposed.
     /// </summary>
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        objRef?.Dispose();
+        if (isJsInitialized)
+        {
+            await JSRuntime.InvokeVoidAsync("DropBearNavigationButtons.dispose");
+        }
+        _objRef?.Dispose();
     }
 
     /// <summary>
