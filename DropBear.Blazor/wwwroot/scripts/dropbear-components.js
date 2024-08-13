@@ -131,7 +131,7 @@ window.DropBearFileUploader = (function () {
 
 // Utility function for file download
 window.downloadFileFromStream = (fileName, byteArray, contentType) => {
-  const blob = new Blob([byteArray], { type: contentType });
+  const blob = new Blob([byteArray], {type: contentType});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.style.display = 'none';
@@ -255,3 +255,43 @@ window.DropBearContextMenu = (function () {
   };
 })();
 
+// DropBearNavigationButtons
+window.DropBearNavigationButtons = (function () {
+  let dotNetReference = null;
+
+  function handleScroll() {
+    const isVisible = window.scrollY > 300;
+    dotNetReference.invokeMethodAsync('UpdateVisibility', isVisible);
+  }
+
+  return {
+    initialize(dotNetRef) {
+      if (dotNetReference) {
+        console.warn('DropBearNavigationButtons already initialized. Disposing previous instance.');
+        this.dispose();
+      }
+
+      dotNetReference = dotNetRef;
+      window.addEventListener('scroll', handleScroll);
+      console.log('DropBearNavigationButtons initialized');
+
+      // Trigger initial check
+      handleScroll();
+    },
+
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
+
+    dispose() {
+      if (dotNetReference) {
+        window.removeEventListener('scroll', handleScroll);
+        dotNetReference = null;
+        console.log('DropBearNavigationButtons disposed');
+      }
+    }
+  };
+})();
