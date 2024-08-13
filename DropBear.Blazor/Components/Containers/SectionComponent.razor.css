@@ -3,7 +3,7 @@
   display: block; /* Each section takes up the full width */
   width: 100%;    /* Make sure each section spans the full width */
   padding: 10px;  /* Add padding inside each section */
-  border: 1px solid #ddd; /* Add a light border around each section */
-  border-radius: 5px; /* Round the corners of each section */
+  /* border: 1px solid #ddd;  Add a light border around each section */
+  /* border-radius: 5px;  Round the corners of each section */
   background-color:hsl(206, 30%, 95%); /* Set a light background color for each section */
 }
