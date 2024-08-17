@@ -107,7 +107,13 @@
 .file-upload-meta,
 .file-upload-status {
   font-size: var(--font-size-sm);
-  color: var(--clr-text-dark);
+  color: var(--clr-text-light);
+}
+
+.light-theme .file-upload-meta,
+.light-theme .file-upload-status {
+  font-size: var(--font-size-sm);
+  color: var(--clr-text-light);
 }
 
 .file-upload-remove-btn {
