@@ -11,14 +11,14 @@
   color: var(--clr-grey-500);
   transition: var(--transition-normal);
   box-shadow: var(--bs-md);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   overflow: hidden;
 }
 
 .file-info-row {
   display: flex;
   align-items: center;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
 }
 
 .file-info {
@@ -28,29 +28,29 @@
 }
 
 .file-icon {
-  font-size: 1.5rem;
+  font-size: var(--fs-sm);
   margin-right: var(--spacing-sm);
   color: var(--clr-primary);
 }
 
 .file-name {
-  font-size: var(--fs-md);
+  font-size: var(--fs-xs);
   font-weight: 500;
-  margin-right: var(--spacing-md);
+  margin-right: var(--spacing-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .file-size {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   color: var(--clr-secondary);
-  margin-right: var(--spacing-md);
+  margin-right: var(--spacing-sm);
   white-space: nowrap;
 }
 
 .progress-row {
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-sm);
 }
 
 .download-progress {
@@ -68,7 +68,7 @@
 }
 
 .download-button {
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border: none;
   border-radius: var(--br-md);
   background-color: var(--clr-primary);

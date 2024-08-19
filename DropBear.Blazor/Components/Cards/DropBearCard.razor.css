@@ -107,7 +107,7 @@
 }
 
 .card-icon {
-  font-size: var(--fs-base);
+  font-size: var(--fs-md);
   margin-right: var(--spacing-md);
 }
 
@@ -135,7 +135,7 @@
 }
 
 .card-body {
-  padding: var(--spacing-md) calc(var(--spacing-md) + 10px) !important;
+  padding: var(--spacing-xs) !important;
   font-size: var(--fs-sm);
   flex-grow: 1; /* Allow the body to grow and push the footer down */
   display: flex;
@@ -164,7 +164,7 @@
 }
 
 .card-footer {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm);
   padding-top: 10px !important;
   border-top: 1px solid var(--dark-border);
   display: flex;
@@ -212,11 +212,11 @@
 }
 
 .btn {
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border: none;
   border-radius: var(--br-md);
   font-weight: 500;
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   cursor: pointer;
   transition: background-color var(--transition-fast),
   transform var(--transition-fast);
