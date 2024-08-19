@@ -6,11 +6,11 @@
 .file-download-component {
   display: flex;
   flex-direction: column;
-  border-radius: var(--border-radius-md);
-  background-color: var(--clr-dark-background);
-  color: var(--clr-silver-sand);
+  border-radius: var(--br-md);
+  background-color: var(--clr-background);
+  color: var(--clr-grey-500);
   transition: var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--bs-md);
   margin-bottom: var(--spacing-md);
   overflow: hidden;
 }
@@ -18,7 +18,7 @@
 .file-info-row {
   display: flex;
   align-items: center;
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
 }
 
 .file-info {
@@ -30,11 +30,11 @@
 .file-icon {
   font-size: 1.5rem;
   margin-right: var(--spacing-sm);
-  color: var(--clr-viking);
+  color: var(--clr-primary);
 }
 
 .file-name {
-  font-size: var(--font-size-md);
+  font-size: var(--fs-md);
   font-weight: 500;
   margin-right: var(--spacing-md);
   white-space: nowrap;
@@ -43,45 +43,41 @@
 }
 
 .file-size {
-  font-size: var(--font-size-sm);
-  color: var(--clr-rock-blue);
+  font-size: var(--fs-sm);
+  color: var(--clr-secondary);
   margin-right: var(--spacing-md);
   white-space: nowrap;
 }
 
 .progress-row {
-  padding: 0 var(--padding-left) var(--padding-bottom);
+  padding: 0 var(--spacing-md);
 }
 
 .download-progress {
   height: 4px;
   background-color: rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   overflow: hidden;
 }
 
 .progress-bar {
   width: 0;
   height: 100%;
-  background-color: var(--clr-viking);
+  background-color: var(--clr-primary);
   transition: width var(--transition-normal);
 }
 
 .download-button {
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
   border: none;
-  border-radius: var(--border-radius-sm);
-  background-color: var(--clr-viking);
-  color: var(--clr-dark-background);
+  border-radius: var(--br-md);
+  background-color: var(--clr-primary);
+  color: var(--clr-background);
   font-weight: 600;
-  font-size: var(--font-size-sm);
+  font-size: var(--fs-sm);
   cursor: pointer;
   transition: var(--transition-fast);
   white-space: nowrap;
-}
-
-.download-button:hover:not(:disabled) {
-  background-color: var(--clr-malibu);
 }
 
 .download-button:disabled {
@@ -89,19 +85,24 @@
   cursor: not-allowed;
 }
 
+.download-button:hover:not(:disabled) {
+  background-color: var(--clr-information);
+}
+
+
 /* Light theme */
 .light-theme .file-download-component {
   background-color: #fff;
   color: var(--clr-mine-shaft);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--bs-sm);
 }
 
 .light-theme .file-icon {
-  color: var(--clr-viking);
+  color: var(--clr-primary);
 }
 
 .light-theme .file-size {
-  color: var(--clr-text-dark);
+  color: var(--clr-text-primary);
 }
 
 .light-theme .download-progress {
@@ -109,14 +110,14 @@
 }
 
 .light-theme .progress-bar {
-  background-color: var(--clr-cornflower-blue);
+  background-color: var(--clr-information-light);
 }
 
 .light-theme .download-button {
-  background-color: var(--clr-viking);
+  background-color: var(--clr-primary);
   color: #000;
 }
 
 .light-theme .download-button:hover:not(:disabled) {
-  background-color: var(--clr-malibu);
+  background-color: var(--clr-information);
 }

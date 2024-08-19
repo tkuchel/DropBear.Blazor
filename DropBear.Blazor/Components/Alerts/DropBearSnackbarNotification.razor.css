@@ -2,8 +2,8 @@
 .snackbar {
   display: flex;
   align-items: center;
-  border-radius: var(--border-radius-md);
-  padding: var(--padding-default);
+  border-radius: var(--br-md);
+  padding: var(--spacing-md);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   animation: slideInUp 0.3s ease-out;
   position: relative;

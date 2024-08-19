@@ -8,24 +8,24 @@
   --light-border: hsl(0, 0%, 85%);
 
   /* Dark theme colors */
-  --dark-bg: var(--clr-dark-background);
+  --dark-bg: var(--clr-background);
   --dark-card-bg: hsl(230, 9%, 17%);
-  --dark-text: var(--clr-silver-sand);
+  --dark-text: var(--clr-grey-500);
   --dark-border: hsl(230, 9%, 25%);
 
   /* Shared variables */
-  --card-radius: var(--border-radius-md);
+  --card-radius: var(--br-md);
   --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --card-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 
   /* Button colors */
   --btn-default: var(--clr-mine-shaft);
-  --btn-secondary: var(--clr-rock-blue);
-  --btn-success: var(--clr-pastel-green);
-  --btn-warning: var(--clr-mustard);
-  --btn-error: var(--clr-persimmon);
-  --btn-information: var(--clr-malibu);
-  --btn-primary: var(--clr-malibu);
+  --btn-secondary: var(--clr-secondary);
+  --btn-success: var(--clr-success);
+  --btn-warning: var(--clr-warning);
+  --btn-error: var(--clr-error);
+  --btn-information: var(--clr-information);
+  --btn-primary: var(--clr-information);
 
 
   /* Light theme gradients */
@@ -56,15 +56,15 @@
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--gap);
-  padding: var(--padding-default);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
   max-width: 100%;
   margin: var(--spacing-sm);
 }
 
 .card {
   font-family: "Poppins", sans-serif;
-  font-size: calc(var(--font-size-md));
+  font-size: calc(var(--fs-md));
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   overflow: hidden;
@@ -102,12 +102,12 @@
 
 .card-title {
   margin: 0;
-  font-size: var(--font-size-md) !important;
+  font-size: var(--fs-md) !important;
   font-weight: 500 !important;
 }
 
 .card-icon {
-  font-size: calc(var(--font-size-base) / var(--sqrt-golden-ratio));
+  font-size: var(--fs-base);
   margin-right: var(--spacing-md);
 }
 
@@ -135,8 +135,8 @@
 }
 
 .card-body {
-  padding: var(--padding-default) calc(var(--padding-default) + 10px) !important;
-  font-size: var(--font-size-sm);
+  padding: var(--spacing-md) calc(var(--spacing-md) + 10px) !important;
+  font-size: var(--fs-sm);
   flex-grow: 1; /* Allow the body to grow and push the footer down */
   display: flex;
   flex-direction: column;
@@ -212,11 +212,11 @@
 }
 
 .btn {
-  padding: calc(var(--spacing-md) * var(--inverse-golden-ratio)) var(--spacing-md);
+  padding: var(--spacing-md);
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--br-md);
   font-weight: 500;
-  font-size: calc(var(--font-size-base) / var(--golden-ratio));
+  font-size: var(--fs-md);
   cursor: pointer;
   transition: background-color var(--transition-fast),
   transform var(--transition-fast);

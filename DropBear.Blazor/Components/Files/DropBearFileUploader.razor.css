@@ -5,19 +5,19 @@
 }
 
 .file-upload-component {
-  border-radius: var(--border-radius-md);
+  border-radius: var(--br-md);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--bs-md);
 }
 
 .dark-theme .file-upload-component {
-  background-color: var(--clr-dark-background);
-  color: var(--clr-silver-sand);
+  background-color: var(--clr-background);
+  color: var(--clr-grey-500);
 }
 
 .light-theme .file-upload-component {
   background-color: var(--clr-surface-light, #ffffff);
-  color: var(--clr-text-dark, #333333);
+  color: var(--clr-text-primary, #333333);
 }
 
 .file-upload-completed-list {
@@ -25,8 +25,8 @@
 }
 
 .file-upload-dropzone {
-  border: 2px dashed var(--clr-rock-blue);
-  border-radius: var(--border-radius-md);
+  border: 2px dashed var(--clr-secondary);
+  border-radius: var(--br-md);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
   text-align: center;
@@ -34,7 +34,7 @@
 }
 
 .file-upload-dropzone.dragover {
-  border-color: var(--clr-viking);
+  border-color: var(--clr-primary);
 }
 
 .dark-theme .file-upload-dropzone.dragover {
@@ -46,7 +46,7 @@
 }
 
 .file-upload-dropzone i {
-  color: var(--clr-viking);
+  color: var(--clr-primary);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -60,18 +60,18 @@
 
 .file-upload-label {
   display: inline-block;
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
   margin-top: var(--spacing-md);
-  background-color: var(--clr-viking);
-  color: var(--clr-dark-background);
-  border-radius: var(--border-radius-sm);
+  background-color: var(--clr-primary);
+  color: var(--clr-background);
+  border-radius: var(--br-md);
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition-fast);
 }
 
 .file-upload-label:hover {
-  background-color: var(--clr-malibu);
+  background-color: var(--clr-information);
 }
 
 .file-upload-list {
@@ -82,8 +82,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: var(--border-radius-sm);
-  padding: var(--padding-default);
+  border-radius: var(--br-md);
+  padding: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -92,7 +92,7 @@
 }
 
 .light-theme .file-upload-item {
-  background-color: var( --clr-confirmation);
+  background-color: var(--clr-grey-500);
 }
 
 .file-upload-info {
@@ -106,22 +106,22 @@
 
 .file-upload-meta,
 .file-upload-status {
-  font-size: var(--font-size-sm);
-  color: var(--clr-text-light);
+  font-size: var(--fs-sm);
+  color: var(--clr-text-primary);
 }
 
 .light-theme .file-upload-meta,
 .light-theme .file-upload-status {
-  font-size: var(--font-size-sm);
-  color: var(--clr-text-light);
+  font-size: var(--fs-sm);
+  color: var(--clr-text-primary);
 }
 
 .file-upload-remove-btn {
   background-color: transparent;
-  color: var(--clr-persimmon);
+  color: var(--clr-error);
   border: none;
   cursor: pointer;
-  font-size: var(--font-size-lg);
+  font-size: var(--fs-lg);
   transition: var(--transition-fast);
 }
 
@@ -135,28 +135,28 @@
 
 .file-upload-btn {
   width: 100%;
-  padding: var(--padding-default);
-  background-color: var(--clr-viking);
-  color: var(--clr-dark-background);
+  padding: var(--spacing-md);
+  background-color: var(--clr-primary);
+  color: var(--clr-background);
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition-fast);
 }
 
 .file-upload-btn:hover:not(:disabled) {
-  background-color: var(--clr-malibu);
+  background-color: var(--clr-information);
 }
 
 .file-upload-btn:disabled {
-  background-color: var(--clr-rock-blue);
+  background-color: var(--clr-secondary);
   cursor: not-allowed;
 }
 
 .file-upload-progress {
   height: 4px;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   margin-top: var(--spacing-sm);
   overflow: hidden;
 }
@@ -172,7 +172,7 @@
 .file-upload-progress-bar {
   width: 0;
   height: 100%;
-  background-color: var(--clr-viking);
+  background-color: var(--clr-primary);
   transition: width var(--transition-normal);
 }
 

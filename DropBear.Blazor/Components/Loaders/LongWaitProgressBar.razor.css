@@ -1,26 +1,26 @@
 ﻿/* Loading Components Styles */
 * {
   /* Common variables */
-  --gradient-start: var(--clr-malibu);
-  --gradient-mid: var(--clr-cornflower-blue);
+  --gradient-start: var(--clr-information);
+  --gradient-mid: var(--clr-information-light);
   --gradient-end: var(--clr-heliotrope);
 }
 
 .loading-card-container {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing-unit) * var(--golden-ratio));
+  gap: var(--spacing-md);
   max-width: 400px;
   margin: 0 auto;
   padding: var(--spacing-xl);
 }
 
 .loading-card {
-  border-radius: calc(var(--border-radius-lg) * 1.5);
+  border-radius: calc(var(--br-lg) * 1.5);
   padding: var(--spacing-lg) var(--spacing-md);
   width: 100%;
   min-height: 200px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--bs-md);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,9 +29,9 @@
 
 /* Dark theme (default) */
 .loading-card.theme-dark {
-  --card-bg: var(--clr-dark-background);
-  --text-primary: var(--clr-viking);
-  --text-secondary: var(--clr-silver-sand);
+  --card-bg: var(--clr-background);
+  --text-primary: var(--clr-primary);
+  --text-secondary: var(--clr-grey-500);
   --progress-bg: rgba(255, 255, 255, 0.1);
   background-color: var(--card-bg);
 }
@@ -40,7 +40,7 @@
 .loading-card.theme-light {
   --card-bg: #f0f0f0; /* Lighter background */
   --text-primary: var(--clr-mine-shaft);
-  --text-secondary: var(--clr-rock-blue);
+  --text-secondary: var(--clr-secondary);
   --progress-bg: rgba(0, 0, 0, 0.1);
   background-color: var(--card-bg);
 }
@@ -48,7 +48,7 @@
 .loading-card h3 {
   color: var(--text-primary);
   margin-bottom: var(--spacing-lg);
-  font-size: calc(var(--font-size-base) * 1.2);
+  font-size: calc(var(--fs-base) * 1.2);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -60,7 +60,7 @@
 
 /* Icon Styles */
 .icon {
-  font-size: calc(var(--font-size-base) * 1.5);
+  font-size: calc(var(--fs-base) * 1.5);
   color: var(--text-primary);
   margin-right: var(--spacing-sm);
 }
@@ -69,7 +69,7 @@
 .progress-container {
   width: 100%;
   background-color: var(--progress-bg);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   height: 35px;
   overflow: hidden;
   margin: auto 0;
@@ -83,7 +83,7 @@
     var(--gradient-mid),
     var(--gradient-end)
   );
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   transition: width 0.5s ease-in-out;
   display: flex;
   align-items: center;
@@ -144,7 +144,7 @@
 
 .loading-card p {
   color: var(--text-secondary);
-  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
+  font-size: var(--fs-md);
   margin-top: var(--spacing-md);
   width: 100%;
   text-align: center;
@@ -152,7 +152,7 @@
 
 .loading-card.theme-light p {
   color: var(--text-primary);
-  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
+  font-size: var(--fs-md);
   margin-top: var(--spacing-md);
   width: 100%;
   text-align: center;
@@ -160,7 +160,7 @@
 
 .progress-text {
   color: var(--text-secondary);
-  font-size: calc(0.8rem * var(--inverse-golden-ratio));
+  font-size: var(--fs-sm);
   font-weight: 600;
   position: relative;
   z-index: 1;
@@ -169,10 +169,10 @@
 /*Button styles*/
 .btn {
   font-family: "Poppins", sans-serif;
-  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
-  font-weight: 500;
-  padding: var(--spacing-md) var(--spacing-md);
-  border-radius: var(--border-radius-md);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-500);
+  padding: var(--spacing-md);
+  border-radius: var(--br-md);
   border: none;
   cursor: pointer;
   transition: var(--transition-normal), transform 0.2s;
@@ -191,7 +191,7 @@
 
 .btn:hover {
   transform: scale(1.05);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--bs-md);
 }
 
 .btn:focus {
@@ -205,7 +205,7 @@
 }
 
 .btn-primary {
-  background-color: var(--clr-malibu);
+  background-color: var(--clr-information);
   color: var(--text-primary);
 }
 

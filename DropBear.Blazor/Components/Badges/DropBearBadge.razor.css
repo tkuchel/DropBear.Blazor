@@ -2,25 +2,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-default);
-  font-size: var(--font-size-sm);
+  padding: var(--spacing-md);
+  font-size: var(--fs-sm);
   font-weight: 500;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--br-md);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .dropbear-badge-pill {
-  padding: var(--padding-default);
-  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  border-radius: var(--br-md);
 }
 
 .dropbear-badge-icon-only {
-  padding: var(--padding-default);
-  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  border-radius: var(--br-md);
 }
 
 .dropbear-badge i {
@@ -33,44 +33,44 @@
 
 /* Badge Colors */
 .dropbear-badge-default {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-viking);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-primary);
 }
 
 .dropbear-badge-secondary {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-rock-blue);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-secondary);
 }
 
 .dropbear-badge-success {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-pastel-green);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-success);
 }
 
 .dropbear-badge-information {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-malibu);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-information);
 }
 
 .dropbear-badge-warning {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-mustard);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-warning);
 }
 
 .dropbear-badge-error {
-  color: var(--clr-text-dark);
-  background-color: var(--clr-persimmon);
+  color: var(--clr-text-primary);
+  background-color: var(--clr-error);
 }
 
 /* Tooltip */
 .dropbear-tooltip {
   position: fixed;
-  background-color: var(--clr-dark-background);
-  color: var(--clr-text-white);
-  padding: var(--padding-default);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--font-size-sm);
-  z-index: var(--z-index-tooltip);
+  background-color: var(--clr-background);
+  color: var(--clr-white);
+  padding: var(--spacing-md);
+  border-radius: var(--br-md);
+  font-size: var(--fs-sm);
+  z-index: var(--z-60);
   pointer-events: none;
   opacity: 0.9;
 }

@@ -1,9 +1,3 @@
-/* Import Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-/* Font Awesome 6 */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
-
 :root {
   /* Golden Ratios */
   --golden-ratio: 1.61803398875;
@@ -11,38 +5,38 @@
 
   /* Primary Colors */
   --clr-mine-shaft: #333;
-  --clr-silver-sand: #bbbec3;
-  --clr-viking: #62dbc8;
-  --clr-pastel-green: #7cd651;
+  --clr-grey-500: #bbbec3;
+  --clr-primary: #62dbc8;
+  --clr-success: #7cd651;
   --clr-japonica: #d58558;
-  --clr-mustard: #ffd14d;
+  --clr-warning: #ffd14d;
   --clr-coral: #ff8d48;
-  --clr-persimmon: #ff5757;
+  --clr-error: #ff5757;
   --clr-hot-pink: #ff6ed4;
   --clr-heliotrope: #ad6fff;
-  --clr-malibu: #4ebafd;
-  --clr-cornflower-blue: #8552f8;
+  --clr-information: #4ebafd;
+  --clr-information-light: #8552f8;
   --clr-hyperlink-blue: #61afff;
   --clr-lime: #a0f000;
-  --clr-rock-blue: #a4b1cd;
+  --clr-secondary: #a4b1cd;
 
   /* Success Colors */
-  --clr-success: var(--clr-pastel-green); /* #7cd651 */
+  --clr-success: var(--clr-success); /* #7cd651 */
   --clr-success-light: #a0e57c; /* Lighter version */
   --clr-success-dark: #5db740; /* Darker version */
 
   /* Warning Colors */
-  --clr-warning: var(--clr-mustard); /* #ffd14d */
+  --clr-warning: var(--clr-warning); /* #ffd14d */
   --clr-warning-light: #ffe380; /* Lighter version */
   --clr-warning-dark: #cca03a; /* Darker version */
 
   /* Error Colors */
-  --clr-error: var(--clr-persimmon); /* #ff5757 */
+  --clr-error: var(--clr-error); /* #ff5757 */
   --clr-error-light: #ff8a8a; /* Lighter version */
   --clr-error-dark: #cc4545; /* Darker version */
 
   /* Information Colors */
-  --clr-information: var(--clr-malibu); /* #4ebafd */
+  --clr-information: var(--clr-information); /* #4ebafd */
   --clr-information-light: #80ccff; /* Lighter version */
   --clr-information-dark: #3a8fcc; /* Darker version */
 
@@ -80,20 +74,20 @@
   /* Gradients */
   --gradient-example: linear-gradient(
     90deg,
-    var(--clr-viking),
+    var(--clr-primary),
     var(--clr-japonica)
   );
   --gradient-example-vibrant: linear-gradient(
     90deg,
     in lch,
-    var(--clr-viking),
+    var(--clr-primary),
     var(--clr-japonica)
   );
 
   /* Themes */
   @media (prefers-color-scheme: light) {
     --clr-primary: var(--clr-mine-shaft); /* #333 */
-    --clr-secondary: var(--clr-viking); /* #62dbc8 */
+    --clr-secondary: var(--clr-primary); /* #62dbc8 */
     --clr-tertiary: var(--clr-japonica); /* #d58558 */
     --clr-background: var(--clr-white); /* Overall page background */
     --clr-surface-primary: var(
@@ -116,7 +110,7 @@
       --clr-dim-gray
     ); /* #67696f - Slightly lighter for secondary text */
     --clr-text-link: var(
-      --clr-viking
+      --clr-primary
     ); /* Link color to match the secondary color */
     --clr-text-heading: var(
       --clr-mine-shaft
@@ -127,9 +121,9 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    --clr-primary: var(--clr-silver-sand); /* #bbbec3 */
+    --clr-primary: var(--clr-grey-500); /* #bbbec3 */
     --clr-secondary: var(--clr-hot-pink); /* #ff6ed4 */
-    --clr-tertiary: var(--clr-cornflower-blue); /* #8552f8 */
+    --clr-tertiary: var(--clr-information-light); /* #8552f8 */
     /* Background and Surface Colors */
     --clr-background: var(--clr-black); /* Overall page background */
     --clr-surface-primary: var(
@@ -149,7 +143,7 @@
     ); /* Lighter surface for elevated elements */
     /* Text Colors */
     --clr-text-primary: var(
-      --clr-silver-sand
+      --clr-grey-500
     );
     /* Main text color, high contrast against black background */
     --clr-text-secondary: var(
@@ -161,7 +155,7 @@
     );
     /* Link color to match the secondary color */
     --clr-text-heading: var(
-      --clr-silver-sand
+      --clr-grey-500
     );
     /* Heading text color, strong and prominent */
     --clr-text-muted: var(
@@ -238,13 +232,18 @@
   --z-100: 100;
 
   /* Spacing (Padding and Margin) */
-  --space-xs: calc(1rem * var(--golden-ratio-inverse));
-  --space-sm: 1rem;
-  --space-md: calc(1rem * var(--golden-ratio));
-  --space-lg: calc(1rem * var(--golden-ratio) * var(--golden-ratio));
-  --space-xl: calc(
+  --spacing-xs: calc(1rem * var(--golden-ratio-inverse));
+  --spacing-sm: 1rem;
+  --spacing-md: calc(1rem * var(--golden-ratio));
+  --spacing-lg: calc(1rem * var(--golden-ratio) * var(--golden-ratio));
+  --spacing-xl: calc(
     1rem * var(--golden-ratio) * var(--golden-ratio) * var(--golden-ratio)
   );
+
+  /* Transitions */
+  --transition-fast: 0.2s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
 }
 
 /* Global Styles */
@@ -270,8 +269,8 @@ body {
   line-height: var(--lh-md);
   color: var(--clr-primary);
   background-color: var(--clr-background);
-  padding: var(--space-md);
-  margin: var(--space-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -300,9 +299,9 @@ svg {
 .main-container {
   width: min(65ch, 100% - 4rem);
   margin-inline: auto;
-  padding: var(--space-lg);
-  margin-top: var(--space-md);
-  margin-bottom: var(--space-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 /* Headings */
@@ -315,7 +314,7 @@ h6 {
   font-family: var(--ff-primary), sans-serif;
   font-weight: 700;
   line-height: 1.2;
-  margin: 0 0 var(--space-md);
+  margin: 0 0 var(--spacing-md);
   text-wrap: balance;
 }
 

@@ -15,7 +15,7 @@
   );
   --border-color: #40444b;
   --hover-bg: rgba(78, 186, 253, 0.1);
-  --clr-rock-blue: #5a7a9a;
+  --clr-secondary: #5a7a9a;
 }
 
 /* Light Theme Variables */
@@ -35,22 +35,22 @@
   );
   --border-color: #d1d5db;
   --hover-bg: rgba(59, 143, 217, 0.1);
-  --clr-rock-blue: #a0b4c8;
+  --clr-secondary: #a0b4c8;
 }
 
 /* Common Styles */
 .no-data-container {
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
 }
 
 .dropbear-datagrid-container {
   margin: var(--spacing-sm);
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
   max-width: 100%;
 }
 
 .dropbear-datagrid {
-  border-radius: var(--border-radius-md);
+  border-radius: var(--br-md);
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow var(--transition-normal);
@@ -72,17 +72,17 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  /*z-index: var(--z-index-fixed);*/
-  /*line-height: var(--line-height-base);*/
+  /*z-index: var(--z-40);*/
+  /*line-height: var(--lh-lg);*/
 }
 
 .datagrid-header h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: var(--font-size-md);
+  font-size: var(--fs-md);
   display: flex;
   align-items: center;
-  gap: var(--gap);
+  gap: var(--spacing-md);
 }
 
 .datagrid-actions {
@@ -100,7 +100,7 @@
 .search-input {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  border: 1px solid var(--clr-border);;
+  border: 1px solid var(--clr-grey-500);;
   border-radius: 4px 0 0 4px;
   transition: background-color var(--transition-normal);
   /* Make room for the indicator */
@@ -209,7 +209,7 @@
 }
 
 /*.datagrid-cell {*/
-/*  padding: var(--padding-default);*/
+/*  padding: var(--spacing-md);*/
 /*  text-align: left;*/
 /*  border-bottom: 1px solid var(--border-color);*/
 /*  overflow: hidden;*/
@@ -221,7 +221,7 @@
 
 /* Ensure consistent cell widths and padding */
 .datagrid-cell {
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
   margin: 0;
   width: 150px; /* Ensure a consistent width */
   /* border: 1px solid green;  Temporary border for debugging */
@@ -280,11 +280,11 @@
 
 .datagrid-footer {
   background-color: var(--bg-secondary);
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: calc(var(--font-size-sm) * var(--golden-ratio));
+  font-size: calc(var(--fs-sm) * var(--golden-ratio));
 }
 
 .dropbear-datagrid .pagination {
@@ -307,7 +307,7 @@
 
 .datagrid-footer .pagination span,
 .datagrid-footer label {
-  font-size: calc(var(--font-size-sm) * var(--sqrt-golden-ratio));
+  font-size: var(--fs-md);
   margin: 0 5px;
 }
 
@@ -323,7 +323,7 @@
   color: var(--text-secondary);
   cursor: pointer;
   transition: color var(--transition-normal), transform var(--transition-normal);
-  padding: var(--padding-default);
+  padding: var(--spacing-md);
 }
 
 .btn-icon:hover {
@@ -347,7 +347,7 @@ select {
 
 .items-per-page select {
   color: var(--text-primary);
-  border: 1px solid var(--clr-rock-blue);
+  border: 1px solid var(--clr-secondary);
 }
 
 select:hover {
@@ -355,7 +355,7 @@ select:hover {
 }
 
 .datagrid-footer .items-per-page select {
-  border-radius: var(--border-radius-md);
+  border-radius: var(--br-md);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -366,7 +366,7 @@ select:hover {
 
 .datagrid-footer .pagination .btn-icon:hover,
 .datagrid-footer .items-per-page select:hover {
-  background-color: var(--clr-rock-blue);
+  background-color: var(--clr-secondary);
   color: var(--bg-primary);
 }
 
@@ -428,7 +428,7 @@ select:hover {
   /*background: var(--accent-color);*/
   /*opacity: 0;*/
   /*animation: smoothPulse 3s ease-in-out infinite;*/
-  /*z-index: var(--z-index-sticky);*/
+  /*z-index: var(--z-50);*/
 }
 
 /* Keyframes for smoothPulse animation */
