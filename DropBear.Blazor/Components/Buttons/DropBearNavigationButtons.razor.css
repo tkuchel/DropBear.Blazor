@@ -1,6 +1,6 @@
 ﻿.navigation-buttons {
   position: fixed;
-  z-index: var(--z-40);
+  z-index: 110;
 }
 
 .nav-button {
