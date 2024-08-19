@@ -4,10 +4,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   max-width: calc(75rem * var(--golden-ratio));
   margin: 0 auto;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 .prompt-card-overlay {
@@ -43,7 +43,7 @@
 .card-header {
   display: flex;
   align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md);
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.05);
 }
@@ -56,20 +56,20 @@
 .card-title {
   margin: 0;
   font-weight: 600;
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   color: var(--clr-grey-500);
 }
 
 .card-body {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 .card-text {
   color: var(--clr-grey-500);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   font-weight: 300;
-  font-size: var(--fs-md);
-  line-height: var(--lh-lg);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-md);
   word-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -85,12 +85,12 @@
 
 .prompt-btn {
   border: none;
-  padding: var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-sm);
   border-radius: var(--br-md);
   transition: all var(--transition-fast);
   font-family: "Poppins", sans-serif;
   font-weight: 500;
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;

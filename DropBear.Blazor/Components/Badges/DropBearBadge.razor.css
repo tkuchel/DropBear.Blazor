@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-md);
+  padding: var(--spacing-xs);
   font-size: var(--fs-sm);
   font-weight: 500;
   line-height: 1;

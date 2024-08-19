@@ -1,10 +1,10 @@
 ﻿/* Button Base Styles */
 .dropbear-btn {
-  font-family: var(--font-family), sans-serif;
-  font-size: var(--fs-md);
+  font-family: var(--ff-primary), sans-serif;
+  font-size: var(--fs-sm);
   font-weight: 500;
   line-height: 1.5;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border-radius: var(--br-md);
   cursor: pointer;
   transition: all var(--transition-fast);

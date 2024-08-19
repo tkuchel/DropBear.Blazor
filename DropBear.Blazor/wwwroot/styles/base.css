@@ -270,8 +270,6 @@ body {
   line-height: var(--lh-md);
   color: var(--clr-primary);
   background-color: var(--clr-background);
-  padding: var(--spacing-md);
-  margin: var(--spacing-md);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -15,10 +15,10 @@
 
 .alert {
   border-radius: var(--br-md);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   box-shadow: var(--bs-md);
   transition: var(--transition-normal);
   position: relative;

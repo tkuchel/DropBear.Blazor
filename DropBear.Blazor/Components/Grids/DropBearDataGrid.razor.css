@@ -67,7 +67,7 @@
 .datagrid-header {
   background: var(--accent-gradient);
   color: var(--bg-primary);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -221,7 +221,7 @@
 
 /* Ensure consistent cell widths and padding */
 .datagrid-cell {
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   margin: 0;
   width: 150px; /* Ensure a consistent width */
   /* border: 1px solid green;  Temporary border for debugging */
@@ -280,11 +280,11 @@
 
 .datagrid-footer {
   background-color: var(--bg-secondary);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: calc(var(--fs-sm) * var(--golden-ratio));
+  font-size: var(--fs-sm);
 }
 
 .dropbear-datagrid .pagination {
@@ -307,7 +307,7 @@
 
 .datagrid-footer .pagination span,
 .datagrid-footer label {
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   margin: 0 5px;
 }
 
@@ -323,7 +323,7 @@
   color: var(--text-secondary);
   cursor: pointer;
   transition: color var(--transition-normal), transform var(--transition-normal);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
 }
 
 .btn-icon:hover {

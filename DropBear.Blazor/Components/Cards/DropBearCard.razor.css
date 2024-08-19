@@ -199,7 +199,7 @@
 
 /* Compact card styles */
 .compact .card-header {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm);
 }
 
 .compact .card-body {
@@ -208,7 +208,7 @@
 }
 
 .compact .card-footer {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm);
 }
 
 .btn {
