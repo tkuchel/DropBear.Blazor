@@ -1,31 +1,31 @@
 ﻿/* Custom Card Styles - Updated */
 
 * {
-  /* Light theme colors */
-  --light-bg: hsl(0, 0%, 98%);
-  --light-card-bg: hsl(0, 0%, 100%);
-  --light-text: var(--clr-mine-shaft);
-  --light-border: hsl(0, 0%, 85%);
+  /*!* Light theme colors *!*/
+  /*--light-bg: hsl(0, 0%, 98%);*/
+  /*--light-card-bg: hsl(0, 0%, 100%);*/
+  /*--light-text: var(--clr-mine-shaft);*/
+  /*--light-border: hsl(0, 0%, 85%);*/
 
-  /* Dark theme colors */
-  --dark-bg: var(--clr-background);
-  --dark-card-bg: hsl(230, 9%, 17%);
-  --dark-text: var(--clr-grey-500);
-  --dark-border: hsl(230, 9%, 25%);
+  /*!* Dark theme colors *!*/
+  /*--dark-bg: var(--clr-background);*/
+  /*--dark-card-bg: hsl(230, 9%, 17%);*/
+  /*--dark-text: var(--clr-grey-500);*/
+  /*--dark-border: hsl(230, 9%, 25%);*/
 
-  /* Shared variables */
-  --card-radius: var(--br-md);
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --card-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  /*!* Shared variables *!*/
+  /*--card-radius: var(--br-md);*/
+  /*--card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+  /*--card-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);*/
 
-  /* Button colors */
-  --btn-default: var(--clr-mine-shaft);
-  --btn-secondary: var(--clr-secondary);
-  --btn-success: var(--clr-success);
-  --btn-warning: var(--clr-warning);
-  --btn-error: var(--clr-error);
-  --btn-information: var(--clr-information);
-  --btn-primary: var(--clr-information);
+  /*!* Button colors *!*/
+  /*--btn-default: var(--clr-mine-shaft);*/
+  /*--btn-secondary: var(--clr-secondary);*/
+  /*--btn-success: var(--clr-success);*/
+  /*--btn-warning: var(--clr-warning);*/
+  /*--btn-error: var(--clr-error);*/
+  /*--btn-information: var(--clr-information);*/
+  /*--btn-primary: var(--clr-information);*/
 
 
   /* Light theme gradients */
@@ -56,8 +56,8 @@
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  gap: var(--spacing-sm);
+  /*padding: var(--spacing-sm);*/
   max-width: 100%;
   margin: var(--spacing-sm);
 }
@@ -65,8 +65,8 @@
 .card {
   font-family: "Poppins", sans-serif;
   font-size: calc(var(--fs-md));
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
+  border-radius: var(--br-md);
+  box-shadow: var(--bs-md);
   overflow: hidden;
   transition: box-shadow var(--transition-normal);
   display: flex;
@@ -76,27 +76,27 @@
 }
 
 .card:hover {
-  box-shadow: var(--card-hover-shadow);
+  box-shadow: var(--bs-lg);
 }
 
 /* Theme-specific styles */
 .card.light-theme {
-  background-color: var(--light-card-bg);
-  color: var(--light-text);
-  border: 1px solid var(--light-border);
+  background-color: var(--clr-background);
+  color: var(--text-primary);
+  border: 1px solid var(--clr-surface-primary);
 }
 
 .card.dark-theme {
-  background-color: var(--dark-card-bg);
-  color: var(--dark-text);
-  border: 1px solid var(--dark-border);
+  background-color: var(--clr-background);
+  color: var(--text-primary);
+  border: 1px solid var(--clr-surface-primary);
 }
 
 .card-header {
   display: flex;
   align-items: center;
   padding: 10px 15px !important;
-  border-bottom: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--clr-surface-primary);
   background: var(--dark-header-gradient);
 }
 
@@ -120,17 +120,17 @@
 
 .light-theme .card-icon,
 .light-theme .card-title {
-  color: var(--light-text);
+  color: var(--clr-text-primary);
 }
 
 .dark-theme .card-icon,
 .dark-theme .card-title {
-  color: var(--dark-text);
+  color: var(--clr-text-primary);
 }
 
 
 .light-theme .card-header {
-  border-bottom-color: var(--light-border);
+  border-bottom-color: var(--clr-surface-primary);
   background: var(--light-header-gradient);
 }
 
@@ -166,7 +166,7 @@
 .card-footer {
   padding: var(--spacing-sm);
   padding-top: 10px !important;
-  border-top: 1px solid var(--dark-border);
+  border-top: 1px solid var(--clr-surface-primary);
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-xs);
@@ -178,7 +178,7 @@
 .light-theme .card-body,
 .light-theme .card-title,
 .light-theme .card-icon {
-  color: var(--light-text);
+  color: var(--clr-text-primary);
 }
 
 /* Adjustments for cards without icons */
@@ -187,7 +187,7 @@
 }
 
 .light-theme .card-footer {
-  border-top-color: var(--light-border);
+  border-top-color: var(--clr-surface-primary);
   background: var(--light-footer-gradient);
 }
 
@@ -228,7 +228,7 @@
 
 /* Ensure proper text color for light theme buttons */
 .light-theme .btn {
-  color: var(--light-text);
+  color: var(--clr-text-primary);
 }
 
 .btn:hover {
@@ -236,39 +236,39 @@
 }
 
 .btn-default {
-  background-color: var(--btn-default);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-primary);
+  color: var(--clr-text-primary);
 }
 
 .btn-secondary {
-  background-color: var(--btn-secondary);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-secondary);
+  color: var(--clr-text-primary);
 }
 
 /* Success button style */
 .btn-success {
-  background-color: var(--btn-success);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-success);
+  color: var(--clr-text-primary);
 }
 
 .btn-warning {
-  background-color: var(--btn-warning);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-warning);
+  color: var(--clr-text-primary);
 }
 
 .btn-error {
-  background-color: var(--btn-error);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-error);
+  color: var(--clr-text-primary);
 }
 
 .btn-information {
-  background-color: var(--btn-information);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-information);
+  color: var(--clr-text-primary);
 }
 
 .btn-primary {
-  background-color: var(--btn-primary);
-  color: var(--dark-card-bg);
+  background-color: var(--clr-primary);
+  color: var(--clr-text-primary);
 }
 
 /* Hover styles */
