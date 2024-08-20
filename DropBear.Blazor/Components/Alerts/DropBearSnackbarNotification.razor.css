@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   border-radius: var(--br-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   animation: slideInUp 0.3s ease-out;
   position: relative;

@@ -44,8 +44,8 @@
 }
 
 .dropbear-datagrid-container {
-  margin: var(--spacing-sm);
-  padding: var(--spacing-md);
+  margin: var(--spacing-xs);
+  padding: 0;
   max-width: 100%;
 }
 
@@ -221,7 +221,7 @@
 
 /* Ensure consistent cell widths and padding */
 .datagrid-cell {
-  padding: var(--spacing-sm);
+  padding: var(--spacing-xs);
   margin: 0;
   width: 150px; /* Ensure a consistent width */
   /* border: 1px solid green;  Temporary border for debugging */

@@ -86,9 +86,9 @@
 
   /* Themes */
   @media (prefers-color-scheme: light) {
-    --clr-primary: var(--clr-mine-shaft); /* #333 */
-    --clr-secondary: var(--clr-viking); /* #62dbc8 */
-    --clr-tertiary: var(--clr-japonica); /* #d58558 */
+    --clr-primary: var(--clr-viking);
+    --clr-secondary: var(--clr-japonica);
+    --clr-tertiary: var(--clr-mine-shaft);
     --clr-background: var(--clr-white); /* Overall page background */
     --clr-surface-primary: var(
       --clr-anti-flash-white

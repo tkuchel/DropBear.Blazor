@@ -108,7 +108,7 @@
 
 .card-icon {
   font-size: var(--fs-md);
-  margin-right: var(--spacing-md);
+  margin-right: var(--spacing-sm);
 }
 
 /* Ensure text remains visible on gradient backgrounds */
@@ -169,7 +169,7 @@
   border-top: 1px solid var(--dark-border);
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   margin-top: auto;
   background: var(--dark-footer-gradient);
 }

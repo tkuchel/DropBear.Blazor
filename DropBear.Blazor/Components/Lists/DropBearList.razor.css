@@ -10,7 +10,7 @@
 .drop-bear-list-header {
   background-color: var(--clr-surface-primary, #f44336);
   color: #fff;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
