@@ -44,13 +44,13 @@
 .context-menu-item {
   display: flex;
   align-items: center;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm);
   cursor: pointer;
   border-radius: var(--br-md);
   transition: background-color var(--transition-fast),
   color var(--transition-fast);
   position: relative;
-  color: var(--clr-grey-500);
+  color: var(--clr-grey-800);
   opacity: 1; /* Change this from 0 to 1 */
   animation: fadeIn var(--transition-normal) ease-out forwards;
 }
