@@ -87,7 +87,7 @@
   /* Themes */
   @media (prefers-color-scheme: light) {
     --clr-primary: var(--clr-viking);
-    --clr-secondary: var(--clr-japonica);
+    --clr-secondary: var(--clr-rock-blue);
     --clr-tertiary: var(--clr-mine-shaft);
     --clr-background: var(--clr-white); /* Overall page background */
     --clr-surface-primary: var(
@@ -121,8 +121,8 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    --clr-primary: var(--clr-silver-sand); /* #bbbec3 */
-    --clr-secondary: var(--clr-hot-pink); /* #ff6ed4 */
+    --clr-primary: var(--clr-viking); /* #bbbec3 */
+    --clr-secondary: var(--clr-rock-blue); /* #ff6ed4 */
     --clr-tertiary: var(--clr-cornflower-blue); /* #8552f8 */
     /* Background and Surface Colors */
     --clr-background: var(--clr-black); /* Overall page background */
